@@ -1,0 +1,10 @@
+<core:View xmlns:core="sap.ui.core"
+           xmlns:mvc="sap.ui.core.mvc"
+           xmlns="sap.m"
+	   xmlns:html="http://www.w3.org/1999/xhtml">
+  <MessagePage
+      title="404 Error"
+      text="This page is not available."
+      description="May be you encountered 404 error, That means you are 
+		   trying to access the page which is not available."/>
+</core:View>

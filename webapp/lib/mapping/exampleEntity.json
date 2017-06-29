@@ -1,0 +1,68 @@
+{
+    "description": "Define Example Entity",
+    "primaryKey" : "id",
+    "entity" : [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+            "name": "name",
+            "required": true
+        },
+        {
+            "name": "items",
+            "type": "collection",
+            "collectionItem": [
+                {
+                    "name": "oEntityId",
+                    "required": true
+                },
+                {
+                    "name": "quantity",
+                    "type": "int",
+                    "required": true
+                }
+            ]
+        }
+    ],
+    "request": {
+        "getCollection": {
+            "uri": "getCollection",
+            "method": "GET",
+            "params": [
+                {
+                    "name": "startDate",
+                    "type": "Date",
+                    "dateFormat": "yyyyMMddHHmmss",
+                    "required": true
+                },
+                {
+                    "name": "endDate",
+                    "type": "Date",
+                    "dateFormat": "yyyyMMddHHmmss"
+                }
+            ]
+        },
+        "getEntity": {
+            "uri": "getEntity",
+            "method": "GET",
+            "params": [
+                {
+                    "name": "id",
+                    "required": true
+                }
+            ]
+        },
+        "saveEntity": {
+            "uri": "saveEntity",
+            "method": "POST",
+            "params": [
+                {
+                    "name": "entityString",
+                    "required": true
+                }
+            ]
+        }
+    }
+}
