@@ -49,11 +49,145 @@ jQuery.sap.declare("oui5lib.request");
         xhr.send();
     }
 
-    function publishFailureEvent(eventId, props) {
-        var eventBus = sap.ui.getCore().getEventBus();
-        eventBus.publish("xhr", "timeout", props);
+
+    function doRequest(entityName, requestName, params, resolve, isAsync) {
+        if (params === undefined || params === null) {
+            params = {};
+        }
+        if (typeof isAsync !== "boolean") {
+            isAsync = true;
+        }
+        
+        var requestDef = oui5lib.mapping.getRequestDef(entityName, requestName);
+        var requestParams = procParams(params, requestDef);
+        oui5lib.logger.debug("processed requestParams: " + JSON.stringify(requestParams));
+        if (!requestParams) {
+            throw Error("required parameters missing");
+        }
+        var jqXHR = $.ajax({
+            type: requestDef.method,
+            url: procUrl(requestDef),
+            data: requestParams,
+            async: isAsync,
+            dataType: "json"
+        });
+        jqXHR.done(function (xhrData, textStatus, jqXHR) {
+            if (typeof resolve === "function") {
+                resolve(xhrData, requestName);
+            }
+        });
+        jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
+            // error event
+        });
     }
     
+    function procUrl(requestDef) {
+        var requestUri = requestDef.uri;
+        oui5lib.logger.debug("requestUri: " + requestUri);
+        if (oui5lib.isTest) {
+            switch(requestUri) {
+            case "getAddresses":
+                return "../model/addresses.json";
+                break;
+            case "getOrders":
+                return "../model/orders.json";
+                break;
+            case "getOrder":
+                return "../model/order.json";
+                break;
+            case "getProducts":
+                return "../model/products.json";
+                break;
+            }
+        }
+        return requestUri;
+    }
+
+    function procParams(params, requestDef) {
+        var paramsDef = requestDef.params;
+        if (paramsDef === undefined || paramsDef.length === 0) {
+            return null;
+        }
+        var requestParams = {};
+
+        var l = paramsDef.length, paramDef;
+        while (l--) {
+            paramDef = paramsDef[l];
+            var paramName = paramDef.name;
+            var paramValue = null;
+            if (params[paramName] === undefined) {
+                if (typeof paramDef.default === "string") {
+                    paramValue = paramDef.default;
+                }
+            } else {
+                paramValue = params[paramName];
+                if (paramDef.type !== undefined) {
+                    paramValue = convertValue(paramValue, paramDef);
+                }
+            }
+
+            var isRequired = false;
+            if (typeof paramDef.required === "boolean") {
+                isRequired = paramDef.required;
+            }
+            if (isRequired && paramValue === null) {
+                return false;
+            }
+            if (paramValue !== null) {
+                requestParams[paramName] = paramValue;
+            }
+        }
+        return requestParams;
+    }
+    
+    function convertValue(value, paramDef) {
+        var type = paramDef.type;
+        switch (type) {
+        case "boolean":
+            if (typeof value === "boolean") {
+                if (value) {
+                    return "t";
+                } else {
+                    return "f";
+                }
+            }
+            break;
+        case "Date":
+            if (value instanceof Date &&
+                typeof paramDef.dateFormat === "string") {
+                // convert
+            }
+            break;
+        case "Time":
+            if (value instanceof Date &&
+                typeof paramDef.timeFormat === "string") {
+                // convert
+            }
+            break;
+        case "Array":
+            if (value instanceof Array) {
+                value = value.toString();
+            }
+            break;
+        case "int":
+        case "float":
+            if (typeof value === "number") {
+                value = value + "";
+            }
+            break;
+        }
+        return value;
+    }
+
+    function publishFailureEvent(eventId, props) {
+        if (typeof sap !== "undefined" &&
+            typeof sap.ui !== "undefined") {
+            var eventBus = sap.ui.getCore().getEventBus();
+            eventBus.publish("xhr", eventId, props);
+        }
+    }
+
     var request = oui5lib.namespace("request");
     request.loadJson = loadJson;
+    request.doRequest = doRequest;
 }());

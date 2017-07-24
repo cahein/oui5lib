@@ -11,13 +11,16 @@ oui5lib.namespace = function(string) {
     return object;
 };
 
-jQuery.sap.require("oui5lib.events");
 
-var eventBus = sap.ui.getCore().getEventBus();
-eventBus.subscribe("xhr", "status", oui5lib.events.requestFailure);
-eventBus.subscribe("xhr", "error", oui5lib.events.requestFailure);
-eventBus.subscribe("xhr", "timeout", oui5lib.events.requestFailure);
+if (typeof sap !== "undefined" &&
+    typeof sap.ui !== "undefined") {
+    jQuery.sap.require("oui5lib.events");
 
+    var eventBus = sap.ui.getCore().getEventBus();
+    eventBus.subscribe("xhr", "status", oui5lib.events.requestFailure);
+    eventBus.subscribe("xhr", "error", oui5lib.events.requestFailure);
+    eventBus.subscribe("xhr", "timeout", oui5lib.events.requestFailure);
+}
 jQuery.sap.require("oui5lib.request");
 jQuery.sap.require("oui5lib.configuration");
 jQuery.sap.require("oui5lib.logger");
