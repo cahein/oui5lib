@@ -1,3 +1,7 @@
+jQuery.sap.require("oui5lib.configuration");
+
+jQuery.sap.declare("oui5lib.logger");
+
 (function () {
     if (!window.console) {
         logger.debug = function(){};
@@ -5,14 +9,12 @@
         logger.warn = function(){};
         logger.error = function(){};
         return;
-    };
-
-    var logLevel = oui5lib.configuration.getLogLevel();
-    if (typeof logLevel !== "string") {
-        logLevel = "WARN";
     }
-    var prefix = "oUI5Lib - ";
+
+    var logLevel =  oui5lib.configuration.getLogLevel();
    
+    var logPrefix = "oUI5Lib - ";
+
     switch (logLevel) {
     case "ERROR":
         console.warn = function(){};
@@ -23,19 +25,19 @@
     }
     
     function debug(msg) {
-        console.debug(prefix + msg);
+        console.debug(logPrefix + msg);
     }
     
     function info(msg) {
-        console.info(prefix + msg);
+        console.info(logPrefix + msg);
     }
     
     function warn(msg) {
-        console.warn(prefix + msg);
+        console.warn(logPrefix + msg);
     }
     
     function error(msg) {
-        console.error(prefix + msg);
+        console.error(logPrefix + msg);
     }
     
     var logger = oui5lib.namespace("logger");

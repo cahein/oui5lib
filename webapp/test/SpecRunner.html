@@ -10,22 +10,22 @@
     <script src="jasmine/lib/jasmine-2.6.4/jasmine.js"></script>
     <script src="jasmine/lib/jasmine-2.6.4/jasmine-html.js"></script>
     <script src="jasmine/lib/jasmine-2.6.4/boot.js"></script>
-
+  
+    <script id="sap-ui-bootstrap" type="text/javascript"
+            src="../resources/sap-ui-core.js"
+            data-sap-ui-resourceroots='{
+                                       "oui5lib" : "../lib",
+                                       "oui5lib.fragment" : "../fragment",
+                                       "oui5lib.controller" : "../controller",
+                                       "oui5lib.view" : "../view"
+                                       }'></script>
+            
     <!-- include source files here... -->
     <script src="../lib/init.js"></script>
-    <script src="../lib/request.js"></script>
-    <script src="../lib/configuration.js"></script>
-    <script>
-      oui5lib.configuration.getMappingDir = function() {
-      return "../lib/mapping";
-      }
-    </script>
-    <script src="../lib/logger.js"></script>
     
     <script src="../lib/listHelper.js"></script>
     <script src="../lib/listBase.js"></script>
     <script src="../lib/itemBase.js"></script>
-
     <script src="../lib/mapping.js"></script>
 
     <!-- include spec files here... -->

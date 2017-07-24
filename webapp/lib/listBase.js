@@ -1,3 +1,5 @@
+jQuery.sap.declare("oui5lib.listBase");
+
 (function() {
     function getBaseObject(primaryKey) {
         if (primaryKey === undefined ||
@@ -171,7 +173,7 @@
 
             /**
              * Remove an entry from the data.
-             * @param {object} value The primaryKey value.
+             * @param {String|Number} value The primaryKey value.
              * @returns The removed entry.
              */
             removeItem: function(value) {

@@ -1,6 +1,6 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "oui5lib/lib/logger"
+    "oui5lib/logger"
 ], function (Controller, logger) {
     "use strict";
 

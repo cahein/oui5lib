@@ -1,9 +1,22 @@
+jQuery.sap.require("oui5lib.request");
+
+jQuery.sap.declare("oui5lib.configuration");
+
 (function() {
-    var configData = null;
+    var _configData = null;
+    var _configDataLoading = false;
+    
+    function getComponentName() {
+        var config = getConfigData();
+        return config.componentName;
+    }
     
     function getComponent() {
-        var config = getConfigData();
-        return sap.ui.getCore().getComponent(config.componentName);
+        var componentName = getComponentName();
+        if (typeof componentName === "string") {
+            return sap.ui.getCore().getComponent(componentName);
+        }
+        return null;
     }
     
     function getAvailableLanguages() {
@@ -13,6 +26,9 @@
 
     function getLogLevel() {
         var config = getConfigData();
+        if (config === null || typeof config.logLevel === "undefined") {
+            return "WARN";
+        }
         return config.logLevel;
     }
 
@@ -60,50 +76,43 @@
             component.setModel(oI18nModel, "i18n");
         }
     }
-
-    function getTilesDef() {
-        var config = getConfigData();
-        if (config.entryPoints !== "undefined") {
-            return config.entryPoints;
-        }
-        return false;
-    }
-
-    function getAppModel() {
-        var component = getComponent();
-        var appConfig = component.getManifestEntry("sap.app");
-        
-        var appModel = new sap.ui.model.json.JSONModel({
-            appTitle: appConfig.title,
-            appVersion: appConfig.applicationVersion.version,
-            openui5Version: sap.ui.version
-        });
-
-        return appModel;
-    }
     
     /**
-     * Get config data. Loads configuration file, if necessary
+     * Get config data. Loads configuration file, if necessary.
      * @function getConfigData
      * @memberof oui5lib.configuration
      * @returns {object} The config data
      */
     function getConfigData() {
-        if (configData === null) {
-            var configFile = "../oui5lib.json";
-            configData = oui5lib.request.loadFile(configFile);
+        if (_configData === null && !_configDataLoading) {
+            loadConfigData();
         }
-        return configData;
+        return _configData;
+    }
+    
+    function loadConfigData() {
+        var configFile = "oui5lib.json";
+        oui5lib.request.loadJson(configFile, configDataLoaded, null, false);
+        _configDataLoading = true;
+    }
+    
+    function configDataLoaded(data) {
+        _configData = data;
+        _configDataLoading = false;
     }
     
     var configuration = oui5lib.namespace("configuration");
     configuration.getAvailableLanguages = getAvailableLanguages;
     configuration.getDefaultLanguage = getDefaultLanguage;
     configuration.getCurrentLanguage = getCurrentLanguage;
+    configuration.setCurrentLanguage = setCurrentLanguage;
+
     configuration.getLogLevel = getLogLevel;
     configuration.getMappingDir = getMappingDir;
 
-    configuration.setCurrentLanguage = setCurrentLanguage;
-    configuration.getAppInfoModel = getAppModel;
-    configuration.getEntryPoints = getTilesDef;
+    configuration.getComponent = getComponent;
+
+    configuration.loadConfig = loadConfigData;
 }());
+
+oui5lib.configuration.loadConfig();

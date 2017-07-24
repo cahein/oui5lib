@@ -5,11 +5,13 @@ describe("configuration", function() {
     it("should return array of available languages", function() {
         var availableLanguages = oui5lib.configuration.getAvailableLanguages();
         expect(availableLanguages instanceof Array).toBe(true);
+        expect(availableLanguages.length).toEqual(2);
     });
     
     it("should return log level", function() {
         var logLevel = oui5lib.configuration.getLogLevel();
         expect(typeof logLevel).toEqual("string");
+        expect(logLevel).toEqual("DEBUG");
     });
     
     it("should return default language", function() {
@@ -24,6 +26,6 @@ describe("configuration", function() {
 
     it("should return mapping directory", function() {
         var mappingDir = oui5lib.configuration.getMappingDir();
-        expect(mappingDir).toEqual("../lib/mapping");
+        expect(mappingDir).toEqual("mapping");
     });
 });

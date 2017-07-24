@@ -1,3 +1,5 @@
+jQuery.sap.require("oui5lib.configuration");
+
 sap.ui.jsfragment("oui5lib.fragment.LanguageSwitcher", {
     createContent: function () {
         var languageSelect = new sap.m.Select({
@@ -8,7 +10,7 @@ sap.ui.jsfragment("oui5lib.fragment.LanguageSwitcher", {
                 var selectedLanguage = oEvent.getParameter("selectedItem").getKey();
                 if (oui5lib.configuration.getCurrentLanguage() !== selectedLanguage) {
                     oui5lib.logger.debug("selected language: " + selectedLanguage);
-                    oui5lib.lib.configuration.setCurrentLanguage(selectedLanguage);
+                    oui5lib.configuration.setCurrentLanguage(selectedLanguage);
                 }
             }
         });
