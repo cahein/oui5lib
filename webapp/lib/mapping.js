@@ -19,6 +19,39 @@ jQuery.sap.declare("oui5lib.mapping");
         return defs.primaryKey;
     }
 
+    function getPropertyDefinition(entityName, propertyName) {
+        var defs = getDefinition(entityName);
+        var props = defs.entity;
+        var def = oui5lib.listHelper.getItemByKey(props, "name", propertyName);
+
+        if (typeof def.type === "undefined") {
+            def.type = "string";
+        }
+
+        var tests = [];
+        if (typeof def.validate !== "undefined") {
+            if (def.validate instanceof Array) {
+                tests = def.validate;
+            }
+        }
+        
+        if (typeof def.required !== "boolean") {
+            def.required = false;
+        }
+        if (def.required) {
+            tests.push("required");
+        }
+        def.tests = tests;
+
+        if (typeof def.i18n === "undefined") {
+            def.i18n = {};
+        }
+        if (typeof def.ui5 === "undefined") {
+            def.ui5 = {};
+        }
+        return def;
+    }
+    
     function getRequestDefinition(entityName, requestName) {
         var defs = getDefinition(entityName);
         return defs.request[requestName];
@@ -42,6 +75,7 @@ jQuery.sap.declare("oui5lib.mapping");
     var mapping = oui5lib.namespace("mapping");
     mapping.getDef = getDefinition;
     mapping.getPrimaryKey = getPrimaryKey;
+    mapping.getPropertyDefinition = getPropertyDefinition;
     mapping.getRequestDef = getRequestDefinition;
 }());
 

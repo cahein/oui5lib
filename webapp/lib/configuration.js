@@ -45,11 +45,6 @@ jQuery.sap.declare("oui5lib.configuration");
         return config.currentLanguage;
     }
 
-    function getMappingDir() {
-        var config = getConfigData();
-        return config.mappingDir;
-    }
-        
     function setCurrentLanguage(sLanguage) {
         var config = getConfigData();
 
@@ -77,6 +72,20 @@ jQuery.sap.declare("oui5lib.configuration");
         }
     }
     
+    function getMappingDir() {
+        var config = getConfigData();
+        return config.mappingDir;
+    }
+        
+    function getValidationRegex(type) {
+        var config = getConfigData();
+        var validation = config.validation;
+        if (typeof validation[type + "Regex"] === "string") {
+            return validation[type + "Regex"];
+        }
+        return null;
+    }
+        
     /**
      * Get config data. Loads configuration file, if necessary.
      * @function getConfigData
@@ -109,6 +118,7 @@ jQuery.sap.declare("oui5lib.configuration");
 
     configuration.getLogLevel = getLogLevel;
     configuration.getMappingDir = getMappingDir;
+    configuration.getRegex = getValidationRegex;
 
     configuration.getComponent = getComponent;
 

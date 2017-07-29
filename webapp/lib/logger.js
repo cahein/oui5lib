@@ -2,6 +2,8 @@ jQuery.sap.require("oui5lib.configuration");
 
 jQuery.sap.declare("oui5lib.logger");
 
+/*eslint no-console: "off"*/
+/*eslint no-fallthrough: "off"*/
 (function () {
     if (!window.console) {
         logger.debug = function(){};

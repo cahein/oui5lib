@@ -1,14 +1,24 @@
-jQuery.sap.declare("oui5lib..validation");
+jQuery.sap.declare("oui5lib.validation");
 
 (function() {
+    var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    var timeRegex = /^\d{2}:\d{2}:\d{2}$/;
+    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    var phoneRegex = /^0{2}[1-9][\d]*$/;
+    
     function validateData(data, paramDefs) {
         var msgs = [];
         for (var i = 0, s = paramDefs.length; i < s; i++) {
             var paramDef = paramDefs[i];
-
             var paramName = paramDef.name;
-            var paramValue = data[paramName];
 
+            var paramValue = null;
+            if (typeof data[paramName] !== "undefined") {
+                paramValue = data[paramName];
+            } else if (typeof paramDef.default !== "undefined") {
+                paramValue = paramDef.default;
+            }
+            
             // required
             var isRequired = false;
             if (typeof paramDef.required === "boolean") {
@@ -29,6 +39,10 @@ jQuery.sap.declare("oui5lib..validation");
             if (isRequired) {
                 switch(type) {
                 case "string":
+                    if (typeof paramValue !== "string") {
+                        msgs.push("wrongType:" + paramName);
+                    }
+                    break;
                 case "Date":
                 case "Time":
                     if (!(paramValue instanceof Date)) {
@@ -36,6 +50,9 @@ jQuery.sap.declare("oui5lib..validation");
                         continue;
                     }
                     break;
+                case "email":
+                case "phone":
+                    
                 }
             }
             
@@ -46,17 +63,12 @@ jQuery.sap.declare("oui5lib..validation");
                 tests = paramDef.validate;
             }
             if (tests !== null) {
-                if (typeof paramValue !== type) {
-                    if (type !== "email" && type !== "phone") { 
-                        msgs.push("wrongType: " + paramName);
-                    }
-                    continue;
-                }
                 if (!this.isValid(paramValue, tests)) {
                     msgs.push("invalid:" + paramName);
                     continue;
                 }
             }
+
             // allowedValues
             if (typeof paramDef.allowedValues !== "undefined") {
                 var allowedValues = paramDef.allowedValues;
@@ -78,7 +90,7 @@ jQuery.sap.declare("oui5lib..validation");
      */
     function isValid(vlue, tests) {
         var valid = true;
-        if (tests) {
+        if (tests && tests.length > 0) {
             for (var i = 0, s = tests.length; i < s; i++) {
                 var test = tests[i];
 
@@ -110,25 +122,26 @@ jQuery.sap.declare("oui5lib..validation");
                         valid = false;
                     }
                     break;
-                case "isValidEmail":
+                case "minLength":
+                    if (!minLength(vlue, number)) {
+                        valid = false;
+                    }
+                    break;
+                case "maxLength":
+                    if (!maxLength(vlue, number)) {
+                        valid = false;
+                    }
+                    break;
+                case "validEmail":
                     if (!isBlank(vlue)) {
                         if (!custom("email", vlue)) {
                             valid = false;
                         }
                     }
                     break;
-                case "isValidSms":
+                case "validPhone":
                     if (!(isBlank(vlue))) {
-                        if (!custom("sms", vlue)) {
-                            valid = false;
-                        }
-                    }
-                    break;
-                case "isValidTimeString":
-                    vlue = vlue.trim();
-                    if (!(isBlank(vlue))) {
-                        match = vlue.match(/(\d+) (\d+)/);
-                        if (match === null || match.length !== 3) {
+                        if (!custom("phone", vlue)) {
                             valid = false;
                         }
                     }
@@ -140,8 +153,8 @@ jQuery.sap.declare("oui5lib..validation");
     }
     
     /**
-     * Custom validations. Currently validates email, sms.
-     * @param {string} fnme Available: 'email', 'sms'
+     * Custom validations. Currently validates email, phone.
+     * @param {string} fnme Available: 'email', 'phone'
      * @param {string} vlue The value to be tested.
      * @returns {boolean}
      */
@@ -150,33 +163,31 @@ jQuery.sap.declare("oui5lib..validation");
 
         switch(fnme) {
         case "email":
-            regex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            regex = emailRegex;
             break;
-        case "sms":
-            regex = /^0{2}[1-9][\d]*$/;
+        case "phone":
+            regex = phoneRegex;
             break;
         }
         return regex.test(vlue);
     }
 
     /**
-     * Tests if value is a valid date. Format: YYYY:MM:DD
+     * Tests if value is a valid date. Format: YYYY-MM-DD
      * @param vlue The value to be validated.
      * @returns {boolean}
      */
-    function isValidDate(vlue) {
-        var regex = /^\d{4}-\d{2}-\d{2}$/;
-        return regex.test(vlue);
+    function isValidDateString(vlue) {
+        return dateRegex.test(vlue);
     }
 
     /**
-     * Tests if value is a valid time. Format: HH:mm:ss
-     * @param vlue The value to be validated.
+     * Tests if value is a valid time string. Format: HH:mm:ss
+     * @param {string} vlue The value to be validated.
      * @returns {boolean}
      */
-    function isValidTime(vlue) {
-        var regex = /^\d{2}:\d{2}:\d{2}$/;
-        return regex.test(vlue);
+    function isValidTimeString(vlue) {
+        return timeRegex.test(vlue);
     }
     
     /**
@@ -207,8 +218,8 @@ jQuery.sap.declare("oui5lib..validation");
 
     /**
      * Tests if a string has a certain length.
-     * @param {string} vlue The string to be tested.
-     * @param {int} number The length.
+     * @param {string|array} vlue The string or array to be tested.
+     * @param {int} number The required length.
      * @returns {boolean}
      */
     function verifyLength(vlue, number) {
@@ -218,6 +229,32 @@ jQuery.sap.declare("oui5lib..validation");
         return true;
     }
     
+    /**
+     * Tests if a string has a certain minimum length.
+     * @param {string|array} vlue The string or array to be tested.
+     * @param {int} number The length minimum.
+     * @returns {boolean}
+     */
+    function minLength(vlue, number) {
+        if (vlue.length < number) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Tests if a string is not longer than a certain maximum length.
+     * @param {string|array} vlue The string or array to be tested.
+     * @param {int} number The length maximum.
+     * @returns {boolean}
+     */
+    function maxLength(vlue, number) {
+        if (vlue.length > number) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Tests if value is null or empty.
      * @param vlue The value to be tested.
@@ -229,23 +266,25 @@ jQuery.sap.declare("oui5lib..validation");
         }      
         for (var i = 0; i < vlue.length; i++) {
             var c = vlue.charAt(i);
-            if (c != ' ' && c != '\n' && c != '\t') {
+            if (c != " " && c != "\n" && c != "\t") {
                 return false;
             }
         }
         return true;
     }
 
-    var validation = oum.namespace("lib.validation");
+    var validation = oui5lib.namespace("validation");
     validation.validateData = validateData;
     validation.isValid = isValid;
+    validation.isBlank = isBlank;
 
     // only for testing
     validation.numbersOnly = numbersOnly;
     validation.hasLetters = hasLetters;
-    validation.isValidDate = isValidDate;
-    validation.isValidTime = isValidTime;
+    validation.isValidDate = isValidDateString;
+    validation.isValidTime = isValidTimeString;
     validation.verifyLength = verifyLength;
-    validation.isBlank = isBlank;
+    validation.minLength = minLength;
+    validation.maxLength = maxLength;
     validation.custom = custom;
 }());

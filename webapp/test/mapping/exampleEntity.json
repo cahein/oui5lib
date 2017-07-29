@@ -11,6 +11,61 @@
             "required": true
         },
         {
+            "name": "email",
+            "required": true,
+            "validate": [
+                "validEmail"
+            ]
+            "ui5": {
+                "control": "sap.m.Input",
+                "inputType": "Email"
+            }
+        },
+        {
+            "name": "sku",
+            "validate": [
+                "hasLetters",
+                "minLength_4",
+                "maxLength_8"
+            ],
+            "i18n": {
+                "label": "sku.label",
+                "tooltip": "sku.tooltip"
+            },
+            "ui5": {
+                "control": "sap.m.Input",
+            }
+        },
+        {
+            "name": "time",
+            "validate": [
+            ],
+            "i18n": {
+                "label": "time.label",
+                "tooltip": "time.tooltip"
+            },
+            "ui5": {
+                "control": "sap.m.MaskInput",
+                "mask": "99:99",
+                "width": "60px"
+            }
+        },
+        {
+            "name": "location",
+            "i18n": {
+                "label": "location.label",
+                "tooltip": "location.tooltip",
+                "placeholder": "locations.placeholder"
+            },
+            "ui5": {
+                "control": "sap.m.Select",
+                "itemsModel": "locations",
+                "itemKey": "key",
+                "itemText": "text",
+                "sortBy": "text"
+            }
+        },
+        {
             "name": "items",
             "type": "collection",
             "collectionItem": [

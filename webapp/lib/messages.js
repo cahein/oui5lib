@@ -1,8 +1,10 @@
+jQuery.sap.require("oui5lib.logger");
+
+jQuery.sap.declare("oui5lib.messages");
 (function () {
     function getMessageManager() {
         return sap.ui.getCore().getMessageManager();
     }
-    
     function getMessageProcessor() {
         return new sap.ui.core.message.ControlMessageProcessor();
     }
@@ -38,8 +40,31 @@
         }
     }
 
+    function showMessageToast(msg) {
+        jQuery.sap.require("sap.m.MessageToast");
+        sap.m.MessageToast.show(msg);
+    }
+
+    function showErrorMessageBox(msg, handleClose) {
+        if (typeof handleClose !== "function") {
+            handleClose = handleErrorMessageBoxClosed;
+        }
+        
+        jQuery.sap.require("sap.m.MessageBox");
+        sap.m.MessageBox.error(msg, {
+            title: "{i18n>messagebox.error}",
+            onClose: handleClose
+        });
+    }
+    function handleErrorMessageBoxClosed(sResult) {
+        oui5lib.logger.info("ErrorMessage closed: " + sResult);
+    }
+
     var messages = oui5lib.namespace("messages");
     messages.addErrorMessage = addErrorMessage;
     messages.addWarnMessage = addWarnMessage;
     messages.removeMessages = removeMessages;
+
+    messages.showNotification = showMessageToast;
+    messages.showErrorMessage = showErrorMessageBox;
 }());

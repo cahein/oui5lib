@@ -88,16 +88,12 @@ jQuery.sap.declare("oui5lib.request");
             switch(requestUri) {
             case "getAddresses":
                 return "../model/addresses.json";
-                break;
             case "getOrders":
                 return "../model/orders.json";
-                break;
             case "getOrder":
                 return "../model/order.json";
-                break;
             case "getProducts":
                 return "../model/products.json";
-                break;
             }
         }
         return requestUri;

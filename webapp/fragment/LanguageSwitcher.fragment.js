@@ -16,8 +16,7 @@ sap.ui.jsfragment("oui5lib.fragment.LanguageSwitcher", {
         });
 
         var availableLanguages = oui5lib.configuration.getAvailableLanguages();
-        for (var i = 0, s = availableLanguages.length;
-             i < s; i++) {
+        for (var i = 0, s = availableLanguages.length; i < s; i++) {
             var languageKey = availableLanguages[i];
             var item = new sap.ui.core.Item({
                 text: "{i18n>language." + languageKey + "}",

@@ -6,4 +6,10 @@ describe("mapping", function() {
         var primaryKey = oui5lib.mapping.getPrimaryKey("exampleEntity");
         expect(primaryKey).toEqual("id");
     });
+
+    it("should return property definition", function() {
+        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity", "id");
+        expect(prop.name).toEqual("id");
+        expect(prop.type).toEqual("int");
+    });
 });

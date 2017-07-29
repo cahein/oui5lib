@@ -16,10 +16,12 @@
         "no-new-wrappers": "error",
         "no-array-constructor": "error",
         "no-mixed-spaces-and-tabs": "error",
-        "indent": [ "warn", 4 ],
         "linebreak-style": [ "error", "unix" ],
         "quotes": [ "error", "double" ],
-        "semi": [ "error", "always" ]
+        "semi": [ "error", "always" ],
+        "indent": [
+            "warn", 4, { "FunctionDeclaration": { "parameters": "first" }}
+        ]
     },
     "globals": {
         "sap": true,

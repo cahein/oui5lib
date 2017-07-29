@@ -1,0 +1,17 @@
+{
+  "name": "oui5lib",
+  "version": "0.1.0",
+  "private": true,
+  "description": "UI5 extension library",
+  "author": "Carsten Heinrigs",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-available-tasks": "^0.6.3",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-jasmine": "^1.1.0",
+    "grunt-eslint": "^20.0.0",
+    "grunt-jsdoc": "^2.1.0"
+  },
+  "dependencies": {},
+  "optionalDependencies": {}
+}
