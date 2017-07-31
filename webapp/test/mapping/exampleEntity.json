@@ -15,7 +15,7 @@
             "required": true,
             "validate": [
                 "validEmail"
-            ]
+            ],
             "ui5": {
                 "control": "sap.m.Input",
                 "inputType": "Email"
@@ -33,7 +33,7 @@
                 "tooltip": "sku.tooltip"
             },
             "ui5": {
-                "control": "sap.m.Input",
+                "control": "sap.m.Input"
             }
         },
         {

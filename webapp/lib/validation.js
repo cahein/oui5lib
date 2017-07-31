@@ -1,11 +1,16 @@
 jQuery.sap.declare("oui5lib.validation");
 
+/** @namespace oui5lib.validation */
 (function() {
     var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     var timeRegex = /^\d{2}:\d{2}:\d{2}$/;
     var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     var phoneRegex = /^0{2}[1-9][\d]*$/;
     
+    /**
+     * Validate data against entity definition provided by the mapping.
+     * @memberof oui5lib.validation
+     */
     function validateData(data, paramDefs) {
         var msgs = [];
         for (var i = 0, s = paramDefs.length; i < s; i++) {
@@ -83,7 +88,7 @@ jQuery.sap.declare("oui5lib.validation");
     
     /**
      * Test validity of value against a list of tests.
-     * @function baselib.validation.isValid
+     * @memberof oui5lib.validation
      * @param vlue The value to be tested.
      * @param {array} tests The tests to be run.
      * @returns {boolean} valid or not
@@ -173,25 +178,36 @@ jQuery.sap.declare("oui5lib.validation");
     }
 
     /**
-     * Tests if value is a valid date. Format: YYYY-MM-DD
+     * Tests if value is a valid date. Default pattern: YYYY-MM-DD
+     * @memberof oui5lib.validation
      * @param vlue The value to be validated.
+     * @param {string} regex The regular expression to validate against.
      * @returns {boolean}
      */
-    function isValidDateString(vlue) {
-        return dateRegex.test(vlue);
+    function isValidDateString(vlue, regex) {
+        if (!(regex instanceof RegExp)) {
+            regex = dateRegex;
+        }
+        return regex.test(vlue);
     }
 
     /**
-     * Tests if value is a valid time string. Format: HH:mm:ss
+     * Tests if value is a valid time string. Default pattern: HH:mm:ss
+     * @memberof oui5lib.validation
      * @param {string} vlue The value to be validated.
+     * @param {string} regex The regular expression to validate against.
      * @returns {boolean}
      */
-    function isValidTimeString(vlue) {
-        return timeRegex.test(vlue);
+    function isValidTimeString(vlue, regex) {
+        if (!(regex instanceof RegExp)) {
+            regex = timeRegex;
+        }
+        return regex.test(vlue);
     }
     
     /**
      * Tests if value contains only digits.
+     * @memberof oui5lib.validation
      * @param vlue The value to be tested.
      * @returns {boolean}
      */
@@ -205,6 +221,7 @@ jQuery.sap.declare("oui5lib.validation");
 
     /**
      * Tests if value contains any letters.
+     * @memberof oui5lib.validation
      * @param vlue The value to be tested.
      * @returns {boolean}
      */
@@ -218,6 +235,7 @@ jQuery.sap.declare("oui5lib.validation");
 
     /**
      * Tests if a string has a certain length.
+     * @memberof oui5lib.validation
      * @param {string|array} vlue The string or array to be tested.
      * @param {int} number The required length.
      * @returns {boolean}
@@ -231,6 +249,7 @@ jQuery.sap.declare("oui5lib.validation");
     
     /**
      * Tests if a string has a certain minimum length.
+     * @memberof oui5lib.validation
      * @param {string|array} vlue The string or array to be tested.
      * @param {int} number The length minimum.
      * @returns {boolean}
@@ -244,6 +263,7 @@ jQuery.sap.declare("oui5lib.validation");
 
     /**
      * Tests if a string is not longer than a certain maximum length.
+     * @memberof oui5lib.validation
      * @param {string|array} vlue The string or array to be tested.
      * @param {int} number The length maximum.
      * @returns {boolean}
@@ -257,6 +277,7 @@ jQuery.sap.declare("oui5lib.validation");
 
     /**
      * Tests if value is null or empty.
+     * @memberof oui5lib.validation
      * @param vlue The value to be tested.
      * @returns {boolean}
      */

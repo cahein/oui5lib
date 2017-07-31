@@ -1,4 +1,4 @@
-describe("oui5lib validation", function() {
+describe("validation", function() {
     it("should test for numbers only", function() {
         expect(oui5lib.validation.numbersOnly("1234e")).toBe(false);
         expect(oui5lib.validation.numbersOnly("1234")).toBe(true);
@@ -36,6 +36,7 @@ describe("oui5lib validation", function() {
         expect(oui5lib.validation.isValidTime("20:01:05")).toBe(true);
         expect(oui5lib.validation.isValidTime("1:15")).toBe(false);
         expect(oui5lib.validation.isValidTime("12:10")).toBe(false);
+        expect(oui5lib.validation.isValidTime("12:10", /^\d{2}:\d{2}$/)).toBe(true);
         expect(oui5lib.validation.isValidTime("02:10:00")).toBe(true);
         expect(oui5lib.validation.isValidTime("2:10:00")).toBe(false);
     });
@@ -90,7 +91,7 @@ describe("oui5lib validation", function() {
                 "name": "email",
                 "type": "email",
                 "validate" : [
-                    "isValidEmail"
+                    "validEmail"
                 ]
             },
             {
@@ -102,7 +103,7 @@ describe("oui5lib validation", function() {
                 "name" : "sms",
                 "type": "phone",
                 "validate" : [
-                    "isValidPhone"
+                    "validPhone"
                 ]
             },
             {

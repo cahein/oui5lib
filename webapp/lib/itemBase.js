@@ -1,5 +1,6 @@
 jQuery.sap.declare("oui5lib.itemBase");
 
+/** @namespace oui5lib.itemBase */
 (function () {
     function updateModel() {
         if (this._model !== undefined) {
@@ -14,6 +15,7 @@ jQuery.sap.declare("oui5lib.itemBase");
 
     /**
      * Get Model from data.
+     * @memberof oui5lib.itemBase
      * @return {sap.ui.model.json.JSONModel} The JSONModel.
      */
     function getModel() {
@@ -28,6 +30,7 @@ jQuery.sap.declare("oui5lib.itemBase");
 
     /**
      * Use to get object data.
+     * @memberof oui5lib.itemBase
      * @return {object}
      */
     function getData() {
@@ -36,6 +39,7 @@ jQuery.sap.declare("oui5lib.itemBase");
 
     /**
      * Use to set object data.
+     * @memberof oui5lib.itemBase
      * @param {object} data
      */
     function setData(data) {
@@ -45,6 +49,7 @@ jQuery.sap.declare("oui5lib.itemBase");
     
     /**
      * Use to get property value from object data.
+     * @memberof oui5lib.itemBase
      * @param {string} key The parameter key.
      * @return The parameter value
      */
@@ -58,6 +63,7 @@ jQuery.sap.declare("oui5lib.itemBase");
 
     /**
      * Use to set a property value. Sets the item modified.
+     * @memberof oui5lib.itemBase
      * @param {string} key The parameter key.
      * @param {string} vlue The parameter value.
      * @return {boolean} True if successful, false if key undefined.
@@ -76,6 +82,7 @@ jQuery.sap.declare("oui5lib.itemBase");
     
     /**
      * Were the item data modified?
+     * @memberof oui5lib.itemBase
      * @returns {boolean} True if modified.
      */
     function wasModified() {
@@ -84,6 +91,7 @@ jQuery.sap.declare("oui5lib.itemBase");
 
     /**
      * Is the item new?
+     * @memberof oui5lib.itemBase
      * @returns {boolean} True if new. Defaults to false.
      */
     function isNew() {
@@ -92,6 +100,7 @@ jQuery.sap.declare("oui5lib.itemBase");
 
     /**
      * Set the item new
+     * @memberof oui5lib.itemBase
      * @param {boolean} isNew True if new. Defaults to false.
      */
     function setNew(isNew) {

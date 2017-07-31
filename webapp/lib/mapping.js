@@ -4,9 +4,15 @@ jQuery.sap.require("oui5lib.logger");
 
 jQuery.sap.declare("oui5lib.mapping");
 
+/** @namespace oui5lib.mapping */
 (function () {
     var mappings = {};
-
+    /**
+     * Get the mapping for the given entity. Will try to load the mapping if necessary.
+     * @memberof oui5lib.mapping
+     * @param {string} entityName The name of the entity.
+     * @returns {object} The mapping object.
+     */
     function getDefinition(entityName) {
         if (typeof mappings[entityName] === "undefined") {
             loadMapping(entityName);

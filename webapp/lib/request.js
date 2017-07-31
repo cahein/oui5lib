@@ -1,6 +1,16 @@
 jQuery.sap.declare("oui5lib.request");
 
+/** @namespace oui5lib.request */
 (function () {
+
+    /**
+     * Load JSON file.
+     * @memberof oui5lib.request
+     * @param {string} uri
+     * @param {function} resolve
+     * @param {object} props
+     * @param {boolean} isAsync
+     */
     function loadJson(uri, resolve, props, isAsync) {
         if (typeof props === "undefined") {
             props = {};
@@ -49,7 +59,15 @@ jQuery.sap.declare("oui5lib.request");
         xhr.send();
     }
 
-
+    /**
+     * Run request.
+     * @memberof oui5lib.request
+     * @param {string} entityName
+     * @param {string} requestName
+     * @param {object} params
+     * @param {function} resolve
+     * @param {boolean} isAsync
+     */
     function doRequest(entityName, requestName, params, resolve, isAsync) {
         if (params === undefined || params === null) {
             params = {};
@@ -98,7 +116,13 @@ jQuery.sap.declare("oui5lib.request");
         }
         return requestUri;
     }
-
+    
+    /**
+     * Process parameters
+     * @memberof oui5lib.request
+     * @param {object} params
+     * @param {object} requestDef
+     */
     function procParams(params, requestDef) {
         var paramsDef = requestDef.params;
         if (paramsDef === undefined || paramsDef.length === 0) {

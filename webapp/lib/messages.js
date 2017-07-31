@@ -1,6 +1,8 @@
 jQuery.sap.require("oui5lib.logger");
 
 jQuery.sap.declare("oui5lib.messages");
+
+/** @namespace oui5lib.messages */
 (function () {
     function getMessageManager() {
         return sap.ui.getCore().getMessageManager();
@@ -9,6 +11,13 @@ jQuery.sap.declare("oui5lib.messages");
         return new sap.ui.core.message.ControlMessageProcessor();
     }
 
+    /**
+     * Add message to the specified target.
+     * @memberof oui5lib.messages
+     * @param {string} msgType
+     * @param {string} msgText
+     * @param {string} target
+     */
     function addMessage(msgType, msgText, target) {
         var messageManager  = getMessageManager();
         var messageProcessor = getMessageProcessor();
@@ -21,14 +30,30 @@ jQuery.sap.declare("oui5lib.messages");
         messageManager.addMessages(msg);
     }
     
+    /**
+     * Add message of type Error to the specified target.
+     * @memberof oui5lib.messages
+     * @param {string} msgText
+     * @param {string} target
+     */
     function addErrorMessage(msgText, target) {
         addMessage("Error", msgText, target);
     }
 
+    /**
+     * Add message of type Warning to the specified target.
+     * @memberof oui5lib.messages
+     * @param {string} msgText
+     * @param {string} target
+     */
     function addWarnMessage(msgText, target) {
         addMessage("Warning", msgText, target);
     }
 
+    /**
+     * Remove messages for specified target.
+     * @memberof oui5lib.messages
+     */
     function removeMessages(target) {
         var messageManager  = getMessageManager();
         var data = messageManager.getMessageModel().getData();

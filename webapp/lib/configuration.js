@@ -2,15 +2,24 @@ jQuery.sap.require("oui5lib.request");
 
 jQuery.sap.declare("oui5lib.configuration");
 
+/** @namespace oui5lib.configuration */
 (function() {
     var _configData = null;
     var _configDataLoading = false;
-    
+
+    /**
+     * Get the componentName from the configuration.
+     */
     function getComponentName() {
         var config = getConfigData();
         return config.componentName;
     }
     
+    /**
+     * Get Component.
+     * @memberof oui5lib.configuration
+     * @returns The Component by the configured name. Returns undefined if such a Components does not exist. Returns null if the componentName has not been specified.
+     */
     function getComponent() {
         var componentName = getComponentName();
         if (typeof componentName === "string") {
@@ -18,12 +27,22 @@ jQuery.sap.declare("oui5lib.configuration");
         }
         return null;
     }
-    
+
+    /**
+     * Get the availableLanguages property from the configuration.
+     * @memberof oui5lib.configuration
+     * @returns {Array} The available languages. Returns undefined if not set.
+     */
     function getAvailableLanguages() {
         var config = getConfigData();
         return config.availableLanguages;
     }
 
+    /**
+     * Get the logLevel property from the configuration.
+     * @memberof oui5lib.configuration
+     * @returns {string} The logLevel. Returns WARN if not set.
+     */
     function getLogLevel() {
         var config = getConfigData();
         if (config === null || typeof config.logLevel === "undefined") {
@@ -32,11 +51,21 @@ jQuery.sap.declare("oui5lib.configuration");
         return config.logLevel;
     }
 
+    /**
+     * Get the defaultLanguage property from the configuration.
+     * @memberof oui5lib.configuration
+     * @returns {string} The default language. Returns undefined if not set.
+     */
     function getDefaultLanguage() {
         var config = getConfigData();
         return config.defaultLanguage;
     }
 
+    /**
+     * Get the current language.
+     * @memberof oui5lib.configuration
+     * @returns {string} The current language. Returns the defaultLanguage if not set.
+     */
     function getCurrentLanguage() {
         var config = getConfigData();
         if (typeof config.currentLanguage === "undefined") {
@@ -45,6 +74,11 @@ jQuery.sap.declare("oui5lib.configuration");
         return config.currentLanguage;
     }
 
+    /**
+     * Set the current language.
+     * @memberof oui5lib.configuration
+     * @param {string} sLanguage 
+     */
     function setCurrentLanguage(sLanguage) {
         var config = getConfigData();
 
@@ -72,23 +106,33 @@ jQuery.sap.declare("oui5lib.configuration");
         }
     }
     
+    /**
+     * Get the mappingDir property from the configuration.
+     * @memberof oui5lib.configuration
+     * @returns {string} The mapping folder. Returns undefined if not set.
+     */
     function getMappingDir() {
         var config = getConfigData();
         return config.mappingDir;
     }
         
+    /**
+     * Get the regular expression from the validation section of the configuration.
+     * @memberof oui5lib.configuration
+     * @param {string} type 
+     * @returns {RegExp}
+     */
     function getValidationRegex(type) {
         var config = getConfigData();
         var validation = config.validation;
         if (typeof validation[type + "Regex"] === "string") {
-            return validation[type + "Regex"];
+            return new RegExp(validation[type + "Regex"]);
         }
         return null;
     }
         
     /**
      * Get config data. Loads configuration file, if necessary.
-     * @function getConfigData
      * @memberof oui5lib.configuration
      * @returns {object} The config data
      */

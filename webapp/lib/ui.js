@@ -4,7 +4,14 @@ jQuery.sap.require("oui5lib.logger");
 
 jQuery.sap.declare("oui5lib.ui");
 
+/** @namespace oui5lib.ui */
 (function() {
+
+    /**
+     * Opens a MessageBox to require the user to confirm unsaved changes.
+     * @memberof oui5lib.ui
+     * @param {function} handleClose
+     */
     function confirmUnsavedChanges(handleClose) {
         if (typeof handleClose !== "function") {
             throw TypeError("need a function to handle the onClose event");
@@ -16,6 +23,12 @@ jQuery.sap.declare("oui5lib.ui");
         });
     }
 
+    /**
+     * Opens a MessageBox to require the user to confirm deleting an entity.
+     * @memberof oui5lib.ui
+     * @param {string} msg
+     * @param {function} handleClose
+     */
     function confirmDelete(msg, handleClose) {
         if (typeof handleClose !== "function") {
             throw TypeError("need a function to handle the onClose event");
@@ -36,7 +49,10 @@ jQuery.sap.declare("oui5lib.ui");
      * @param {string} modelName The name of the model set to the form.
      * @param {array} errors List of error objects returned from the oui5lib.validation.validateData function.
      */
-    function handleValidationErrors(view, modelName, errors) {
+    function handleValidationErrors(view, modelName, errors, openMessageBox) {
+        if (typeof openMessageBox !== "boolean") {
+            openMessageBox = false;
+        }
         var msgs = [];
         for (var i = 0, s = errors.length; i < s; i++) {
             var error = errors[i].split(":");
@@ -47,9 +63,23 @@ jQuery.sap.declare("oui5lib.ui");
 
             msgs.push("Invalid: " + error[0] + " " + error[1]);                
         }
-        this.showValidationErrors(msgs);
+        if (openMessageBox) {
+            showValidationErrors(msgs);
+        }
     }
     
+    /**
+     * Show input validation errors. Will open a MessageBox.
+     * @param {array} msgs Error messages to be shown in the box.
+     */
+    function showValidationErrors(msgs) {
+        var msgText = oui5lib.util.getI18nText("validation.fix-errors");
+        for (var i = 0, s = msgs.length; i < s; i++) {
+            msgText += msgs[i] + "\n";
+        }
+        oui5lib.messages.showErrorMessage(msgText);
+    }
+
     /**
      * Set or remove the error value state of a control and show related message.
      * @param {object} control  A sapui control.
@@ -143,11 +173,23 @@ jQuery.sap.declare("oui5lib.ui");
         return true;
     }
 
+    /**
+     * Use to unset any selected item and remove all items from a ComboBox.
+     * @param {sap.m.ComboBox} comboBox The ComboBox to clear.
+     */
+    function clearComboBox(comboBox) {
+        comboBox.setSelectedItem(null);
+        comboBox.removeAllItems();
+    }
+    
     var ui = oui5lib.namespace("ui");
     ui.confirmUnsavedChanges = confirmUnsavedChanges;
-    ui.setControlValueState = setControlValueState;
     ui.confirmDelete = confirmDelete;
+
     ui.handleValidationErrors = handleValidationErrors;
+    ui.setControlValueState = setControlValueState;
+
+    ui.clearComboBox = clearComboBox;
 
     ui.checkComboBox = checkComboBox;
     ui.checkDatePicker = checkDatePicker;

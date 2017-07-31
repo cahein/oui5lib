@@ -3,6 +3,7 @@
 .#*
 .tern-port
 resources
+doc
 saved
 jasmine
 node_modules
