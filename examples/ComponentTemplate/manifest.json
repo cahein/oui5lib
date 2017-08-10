@@ -1,0 +1,94 @@
+{
+    "start_url": "index.html",
+    "sap.app": {
+        "id": "ui5manual",
+        "type": "application",
+        "title": "{{ui5manual.title}}",
+        "applicationVersion": {
+            "version": "0.1"
+        }
+    },
+    "sap.ui": {
+	"deviceTypes": {
+	    "desktop": true,
+	    "tablet": true,
+	    "phone": false
+	},
+        "supportedThemes": [
+            "sap_belize",
+            "sap_hcb"
+        ]
+    },
+    "sap.ui5": {
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "dependencies": {
+            "libs": {
+            },
+            "components" : {
+            }
+        },
+        "routing" : {
+            "config" : {
+                "routerClass": "oum.Router",
+                "async": true,
+                "viewType": "JS",
+                "viewPath": "oum.view",
+                "controlId": "oumApp",
+                "controlAggregation": "pages",
+                "bypassed": {
+                    "target": "noRoute"
+                }
+            },
+            "routes": [
+                {
+                    "pattern": "",
+                    "name": "home",
+                    "target": "home"
+                },
+                {
+                    "pattern": "help",
+                    "name": "help",
+                    "target": ["helpIndex", "helpIntro"]
+                },
+                {
+                    "pattern": "pageNotFound",
+                    "name": "noRoute",
+                    "target": "noRoute"
+                }
+            ],
+            "targets": {
+                "app": {
+                    "viewName": "app",
+                    "viewType": "XML"
+                },
+                "home": {
+                    "viewName": "entry"
+                },
+                "splitApp": {
+                    "viewName": "splitApp",
+                    "viewType": "XML"
+                },
+                "helpIndex": {
+                    "parent": "splitApp",
+                    "viewName": "help.index",
+                    "controlId": "oumSplitApp",
+                    "controlAggregation": "masterPages"
+                },
+                "helpIntro": {
+                    "parent": "splitApp",
+                    "viewName": "help.intro",
+                    "controlId": "oumSplitApp",
+                    "controlAggregation": "detailPages"
+                },
+                "noRoute": {
+                    "viewPath": "oui5lib.view",
+                    "viewName": "noRoute",
+                    "viewType": "XML"
+                }
+            }
+        }
+    }
+}

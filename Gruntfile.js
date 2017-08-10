@@ -53,15 +53,52 @@ module.exports = function (grunt) {
                 ],
                 dest: "doc"
             }
+        },
+        copy: {
+            oui5lib: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.lib %>",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/BusinessObjects/oui5lib/lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.lib %>",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.controller %>",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/controller/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.fragment %>",
+                        src: "**",
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/fragment/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.view %>",
+                        src: "**",
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/view/"
+                    }
+                ]
+            }
         }
-
     });
     grunt.loadNpmTasks("grunt-available-tasks");
+    grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-eslint");
 
     grunt.registerTask("default", ["availabletasks"]);
     grunt.registerTask("lint", ["eslint"]);
     grunt.registerTask("gendoc", ["clean:doc", "jsdoc"]);
+    grunt.registerTask("prepare-examples", ["copy:oui5lib"]);
 
 };

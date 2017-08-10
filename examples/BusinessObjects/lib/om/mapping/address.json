@@ -1,0 +1,52 @@
+{
+    "description": "Define Address",
+    "primaryKey" : "id",
+    "entity" : [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+            "name": "firstName",
+            "required": true
+        },
+        {
+            "name": "lastName",
+            "required": true
+        },
+        {
+            "name": "street",
+            "required": true
+        },
+        {
+            "name": "city",
+            "required": true
+        },
+        {
+            "name": "postcode",
+            "required": true
+        },
+        {
+            "name": "phone"
+        }
+    ],
+    "request": {
+        "getAddresses": {
+            "uri": "getAddresses",
+            "method": "GET",
+            "params": [
+                {
+                    "name": "ids",
+                    "type": "Array",
+                    "required": true
+                }
+            ]
+        },
+        "saveAddress": {
+            "uri": "saveAddresses",
+            "method": "POST",
+            "params": [
+            ]
+        }
+    }
+}

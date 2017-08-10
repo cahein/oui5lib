@@ -1,0 +1,77 @@
+{
+    "results": [
+        {
+            "id": 1,
+            "status": "shipped",
+            "orderDate": "2017-05-16 10:01:23",
+            "customerAddressId": 1,
+            "billingAddressId": 1,
+            "items": [
+                {
+                    "productId": 2,
+                    "quantity": 2,
+                    "unitPrice": 4.80
+                },
+                {
+                    "productId": 1,
+                    "quantity": 1,
+                    "unitPrice": 37.90
+                }
+            ],
+            "payments": [
+                {
+                    "date": "2017-05-17",
+                    "method": "bankpayment",
+                    "amount": 37.90
+                }
+            ],
+            "shipments": [
+                {
+                    "provider": "CompanyA",
+                    "shipDate": "2017-05-18"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "status": "processing",
+            "customerAddressId": 2,
+            "billingAddressId": 3,
+            "orderDate": "2017-05-02 02:21:03",
+            "items": [
+                {
+                    "productId": 2,
+                    "quantity": 1,
+                    "unitPrice": 2.40
+                },
+                {
+                    "productId": 3,
+                    "quantity": 2,
+                    "unitPrice": 19.80
+                }
+            ],
+            "payments": [
+                {
+                    "date": "2017-05-02",
+                    "method": "creditcard",
+                    "amount": 2.40
+                },
+                {
+                    "date": "2017-05-05",
+                    "method": "paymentservice",
+                    "amount": 19.80
+                }
+            ],
+            "shipments": [
+                {
+                    "provider": "CompanyA",
+                    "shipDate": "2017-05-03"
+                },
+                {
+                    "provider": "CompanyB",
+                    "shipDate": "2017-05-06"
+                }
+            ]
+        }
+    ]
+}

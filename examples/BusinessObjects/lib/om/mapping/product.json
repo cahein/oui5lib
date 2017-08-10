@@ -1,0 +1,48 @@
+{
+    "description": "Define Product",
+    "primaryKey" : "id",
+    "entity" : [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+            "name": "name",
+            "required": true
+        },
+        {
+            "name": "description",
+            "required": true
+        },
+        {
+            "name": "salesPrice",
+            "type": "float",
+            "required": true
+        },
+        {
+            "name": "stockQty",
+            "type": "int",
+            "default": 0,
+            "required": true
+        }
+    ],
+    "request": {
+        "getProducts": {
+            "uri": "getProducts",
+            "method": "GET",
+            "params": [
+                {
+                    "name": "ids",
+                    "type": "Array",
+                    "required": true
+                }
+            ]
+        },
+        "saveProduct": {
+            "uri": "saveProduct",
+            "method": "POST",
+            "params": [
+            ]
+        }
+    }
+}

@@ -103,16 +103,7 @@ jQuery.sap.declare("oui5lib.request");
         var requestUri = requestDef.uri;
         oui5lib.logger.debug("requestUri: " + requestUri);
         if (oui5lib.isTest) {
-            switch(requestUri) {
-            case "getAddresses":
-                return "../model/addresses.json";
-            case "getOrders":
-                return "../model/orders.json";
-            case "getOrder":
-                return "../model/order.json";
-            case "getProducts":
-                return "../model/products.json";
-            }
+            return oui5lib.request.getTestUri(requestUri);
         }
         return requestUri;
     }

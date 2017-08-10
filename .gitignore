@@ -9,4 +9,5 @@ jasmine
 node_modules
 build
 dist
-
+examples/*/oui5lib
+package-lock.json

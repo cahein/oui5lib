@@ -1,0 +1,8 @@
+<View xmlns="sap.m"
+      displayBlock="true">
+  <SplitApp id="oumSplitApp"
+            defaultTransitionNameDetail="slide"
+            defaultTransitionNameMaster="slide"
+            />
+    
+</View>

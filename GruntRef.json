@@ -9,5 +9,6 @@
     "spec" : "webapp/test/spec",
     "build" : "build",
     "tmp" : "build/tmp",
-    "dist" : "dist"
+    "dist" : "dist",
+    "examples" : "examples"
 }

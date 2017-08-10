@@ -1,0 +1,104 @@
+{
+    "description": "Define Order",
+    "primaryKey" : "id",
+    "entity" : [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+            "name": "status",
+            "default": "new"
+        },
+        {
+            "name": "orderDate",
+            "type": "Date",
+            "required": true
+        },
+        {
+            "name": "customerAddressId",
+            "referenceTo": "address.id"
+        },
+        {
+            "name": "billingAddressId",
+            "referenceTo": "address.id"
+        },
+        {
+            "name": "items",
+            "type": "collection",
+            "collectionItem": [
+                {
+                    "name": "productId",
+                    "referenceTo": "product.id",
+                    "required": true
+                },
+                {
+                    "name": "quantity",
+                    "type": "int",
+                    "required": true
+                },
+                {
+                    "name": "unitPrice",
+                    "type": "float",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "payments",
+            "type": "collection",
+            "collectionProperties": [
+                {
+                    "name": "date",
+                    "type": "Date"
+                },
+                {
+                    "name": "method"
+                },
+                {
+                    "name": "amount",
+                    "type": "float"
+                }
+            ]
+        }
+    ],
+    "request": {
+        "getOrders": {
+            "uri": "getOrders",
+            "method": "GET",
+            "params": [
+                {
+                    "name": "startDate",
+                    "type": "Date",
+                    "dateFormat": "yyyyMMddHHmmss",
+                    "required": true
+                },
+                {
+                    "name": "endDate",
+                    "type": "Date",
+                    "dateFormat": "yyyyMMddHHmmss"
+                }
+            ]
+        },
+        "getOrder": {
+            "uri": "getOrder",
+            "method": "GET",
+            "params": [
+                {
+                    "name": "id",
+                    "required": true
+                }
+            ]
+        },
+        "saveOrder": {
+            "uri": "saveOrders",
+            "method": "POST",
+            "params": [
+                {
+                    "name": "orderString",
+                    "required": true
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "results": [
+        {
+            "id": 1,
+            "name": "Sauzahn",
+            "description": "A usefull garden tool.",
+            "salesPrice": 39.90,
+            "stockQty": 10
+        },
+        {
+            "id": 2,
+            "name": "Carrot Seeds",
+            "description": "This is an old variety, which has the form of a cylinder.",
+            "salesPrice": 2.40,
+            "stockQty": 100
+        },
+        {
+            "id": 3,
+            "name": "Schneckenschutz",
+            "description": "Protects you Plants. There are 5 in one package.",
+            "salesPrice": 9.90,
+            "stockQty": 50
+        }
+    ]
+}
