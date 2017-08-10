@@ -2,13 +2,13 @@
 *#
 .#*
 .tern-port
+package-lock.json
 resources
 doc
 saved
+snips.txt
 jasmine
 node_modules
 build
 dist
 examples/*/oui5lib
-package-lock.json
-snips.txt
