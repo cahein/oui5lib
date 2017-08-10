@@ -2,5 +2,10 @@
     "availableLanguages": [ "en", "de" ],
     "defaultLanguage": "en",
     "logLevel": "DEBUG",
-    "mappingDir": "mapping"
+    "mappingDir": "mapping",
+    "validation": {
+        "dateRegex": "^\\d{4}-\\d{2}-\\d{2}$",
+        "timeRegex": "^\\d{2}:\\d{2}:\\d{2}$",
+        "phoneRegex": "^0{2}[1-9][\\d]*$"
+    }
 }

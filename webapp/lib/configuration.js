@@ -117,16 +117,16 @@ jQuery.sap.declare("oui5lib.configuration");
     }
         
     /**
-     * Get the regular expression from the validation section of the configuration.
+     * Get the regular expression string from the configuration.
      * @memberof oui5lib.configuration
      * @param {string} type 
      * @returns {RegExp}
      */
     function getValidationRegex(type) {
         var config = getConfigData();
-        var validation = config.validation;
-        if (typeof validation[type + "Regex"] === "string") {
-            return new RegExp(validation[type + "Regex"]);
+        
+        if (typeof config.validation[type + "Regex"] === "string") {
+            return new RegExp(config.validation[type + "Regex"]);
         }
         return null;
     }

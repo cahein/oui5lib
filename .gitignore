@@ -11,3 +11,4 @@ build
 dist
 examples/*/oui5lib
 package-lock.json
+snips.txt

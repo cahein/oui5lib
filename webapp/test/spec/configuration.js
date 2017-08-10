@@ -28,4 +28,18 @@ describe("configuration", function() {
         var mappingDir = oui5lib.configuration.getMappingDir();
         expect(mappingDir).toEqual("mapping");
     });
+
+    it("should return regexes defined in the configuration", function() {
+        var dateRegex = oui5lib.configuration.getRegex("date");
+        expect(dateRegex instanceof RegExp).toBe(true);
+
+        var timeRegex = oui5lib.configuration.getRegex("time");
+        expect(timeRegex instanceof RegExp).toBe(true);
+
+        var phoneRegex = oui5lib.configuration.getRegex("phone");
+        expect(phoneRegex instanceof RegExp).toBe(true);
+
+        var emailRegex = oui5lib.configuration.getRegex("email");
+        expect(emailRegex).toBe(null);
+    });
 });

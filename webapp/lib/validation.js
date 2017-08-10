@@ -1,10 +1,13 @@
+jQuery.sap.require("oui5lib.configuration");
+
 jQuery.sap.declare("oui5lib.validation");
 
 /** @namespace oui5lib.validation */
 (function() {
+    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
     var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     var timeRegex = /^\d{2}:\d{2}:\d{2}$/;
-    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     var phoneRegex = /^0{2}[1-9][\d]*$/;
     
     /**
@@ -171,7 +174,7 @@ jQuery.sap.declare("oui5lib.validation");
             regex = emailRegex;
             break;
         case "phone":
-            regex = phoneRegex;
+            regex = getPhoneRegex();
             break;
         }
         return regex.test(vlue);
@@ -186,7 +189,7 @@ jQuery.sap.declare("oui5lib.validation");
      */
     function isValidDateString(vlue, regex) {
         if (!(regex instanceof RegExp)) {
-            regex = dateRegex;
+            regex = getDateRegex();
         }
         return regex.test(vlue);
     }
@@ -200,7 +203,7 @@ jQuery.sap.declare("oui5lib.validation");
      */
     function isValidTimeString(vlue, regex) {
         if (!(regex instanceof RegExp)) {
-            regex = timeRegex;
+            regex = getTimeRegex();
         }
         return regex.test(vlue);
     }
@@ -293,6 +296,34 @@ jQuery.sap.declare("oui5lib.validation");
         }
         return true;
     }
+
+    function getDateRegex() {
+        var customRegex = oui5lib.configuration.getRegex("date");
+        if (customRegex !== null &&
+            customRegex instanceof RegExp) {
+            return customRegex;
+        }
+        return dateRegex;
+    }
+
+    function getTimeRegex() {
+        var customRegex = oui5lib.configuration.getRegex("time");
+        if (customRegex !== null &&
+            customRegex instanceof RegExp) {
+            return customRegex;
+        }
+        return timeRegex;
+    }
+
+    function getPhoneRegex() {
+        var customRegex = oui5lib.configuration.getRegex("phone");
+        if (customRegex !== null &&
+            customRegex instanceof RegExp) {
+            return customRegex;
+        }
+        return phoneRegex;
+    }
+
 
     var validation = oui5lib.namespace("validation");
     validation.validateData = validateData;
