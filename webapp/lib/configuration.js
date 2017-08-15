@@ -124,6 +124,9 @@ jQuery.sap.declare("oui5lib.configuration");
      */
     function getValidationRegex(type) {
         var config = getConfigData();
+        if (typeof config.validation === "undefined") {
+            return null;
+        }
         
         if (typeof config.validation[type + "Regex"] === "string") {
             return new RegExp(config.validation[type + "Regex"]);

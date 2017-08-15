@@ -1,3 +1,5 @@
+jQuery.sap.require("oui5lib.listHelper");
+
 jQuery.sap.declare("oui5lib.listBase");
 
 (function() {

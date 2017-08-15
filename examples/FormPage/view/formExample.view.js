@@ -1,0 +1,52 @@
+sap.ui.jsview("oum.view.formExample", {
+    getControllerName : function() {
+        return "oum.controller.formExample";
+    },
+    createContent : function(oController) {
+        var exampleForm = new sap.ui.layout.form.SimpleForm(this.createId("exampleForm"), {
+            title: "{i18n>some.form.title}",
+            editable: true,
+            layout: "ResponsiveGridLayout",
+            singleContainerFullSize: false,
+            adjustLabelSpan: true,
+            labelSpanS: 12,
+            labelSpanM: 2,
+            labelSpanL: 4,
+            labelSpanXL: -1,
+            emptySpanS: 0,
+            emptySpanM: 0,
+            emptySpanL: 1,
+            emptySpanXL: -1,
+            columnsL: 1,
+            columnsM: 1,
+            columnsXL: -1
+        });
+
+        oController.addInput(exampleForm, "exampleEntity", "name");
+        oController.addInput(exampleForm, "exampleEntity", "number");
+        oController.addInput(exampleForm, "exampleEntity", "integer");
+        oController.addInput(exampleForm, "exampleEntity", "email");
+        oController.addInput(exampleForm, "exampleEntity", "phone");
+        oController.addSwitch(exampleForm, "exampleEntity", "boolParam");
+        oController.addComboBox(exampleForm, "exampleEntity", "comboItem");
+        oController.addMultiComboBox(exampleForm, "exampleEntity", "multiComboItem");
+        oController.addSelect(exampleForm, "exampleEntity", "selectItem");
+        
+        var headerTitle = new sap.m.Text({
+            text: "SimpleForm Example"
+        });
+
+        var messages = new sap.ui.layout.VerticalLayout(this.createId("messagesContainer"));
+
+        return new sap.m.Page({
+            customHeader: new sap.m.Bar({
+                contentMiddle: [ headerTitle ],
+                contentRight: [
+                    sap.ui.jsfragment("oui5lib.fragment.BackButton", oController),
+                    sap.ui.jsfragment("oui5lib.fragment.HomeButton", oController)
+                ]
+            }),
+	    content: [ messages, exampleForm ]
+        });
+    }
+});

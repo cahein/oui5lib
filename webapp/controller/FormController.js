@@ -1,3 +1,7 @@
+jQuery.sap.require("oui5lib.mapping");
+jQuery.sap.require("oui5lib.validation");
+jQuery.sap.require("oui5lib.ui");
+
 sap.ui.define([
     "oui5lib/controller/BaseController"
 ], function(oController) {
@@ -16,6 +20,9 @@ sap.ui.define([
 
         defaultTimeDisplayFormat: "HH:mm",
         defaultTimeValueFormat: "HH:mm",
+
+        // default: Text
+        availableInputTypes: ["Email", "Number", "Password", "Tel", "Text", "Url"],
         
         recordChanged: false,
 
@@ -43,12 +50,15 @@ sap.ui.define([
          * @public
          * @returns {boolean} 'true' if changed, 'false' is unchanged.
          */
-        wasRecordChanged : function() {
+        wasRecordChanged: function() {
             return this.recordChanged;
         },
 
+        handleUnsavedChanges: function(action) {
+            oui5lib.logger.info("unsavedChanges: " + action);
+        },
         
-        saveRecord : function() {
+        saveRecord: function() {
             if (this.wasRecordChanged()) {
                 this.submitRecord();
             } else {
@@ -68,13 +78,12 @@ sap.ui.define([
             }
             var controller = this;
 
-            var tests = entryDef.tests;
+            var tests = entryDef.validate;
 
             var oInput = new sap.m.Input(this.getView().createId(entityName + "_" + propertyName), {
                 value: "{" + entityName + ">/" + propertyName + "}",
                 change: function() {
                     controller.setRecordChanged();
-                    
                     if (oui5lib.validation.isValid(oInput.getValue(),
                                                    tests)) {
                         oui5lib.ui.setControlValueState(this,
@@ -87,7 +96,10 @@ sap.ui.define([
             });
             
             if (typeof entryDef.ui5.type === "string") {
-                oInput.setType(entryDef.ui5.type);
+                var inputType = entryDef.ui5.type;
+                if (this.availableInputTypes.indexOf(inputType) > -1) {
+                    oInput.setType(entryDef.ui5.type);
+                }
             }
             if (typeof entryDef.ui5.width === "string") {
                 oInput.setWidth(entryDef.ui5.width);
@@ -114,7 +126,7 @@ sap.ui.define([
             }
             var controller = this;
 
-            var tests = entryDef.tests;
+            var tests = entryDef.validate;
 
             var oInput = new sap.m.MaskInput(this.getView().createId(entityName + "_" + propertyName), {
                 value: "{" + entityName + ">/" + propertyName + "}",
@@ -343,7 +355,7 @@ sap.ui.define([
 
             var itemTemplate = this.getItemTemplate(entryDef);
             var oSorter= this.getSorter(entryDef);
-            
+
             var modelName = entryDef.ui5.itemsModel;
             oSelect.bindAggregation("items", modelName + ">/",
                                    itemTemplate, oSorter);
@@ -532,7 +544,7 @@ sap.ui.define([
             }
             var controller = this;
             
-            var tests = entryDef.tests;
+            var tests = entryDef.validate;
             
             var textArea = new sap.m.TextArea(this.getView().createId(entityName + "_" + propertyName), {
                 value: "{" + entityName + ">/" + propertyName + "}",
@@ -579,7 +591,7 @@ sap.ui.define([
             return label;
         },
 
-        getItem: function(entryDef) {
+        getItemTemplate: function(entryDef) {
             var modelName = entryDef.ui5.itemsModel;
             var key = entryDef.ui5.itemKey;
             var text = entryDef.ui5.itemText;

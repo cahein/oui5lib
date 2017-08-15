@@ -1,6 +1,7 @@
 jQuery.sap.require("oui5lib.request");
 jQuery.sap.require("oui5lib.configuration");
 jQuery.sap.require("oui5lib.logger");
+jQuery.sap.require("oui5lib.listHelper");
 
 jQuery.sap.declare("oui5lib.mapping");
 
@@ -33,7 +34,6 @@ jQuery.sap.declare("oui5lib.mapping");
         if (typeof def.type === "undefined") {
             def.type = "string";
         }
-
         var tests = [];
         if (typeof def.validate !== "undefined") {
             if (def.validate instanceof Array) {
@@ -44,10 +44,9 @@ jQuery.sap.declare("oui5lib.mapping");
         if (typeof def.required !== "boolean") {
             def.required = false;
         }
-        if (def.required) {
+        if (def.required && tests.indexOf("required") === -1) {
             tests.push("required");
         }
-        def.tests = tests;
 
         if (typeof def.i18n === "undefined") {
             def.i18n = {};

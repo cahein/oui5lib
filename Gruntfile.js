@@ -86,6 +86,30 @@ module.exports = function (grunt) {
                         cwd: "<%= dirs.view %>",
                         src: "**",
                         dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/view/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.lib %>",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.controller %>",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/controller/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.fragment %>",
+                        src: "**",
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/fragment/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.view %>",
+                        src: "**",
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/view/"
                     }
                 ]
             }

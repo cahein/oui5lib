@@ -1,0 +1,140 @@
+{
+    "description": "Example entity definition",
+    "primaryKey" : "id",
+    "entity" : [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+            "name": "name",
+            "required": true,
+            "validate": [
+                "hasLetters",
+                "minLength_4",
+                "maxLength_10"
+            ],
+            "ui5": {
+                "control": "sap.m.Input"
+            },
+            "i18n": {
+                "label": "exampleEntity.name"
+            }
+        },
+        {
+            "name": "number",
+            "required": true,
+            "validate": [
+                "numbersOnly",
+                "minLength_4",
+                "maxLength_10"
+            ],
+            "ui5": {
+                "control": "sap.m.Input",
+                "type": "Number"
+            },
+            "i18n": {
+                "label": "exampleEntity.number"
+            }
+        },
+        {
+            "name": "integer",
+            "type": "int",
+            "validate": [
+                "min_1",
+                "max_100"
+            ],
+            "ui5": {
+                "control": "sap.m.Input",
+                "type": "Number"
+            },
+            "i18n": {
+                "label": "exampleEntity.integer"
+            }
+        },
+        {
+            "name": "email",
+            "required": true,
+            "validate": [
+                "validEmail"
+            ],
+            "ui5": {
+                "control": "sap.m.Input",
+                "type": "Email"
+            },
+            "i18n": {
+                "label": "exampleEntity.email"
+            }
+        },
+        {
+            "name": "phone",
+            "validate": [
+                "validPhone"
+            ],
+            "ui5": {
+                "control": "sap.m.Input"
+            },
+            "i18n": {
+                "label": "exampleEntity.phone"
+            }
+        },
+        {
+            "name": "boolParam",
+            "type": "boolean",
+            "required": false,
+            "default": true,
+            "ui5": {
+                "sapuiControl" : "sap.m.Switch"
+            },
+            "i18n" : {
+                "label" : "exampleEntity.boolParam",
+                "tooltip" : "exampleEntity.boolParam.tooltip"
+            }
+        },
+        {
+            "name" : "comboItem",
+            "default" : "1",
+            "ui5" : {
+                "sapuiControl": "sap.m.ComboBox",
+                "itemsModel": "items", 
+                "itemKey": "key", 
+                "itemText": "text",
+                "sortBy" : "text"
+            },
+            "i18n" : {
+                "label" : "exampleEntity.comboItem",
+                "placeholder": "exampleEntity.comboItem.placeholder"
+            }
+        },
+        {
+            "name" : "multiComboItem",
+            "ui5" : {
+                "sapuiControl": "sap.m.MultiComboBox",
+                "itemsModel": "items", 
+                "itemKey": "key", 
+                "itemText": "text",
+                "sortBy" : "text"
+            },
+            "i18n" : {
+                "label" : "exampleEntity.multiComboItem",
+                "placeholder": "exampleEntity.multiComboItem.placeholder"
+            }
+        },
+        {
+            "name": "selectItem",
+            "default": "2",
+            "ui5" : {
+                "sapuiControl": "sap.m.Select",
+                "itemsModel": "items", 
+                "itemKey": "key", 
+                "itemText": "text",
+                "sortBy" : "text"
+            },
+            "i18n" : {
+                "label": "exampleEntity.selectItem"
+            }
+        }
+    ],
+    "request": {
+    }
+}

@@ -95,11 +95,15 @@ jQuery.sap.declare("oui5lib.ui");
         if (isValid) {
             removeMessages(target);
         } else {
-            if (typeof control.setValueState === "function") {
+            oui5lib.messages.addErrorMessage(
+                oui5lib.util.getI18nText("validation." + propertyName + ".invalid"),
+                target);
+        }
+        if (typeof control.setValueState === "function") {
+            if (isValid) {
+                control.setValueState(sap.ui.core.ValueState.None);
+            } else {
                 control.setValueState(sap.ui.core.ValueState.Error);
-                oui5lib.messages.addErrorMessage(
-                    oui5lib.util.getI18nText("validation." + propertyName + ".invalid"),
-                    target);
             }
         }
     }

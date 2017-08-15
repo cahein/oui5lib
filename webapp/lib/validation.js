@@ -71,7 +71,7 @@ jQuery.sap.declare("oui5lib.validation");
                 tests = paramDef.validate;
             }
             if (tests !== null) {
-                if (!this.isValid(paramValue, tests)) {
+                if (!this.isVali(paramValue, tests)) {
                     msgs.push("invalid:" + paramName);
                     continue;
                 }
@@ -97,12 +97,13 @@ jQuery.sap.declare("oui5lib.validation");
      * @returns {boolean} valid or not
      */
     function isValid(vlue, tests) {
+        oui5lib.logger.debug("testing value: " + vlue);
         var valid = true;
         if (tests && tests.length > 0) {
             for (var i = 0, s = tests.length; i < s; i++) {
                 var test = tests[i];
 
-                var match = test.match(/([a-z]+)_(\d+)/);
+                var match = test.match(/([a-zA-Z]+)_(\d+)/);
                 var number = null;
                 if (match !== null && match.length === 3) {
                     test = match[1];
@@ -117,6 +118,16 @@ jQuery.sap.declare("oui5lib.validation");
                     break;
                 case "numbersOnly":
                     if (!numbersOnly(vlue)) {
+                        valid = false;
+                    }
+                    break;
+                case "min":
+                    if (!min(vlue, number)) {
+                        valid = false;
+                    }
+                    break;
+                case "max":
+                    if (!max(vlue, number)) {
                         valid = false;
                     }
                     break;
@@ -157,6 +168,7 @@ jQuery.sap.declare("oui5lib.validation");
                 }
             }
         }
+        oui5lib.logger.debug("valid: " + valid);
         return valid;
     }
     
@@ -218,6 +230,48 @@ jQuery.sap.declare("oui5lib.validation");
         if (!isBlank(vlue)) {
             var regex = /^[\d]+$/;
             return regex.test(vlue);
+        }
+        return true;
+    }
+
+    /**
+     * Tests if an integer or float has a certain minimum value.
+     * @memberof oui5lib.validation
+     * @param {string|number} vlue The number to be tested.
+     * @param {int} number The minimum.
+     * @returns {boolean}
+     */
+    function min(vlue, number) {
+        if (isNaN(vlue)) {
+            return false;
+        }
+
+        if (typeof vlue === "string") {
+            vlue = parseFloat(vlue);
+        }
+        if (vlue < number) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Tests if an integer or float has a certain maximum value.
+     * @memberof oui5lib.validation
+     * @param {string|number} vlue The number to be tested.
+     * @param {int} number The minimum.
+     * @returns {boolean}
+     */
+    function max(vlue, number) {
+        if (isNaN(vlue)) {
+            return false;
+        }
+        
+        if (typeof vlue === "string") {
+            vlue = parseFloat(vlue);
+        }
+        if (vlue > number) {
+            return false;
         }
         return true;
     }
