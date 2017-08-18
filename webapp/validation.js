@@ -71,7 +71,7 @@ jQuery.sap.declare("oui5lib.validation");
                 tests = paramDef.validate;
             }
             if (tests !== null) {
-                if (!this.isVali(paramValue, tests)) {
+                if (!this.isValid(paramValue, tests)) {
                     msgs.push("invalid:" + paramName);
                     continue;
                 }

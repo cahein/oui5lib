@@ -59,15 +59,15 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: "<%= dirs.lib %>",
+                        cwd: "<%= dirs.webroot %>",
                         src: "*.js",
-                        dest: "<%= dirs.examples %>/BusinessObjects/oui5lib/lib/"
+                        dest: "<%= dirs.examples %>/BusinessObjects/oui5lib/"
                     },
                     {
                         expand: true,
-                        cwd: "<%= dirs.lib %>",
+                        cwd: "<%= dirs.webroot %>",
                         src: "*.js",
-                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/lib/"
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/"
                     },
                     {
                         expand: true,
@@ -89,9 +89,9 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        cwd: "<%= dirs.lib %>",
+                        cwd: "<%= dirs.webroot %>",
                         src: "*.js",
-                        dest: "<%= dirs.examples %>/FormPage/oui5lib/lib/"
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/"
                     },
                     {
                         expand: true,

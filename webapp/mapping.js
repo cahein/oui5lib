@@ -1,7 +1,7 @@
 jQuery.sap.require("oui5lib.request");
 jQuery.sap.require("oui5lib.configuration");
 jQuery.sap.require("oui5lib.logger");
-jQuery.sap.require("oui5lib.listHelper");
+jQuery.sap.require("oui5lib.lib.listHelper");
 
 jQuery.sap.declare("oui5lib.mapping");
 
