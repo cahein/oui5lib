@@ -22,15 +22,22 @@ sap.ui.jsview("oum.view.formExample", {
             columnsXL: -1
         });
 
-        oController.addInput(exampleForm, "exampleEntity", "name");
+        oController.addInput(exampleForm, "exampleEntity", "first_name");
+        oController.addInput(exampleForm, "exampleEntity", "last_name");
         oController.addInput(exampleForm, "exampleEntity", "number");
         oController.addInput(exampleForm, "exampleEntity", "integer");
         oController.addInput(exampleForm, "exampleEntity", "email");
         oController.addInput(exampleForm, "exampleEntity", "phone");
-        oController.addSwitch(exampleForm, "exampleEntity", "boolParam");
+        oController.addMaskInput(exampleForm, "exampleEntity", "timestring");
+        oController.addSwitch(exampleForm, "exampleEntity", "switchBoolParam");
+        oController.addCheckBox(exampleForm, "exampleEntity", "checkboxBoolParam");
         oController.addComboBox(exampleForm, "exampleEntity", "comboItem");
         oController.addMultiComboBox(exampleForm, "exampleEntity", "multiComboItem");
         oController.addSelect(exampleForm, "exampleEntity", "selectItem");
+        oController.addDateTimePicker(exampleForm, "exampleEntity", "dateTime");
+        oController.addDatePicker(exampleForm, "exampleEntity", "date");
+        oController.addTimePicker(exampleForm, "exampleEntity", "time");
+        oController.addTextArea(exampleForm, "exampleEntity", "textarea");
         
         var headerTitle = new sap.m.Text({
             text: "SimpleForm Example"

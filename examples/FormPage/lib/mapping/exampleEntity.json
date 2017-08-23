@@ -7,11 +7,11 @@
             "type": "int"
         },
         {
-            "name": "name",
+            "name": "first_name",
             "required": true,
             "validate": [
                 "hasLetters",
-                "minLength_4",
+                "minLength_3",
                 "maxLength_10"
             ],
             "ui5": {
@@ -19,6 +19,17 @@
             },
             "i18n": {
                 "label": "exampleEntity.name"
+            }
+        },
+        {
+            "name": "last_name",
+            "required": true,
+            "validate": [
+                "hasLetters",
+                "maxLength_20"
+            ],
+            "ui5": {
+                "control": "sap.m.Input"
             }
         },
         {
@@ -79,7 +90,17 @@
             }
         },
         {
-            "name": "boolParam",
+            "name": "timestring",
+            "ui5": {
+                "control": "sap.m.MaskInput",
+                "mask": "99:99"
+            },
+            "i18n": {
+                "label": "exampleEntity.timestring"
+            }
+        },
+        {
+            "name": "switchBoolParam",
             "type": "boolean",
             "required": false,
             "default": true,
@@ -87,8 +108,21 @@
                 "sapuiControl" : "sap.m.Switch"
             },
             "i18n" : {
-                "label" : "exampleEntity.boolParam",
-                "tooltip" : "exampleEntity.boolParam.tooltip"
+                "label" : "exampleEntity.switchBoolParam",
+                "tooltip" : "exampleEntity.switchBoolParam.tooltip"
+            }
+        },
+        {
+            "name": "checkboxBoolParam",
+            "type": "boolean",
+            "required": false,
+            "default": true,
+            "ui5": {
+                "sapuiControl" : "sap.m.CheckBox"
+            },
+            "i18n" : {
+                "label" : "exampleEntity.checkboxBoolParam",
+                "tooltip" : "exampleEntity.checkboxBoolParam.tooltip"
             }
         },
         {
@@ -133,7 +167,50 @@
             "i18n" : {
                 "label": "exampleEntity.selectItem"
             }
-        }
+        },
+        {
+            "name": "dateTime",
+            "type": "Date",
+            "required": true,
+            "ui5": {
+                "sapuiControl": "sap.m.DateTimePicker"
+            },
+            "i18n": {
+                "label": "exampleEntity.dateTime"
+            }
+        },
+        {
+            "name": "date",
+            "type": "Date",
+            "ui5": {
+                "sapuiControl": "sap.m.DatePicker"
+            },
+            "i18n": {
+                "label": "exampleEntity.date"
+            }
+        },
+        {
+            "name": "time",
+            "type": "Date",
+            "ui5": {
+                "sapuiControl": "sap.m.TimePicker"
+            },
+            "i18n": {
+                "label": "exampleEntity.time"
+            }
+        },
+        {
+	    "name": "textarea",
+	    "required": true,
+	    "ui5": {
+		"sapuiControl": "sap.m.TextArea",
+		"rows": 10
+	    },
+	    "i18n": {
+		"label": "exampleEntity.textarea",
+		"placeholder": "exampleEntity.textarea.placeholder"
+	    }
+	}
     ],
     "request": {
     }
