@@ -104,13 +104,13 @@ sap.ui.define([
             if (typeof entryDef.ui5.width === "string") {
                 oInput.setWidth(entryDef.ui5.width);
             }
-            
+
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, oInput);
-                form.addContent(label);
+                label = this.getLabel(entryDef, oInput);
             }
             
-            form.addContent(oInput);
+            this.addToForm(form, label, oInput);
             return oInput;
         },
 
@@ -147,13 +147,13 @@ sap.ui.define([
             if (entryDef.ui5.width) {
                 oInput.setWidth(entryDef.ui5.width);
             }
-            
+
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, oInput);
-                form.addContent(label);
+                label = this.getLabel(entryDef, oInput);
             }
-            
-            form.addContent(oInput);
+
+            this.addToForm(form, label, oInput);
             return oInput;
         },
 
@@ -176,12 +176,12 @@ sap.ui.define([
                 }
             });
 
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, oSwitch);
-                form.addContent(label);
+                label = this.getLabel(entryDef, oSwitch);
             }
             
-            form.addContent(oSwitch);
+            this.addToForm(form, label, oSwitch);
             return oSwitch;
         },
 
@@ -209,12 +209,12 @@ sap.ui.define([
                 );
             }
 
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, oCheckBox);
-                form.addContent(label);
+                label = this.getLabel(entryDef, oCheckBox);
             }
             
-            form.addContent(oCheckBox);
+            this.addToForm(form, label, oCheckBox);
             return oCheckBox;
         },
 
@@ -265,12 +265,12 @@ sap.ui.define([
             oComboBox.bindAggregation("items", modelName + ">/",
                                       itemTemplate, oSorter);
 
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, oComboBox);
-                form.addContent(label);
+                label = this.getLabel(entryDef, oComboBox);
             }
             
-            form.addContent(oComboBox);
+            this.addToForm(form, label, oComboBox);
             return oComboBox;
         },
 
@@ -317,12 +317,12 @@ sap.ui.define([
             oMultiComboBox.bindAggregation("items", modelName + ">/",
                                            itemTemplate, oSorter);
 
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, oMultiComboBox);
-                form.addContent(label);
+                label = this.getLabel(entryDef, oMultiComboBox);
             }
 
-            form.addContent(oMultiComboBox);
+            this.addToForm(form, label, oMultiComboBox);
             return oMultiComboBox;
         },
         
@@ -359,13 +359,13 @@ sap.ui.define([
             var modelName = entryDef.ui5.itemsModel;
             oSelect.bindAggregation("items", modelName + ">/",
                                    itemTemplate, oSorter);
-            
+
+            var label = null;
             if (entryDef.i18n && entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, oSelect);
-                form.addContent(label);
+                label = this.getLabel(entryDef, oSelect);
             }
             
-            form.addContent(oSelect);
+            this.addToForm(form, label, oSelect);
             return oSelect;
         },
 
@@ -406,13 +406,13 @@ sap.ui.define([
             if (entryDef.ui5.width) {
                 dateTimePicker.setWidth(entryDef.ui5.width);
             }
-            
+
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, dateTimePicker);
-                form.addContent(label);
+                label = this.getLabel(entryDef, dateTimePicker);
             }
             
-            form.addContent(dateTimePicker);
+            this.addToForm(form, label, dateTimePicker);
             return dateTimePicker;
         },
 
@@ -458,13 +458,13 @@ sap.ui.define([
             if (entryDef.ui5.width) {
                 timePicker.setWidth(entryDef.ui5.width);
             }
-            
+
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, timePicker);
-                form.addContent(label);
+                label = this.getLabel(entryDef, timePicker);
             }
             
-            form.addContent(timePicker);
+            this.addToForm(form, label, timePicker);
             return timePicker;
         },
         
@@ -521,13 +521,13 @@ sap.ui.define([
             if (entryDef.ui5.width) {
                 datePicker.setWidth(entryDef.ui5.width);
             }
-            
+
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, datePicker);
-                form.addContent(label);
+                label = this.getLabel(entryDef, datePicker);
             }
             
-            form.addContent(datePicker);
+            this.addToForm(form, label, datePicker);
             return datePicker;
         },
 
@@ -571,12 +571,12 @@ sap.ui.define([
                 textArea.setRows(entryDef.ui5.rows);
             }
 
+            var label = null;
             if (entryDef.i18n.label) {
-                var label = this.getLabel(entryDef, textArea);
-                form.addContent(label);
+                label = this.getLabel(entryDef, textArea);
             }
             
-            form.addContent(textArea);
+            this.addToForm(form, label, textArea);
             return textArea;
         },
         
@@ -619,6 +619,24 @@ sap.ui.define([
                 oSorter.push(new sap.ui.model.Sorter(sortBy, false));
             }
             return oSorter;
+        },
+
+        addToForm: function(formControl, label, formElement) {
+            if (typeof formControl.addContent === "function") {
+                if (label !== null) {
+                    formControl.addContent(label);
+                }
+                formControl.addContent(formElement);
+            }
+            
+            if (formControl instanceof sap.ui.layout.form.FormContainer) {
+                var oFormElement = new sap.ui.layout.form.FormElement();
+                if (label !== null) {
+                    oFormElement.setLabel(label);
+                }
+                oFormElement.addField(formElement);
+                formControl.addFormElement(oFormElement);
+            }
         }
     });
     return FormController;

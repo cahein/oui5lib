@@ -4,21 +4,29 @@ sap.ui.jsfragment("oui5lib.fragment.BackButton", {
             icon: "sap-icon://nav-back",
             tooltip: "{i18n>button.back.tooltip}",
             press: function () {
+                var router;
                 if (oController) {
                     if (typeof oController.back === "function") {
                         oController.back();
+                        return;
                     } else {
                         if (typeof oController.wasRecordChanged === "function" &&
                             oController.wasRecordChanged()) {
                             oui5lib.ui.confirmUnsavedChanges(oController.handleUnsavedChanges);
+                        } else {
+                            router = oui5lib.util.getComponentRouter();
+                            router.navBack();
                         }
                     }
                 } else {
-                    var router = oui5lib.util.getComponentRouter();
+                    router = oui5lib.util.getComponentRouter();
                     router.navBack();
                 }
             }
         });
         return btn;
+    },
+
+    routeBack: function() {
     }
 });

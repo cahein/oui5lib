@@ -49,6 +49,11 @@
                     "target": "home"
                 },
                 {
+                    "pattern": "simpleform",
+                    "name": "simpleformexample",
+                    "target": "simpleformexample"
+                },
+                {
                     "pattern": "form",
                     "name": "formexample",
                     "target": "formexample"
@@ -74,6 +79,12 @@
                 },
                 "formexample": {
                     "viewName": "formExample"
+                },
+                "mformexample": {
+                    "viewName": "mFormExample"
+                },
+                "simpleformexample": {
+                    "viewName": "simpleFormExample"
                 },
                 "splitApp": {
                     "viewName": "splitApp",

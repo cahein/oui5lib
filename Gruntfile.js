@@ -10,6 +10,7 @@ module.exports = function (grunt) {
                 options: {
                     groups: {
                         "Code quality": ["lint", "gendoc", "test"],
+                        "Examples": ["prepare-examples"],
                         "Default": ["availabletasks"]
                     },
                     descriptions: {
@@ -19,6 +20,8 @@ module.exports = function (grunt) {
                         "Generates html documentation.",
                         "test":
                         "Run Tests.",
+                        "prepare-examples":
+                        "Copy oui5lib for examples",
                         "availabletasks":
                         "List available tasks."
                     },
@@ -92,6 +95,12 @@ module.exports = function (grunt) {
                         cwd: "<%= dirs.webroot %>",
                         src: "*.js",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>/lib",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/lib"
                     },
                     {
                         expand: true,

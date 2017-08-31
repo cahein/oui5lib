@@ -3,53 +3,53 @@ sap.ui.jsview("oum.view.formExample", {
         return "oum.controller.formExample";
     },
     createContent : function(oController) {
-        var exampleForm = new sap.ui.layout.form.SimpleForm(this.createId("exampleForm"), {
-            title: "{i18n>some.form.title}",
-            editable: true,
-            layout: "ResponsiveGridLayout",
-            singleContainerFullSize: false,
-            adjustLabelSpan: true,
-            labelSpanS: 12,
-            labelSpanM: 2,
-            labelSpanL: 4,
-            labelSpanXL: -1,
-            emptySpanS: 0,
-            emptySpanM: 0,
-            emptySpanL: 1,
-            emptySpanXL: -1,
-            columnsL: 1,
-            columnsM: 1,
-            columnsXL: -1
+        var formContainer = new sap.ui.layout.form.FormContainer({
+            formElements: []
         });
 
-        oController.addInput(exampleForm, "exampleEntity", "first_name");
-        oController.addInput(exampleForm, "exampleEntity", "last_name");
-        oController.addInput(exampleForm, "exampleEntity", "number");
-        oController.addInput(exampleForm, "exampleEntity", "integer");
-        oController.addInput(exampleForm, "exampleEntity", "email");
-        oController.addInput(exampleForm, "exampleEntity", "phone");
-        oController.addMaskInput(exampleForm, "exampleEntity", "timestring");
-        oController.addSwitch(exampleForm, "exampleEntity", "switchBoolParam");
-        oController.addCheckBox(exampleForm, "exampleEntity", "checkboxBoolParam");
-        oController.addComboBox(exampleForm, "exampleEntity", "comboItem");
-        oController.addMultiComboBox(exampleForm, "exampleEntity", "multiComboItem");
-        oController.addSelect(exampleForm, "exampleEntity", "selectItem");
-        oController.addDateTimePicker(exampleForm, "exampleEntity", "dateTime");
-        oController.addDatePicker(exampleForm, "exampleEntity", "date");
-        oController.addTimePicker(exampleForm, "exampleEntity", "time");
-        oController.addTextArea(exampleForm, "exampleEntity", "textarea");
+        var exampleForm = new sap.ui.layout.form.Form(this.createId("exampleForm"), {
+            title: "{i18n>some.form.title}",
+            layout: [
+                new sap.ui.layout.form.ResponsiveGridLayout()
+            ],
+            editable: true,
+            formContainers: [ formContainer ]
+        });
+        
+        oController.addInput(formContainer, "exampleEntity", "first_name");
+        var formElements = formContainer.getFormElements();
+        var formField = formElements[formElements.length - 1];
+        
+        var input = oController.addInput(formContainer, "exampleEntity", "last_name", true, false);
+        formField.addField(input);
+        oController.addInput(formContainer, "exampleEntity", "number");
+        oController.addInput(formContainer, "exampleEntity", "integer");
+        oController.addInput(formContainer, "exampleEntity", "email");
+        oController.addInput(formContainer, "exampleEntity", "phone");
+        oController.addMaskInput(formContainer, "exampleEntity", "timestring");
+        oController.addSwitch(formContainer, "exampleEntity", "switchBoolParam");
+        oController.addCheckBox(formContainer, "exampleEntity", "checkboxBoolParam");
+        oController.addComboBox(formContainer, "exampleEntity", "comboItem");
+        oController.addMultiComboBox(formContainer, "exampleEntity", "multiComboItem");
+        oController.addSelect(formContainer, "exampleEntity", "selectItem");
+        oController.addDateTimePicker(formContainer, "exampleEntity", "dateTime");
+        oController.addDatePicker(formContainer, "exampleEntity", "date");
+        oController.addTimePicker(formContainer, "exampleEntity", "time");
+        oController.addTextArea(formContainer, "exampleEntity", "textarea");
         
         var headerTitle = new sap.m.Text({
-            text: "SimpleForm Example"
+            text: "Form Example"
         });
 
         var messages = new sap.ui.layout.VerticalLayout(this.createId("messagesContainer"));
 
         return new sap.m.Page({
             customHeader: new sap.m.Bar({
+                contentLeft: [
+                    sap.ui.jsfragment("oui5lib.fragment.BackButton", oController)
+                ],
                 contentMiddle: [ headerTitle ],
                 contentRight: [
-                    sap.ui.jsfragment("oui5lib.fragment.BackButton", oController),
                     sap.ui.jsfragment("oui5lib.fragment.HomeButton", oController)
                 ]
             }),
