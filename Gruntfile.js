@@ -75,9 +75,21 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
+                        cwd: "<%= dirs.webroot %>/lib",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/BusinessObjects/oui5lib/lib"
+                    },
+                    {
+                        expand: true,
                         cwd: "<%= dirs.webroot %>",
                         src: "*.js",
                         dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>/lib",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/lib/"
                     },
                     {
                         expand: true,
@@ -108,6 +120,12 @@ module.exports = function (grunt) {
                         cwd: "<%= dirs.webroot %>",
                         src: "*.js",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>/lib",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/lib/"
                     },
                     {
                         expand: true,

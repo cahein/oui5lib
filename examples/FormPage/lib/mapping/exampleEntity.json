@@ -111,8 +111,8 @@
                 "sapuiControl" : "sap.m.Switch"
             },
             "i18n" : {
-                "label" : "exampleEntity.switchBoolParam",
-                "tooltip" : "exampleEntity.switchBoolParam.tooltip"
+                "label" : "exampleEntity.switchBool",
+                "tooltip" : "exampleEntity.switchBool.tooltip"
             }
         },
         {
@@ -124,8 +124,8 @@
                 "sapuiControl" : "sap.m.CheckBox"
             },
             "i18n" : {
-                "label" : "exampleEntity.checkboxBoolParam",
-                "tooltip" : "exampleEntity.checkboxBoolParam.tooltip"
+                "label" : "exampleEntity.checkBool",
+                "tooltip" : "exampleEntity.checkBool.tooltip"
             }
         },
         {
