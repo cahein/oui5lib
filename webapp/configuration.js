@@ -96,13 +96,17 @@ jQuery.sap.declare("oui5lib.configuration");
     
     function setLanguageModel(sLanguage) {
         // set i18n model
-        var oI18nModel = new sap.ui.model.resource.ResourceModel({
+        var i18nModel = new sap.ui.model.resource.ResourceModel({
+            bundleUrl: "oui5lib/i18n/i18n.properties",
+            bundleLocale: sLanguage
+        });
+        i18nModel.enhance({
             bundleUrl: "i18n/i18n.properties",
             bundleLocale: sLanguage
         });
         var component = getComponent();
         if (typeof component.setModel === "function") {
-            component.setModel(oI18nModel, "i18n");
+            component.setModel(i18nModel, "i18n");
         }
     }
     

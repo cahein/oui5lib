@@ -7,5 +7,13 @@
         "dateRegex": "^\\d{4}-\\d{2}-\\d{2}$",
         "timeRegex": "^\\d{2}:\\d{2}:\\d{2}$",
         "phoneRegex": "^0{2}[1-9][\\d]*$"
+    },
+    "defaultFormats": {
+        "dateTimeDisplay": "MMM d, y, HH:mm:ss",
+        "dateTimeValue": "MMM d, y, HH:mm:ss",
+        "dateDisplay": "short",
+        "dateValue": "yyyy-MM-dd",
+        "timeDisplay": "HH:mm",
+        "timeValue": "HH:mm"
     }
 }

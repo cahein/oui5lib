@@ -23,7 +23,7 @@ sap.ui.jsview("oum.view.simpleFormExample", {
         });
 
         oController.addInput(exampleForm, "exampleEntity", "first_name");
-        oController.addInput(exampleForm, "exampleEntity", "last_name");
+        oController.addInput(exampleForm, "exampleEntity", "last_name", false);
         oController.addInput(exampleForm, "exampleEntity", "number");
         oController.addInput(exampleForm, "exampleEntity", "integer");
         oController.addInput(exampleForm, "exampleEntity", "email");
