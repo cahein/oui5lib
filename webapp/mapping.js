@@ -8,9 +8,11 @@ jQuery.sap.declare("oui5lib.mapping");
 /** @namespace oui5lib.mapping */
 (function () {
     var mappings = {};
+
     /**
      * Get the mapping for the given entity. Will try to load the mapping if necessary.
      * @memberof oui5lib.mapping
+     * @inner 
      * @param {string} entityName The name of the entity.
      * @returns {object} The mapping object.
      */
@@ -21,11 +23,24 @@ jQuery.sap.declare("oui5lib.mapping");
         return mappings[entityName];
     }
 
+    /**
+     * Get the primary key of the specified entity.
+     * @memberof oui5lib.mapping
+     * @param {string} entityName The name of the entity.
+     * @returns {string} The primaryKey property from the mapping.
+     */
     function getPrimaryKey(entityName) {
         var defs = getDefinition(entityName);
         return defs.primaryKey;
     }
 
+    /**
+     * Get the definition of a property.
+     * @memberof oui5lib.mapping
+     * @param {string} entityName The name of the entity.
+     * @param {string} propertyName The name of the property.
+     * @returns {object} The definition of the property from the mapping.
+     */
     function getPropertyDefinition(entityName, propertyName) {
         var defs = getDefinition(entityName);
         var props = defs.entity;
@@ -57,11 +72,24 @@ jQuery.sap.declare("oui5lib.mapping");
         return def;
     }
     
+    /**
+     * Get the definition of a request.
+     * @memberof oui5lib.mapping
+     * @param {string} entityName The name of the entity.
+     * @param {string} requestName The name of the request.
+     * @returns {object} The definition of the request from the mapping.
+     */
     function getRequestDefinition(entityName, requestName) {
         var defs = getDefinition(entityName);
         return defs.request[requestName];
     }
 
+    /**
+     * Load the mapping file.
+     * @memberof oui5lib.mapping
+     * @inner 
+     * @param {string} entityName The name of the entity.
+     */
     function loadMapping(entityName) {
         var dir = oui5lib.configuration.getMappingDir();
         var uri = dir + "/" + entityName + ".json";
@@ -69,6 +97,13 @@ jQuery.sap.declare("oui5lib.mapping");
         oui5lib.request.loadJson(uri, mappingLoaded, { entity: entityName }, false);
     }
     
+    /**
+     * Called after the mapping file was loaded.
+     * @memberof oui5lib.mapping
+     * @inner 
+     * @param {object} data The data being returned by the request.
+     * @param {objects} props The properties linked to the request.
+     */
     function mappingLoaded(data, props) {
         if (typeof data === "object") {
             if (props !== undefined && typeof props.entity === "string") {
@@ -78,9 +113,8 @@ jQuery.sap.declare("oui5lib.mapping");
     }
 
     var mapping = oui5lib.namespace("mapping");
-    mapping.getDef = getDefinition;
     mapping.getPrimaryKey = getPrimaryKey;
     mapping.getPropertyDefinition = getPropertyDefinition;
-    mapping.getRequestDef = getRequestDefinition;
+    mapping.getRequestDefinition = getRequestDefinition;
 }());
 

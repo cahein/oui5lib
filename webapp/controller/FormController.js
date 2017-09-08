@@ -67,8 +67,7 @@ sap.ui.define([
         },
 
         addInput: function(form, entityName, propertyName, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -84,13 +83,10 @@ sap.ui.define([
                 value: "{" + entityName + ">/" + propertyName + "}",
                 change: function() {
                     controller.setRecordChanged();
-                    if (oui5lib.validation.isValid(oInput.getValue(),
-                                                   tests)) {
-                        oui5lib.ui.setControlValueState(this,
-                                                        propertyName, true);
+                    if (oui5lib.validation.isValid(oInput.getValue(), tests)) {
+                        oui5lib.ui.setControlValueState(this, propertyName, true);
                     } else {
-                        oui5lib.ui.setControlValueState(this,
-                                                        propertyName, false);
+                        oui5lib.ui.setControlValueState(this, propertyName, false);
                     }
                 }
             });
@@ -115,8 +111,7 @@ sap.ui.define([
         },
 
         addMaskInput : function(form, entityName, propertyName, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -134,13 +129,10 @@ sap.ui.define([
                 change: function() {
                     controller.setRecordChanged();
                     
-                    if (oui5lib.validation.isValid(oInput.getValue(),
-                                                   tests)) {
-                        oui5lib.ui.setControlValueState(this,
-                                                        propertyName, true);
+                    if (oui5lib.validation.isValid(oInput.getValue(), tests)) {
+                        oui5lib.ui.setControlValueState(this, propertyName, true);
                     } else {
-                        oui5lib.ui.setControlValueState(this,
-                                                        propertyName, false);
+                        oui5lib.ui.setControlValueState(this, propertyName, false);
                     }
                 }
             });
@@ -158,8 +150,7 @@ sap.ui.define([
         },
 
         addSwitch : function(form, entityName, propertyName, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -186,8 +177,7 @@ sap.ui.define([
         },
 
         addCheckBox : function(form, entityName, propertyName, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -218,10 +208,8 @@ sap.ui.define([
             return oCheckBox;
         },
 
-        addComboBox : function(form, entityName, propertyName,
-                               onChange, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+        addComboBox : function(form, entityName, propertyName, onChange, addLabel) {
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -262,8 +250,7 @@ sap.ui.define([
             var oSorter= this.getSorter(entryDef);
 
             var modelName = entryDef.ui5.itemsModel;
-            oComboBox.bindAggregation("items", modelName + ">/",
-                                      itemTemplate, oSorter);
+            oComboBox.bindAggregation("items", modelName + ">/", itemTemplate, oSorter);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
@@ -274,10 +261,8 @@ sap.ui.define([
             return oComboBox;
         },
 
-        addMultiComboBox : function(form, entityName, propertyName,
-                                    onChange, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+        addMultiComboBox : function(form, entityName, propertyName, onChange, addLabel) {
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -314,8 +299,7 @@ sap.ui.define([
             var oSorter = this.getSorter(entryDef);
             
             var modelName = entryDef.ui5.itemsModel;
-            oMultiComboBox.bindAggregation("items", modelName + ">/",
-                                           itemTemplate, oSorter);
+            oMultiComboBox.bindAggregation("items", modelName + ">/", itemTemplate, oSorter);
 
             var label = null;
             if (entryDef.i18n.label) {
@@ -326,10 +310,8 @@ sap.ui.define([
             return oMultiComboBox;
         },
         
-        addSelect : function(form, entityName, propertyName,
-                             onChange, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+        addSelect : function(form, entityName, propertyName, onChange, addLabel) {
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -357,8 +339,7 @@ sap.ui.define([
             var oSorter= this.getSorter(entryDef);
 
             var modelName = entryDef.ui5.itemsModel;
-            oSelect.bindAggregation("items", modelName + ">/",
-                                   itemTemplate, oSorter);
+            oSelect.bindAggregation("items", modelName + ">/", itemTemplate, oSorter);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
@@ -369,10 +350,8 @@ sap.ui.define([
             return oSelect;
         },
 
-        addDateTimePicker : function(form, entityName, propertyName,
-                                     onChange, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+        addDateTimePicker : function(form, entityName, propertyName, onChange, addLabel) {
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -414,10 +393,8 @@ sap.ui.define([
             return dateTimePicker;
         },
 
-        addTimePicker : function(form, entityName, propertyName,
-                                 onChange, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+        addTimePicker : function(form, entityName, propertyName, onChange, addLabel) {
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -464,10 +441,8 @@ sap.ui.define([
             return timePicker;
         },
         
-        addDatePicker : function(form, entityName, propertyName,
-                                 onChange, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+        addDatePicker : function(form, entityName, propertyName, onChange, addLabel) {
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -481,7 +456,7 @@ sap.ui.define([
             if (entryDef.ui5.valueFormat) {
                 dateValueFormat = entryDef.ui5.valueFormat;
             }
-            var dateDisplayFormat = this.defaultDateValueFormat;;
+            var dateDisplayFormat = this.defaultDateValueFormat;
             if (entryDef.ui5.displayFormat) {
                 dateDisplayFormat = entryDef.ui5.displayFormat;
             }
@@ -526,10 +501,8 @@ sap.ui.define([
             return datePicker;
         },
 
-        addTextArea : function(form, entityName, propertyName,
-                               onChange, addLabel) {
-            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
+        addTextArea : function(form, entityName, propertyName, onChange, addLabel) {
+            var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
             }
@@ -546,8 +519,7 @@ sap.ui.define([
                 change: function() {
                     controller.setRecordChanged();
 
-                    if (oui5lib.validation.isValid(textArea.getValue(),
-                                                   tests)) {
+                    if (oui5lib.validation.isValid(textArea.getValue(), tests)) {
                         oui5lib.ui.setControlValueState(this, propertyName, true);
                     } else {
                         oui5lib.ui.setControlValueState(this, propertyName, false);

@@ -10,7 +10,7 @@ jQuery.sap.declare("oui5lib.ui");
     /**
      * Opens a MessageBox to require the user to confirm unsaved changes.
      * @memberof oui5lib.ui
-     * @param {function} handleClose
+     * @param {function} handleClose The function to call upon user action.
      */
     function confirmUnsavedChanges(handleClose) {
         if (typeof handleClose !== "function") {
@@ -26,8 +26,8 @@ jQuery.sap.declare("oui5lib.ui");
     /**
      * Opens a MessageBox to require the user to confirm deleting an entity.
      * @memberof oui5lib.ui
-     * @param {string} msg
-     * @param {function} handleClose
+     * @param {string} msg The message to show.
+     * @param {function} handleClose  The function to call upon user action.
      */
     function confirmDelete(msg, handleClose) {
         if (typeof handleClose !== "function") {
@@ -45,9 +45,11 @@ jQuery.sap.declare("oui5lib.ui");
     
     /**
      * Handles validation errors. Use with FormController.
+     * @memberof oui5lib.ui
      * @param {sap.ui.core.mvc.JSView} view The view with the form.
      * @param {string} modelName The name of the model set to the form.
-     * @param {array} errors List of error objects returned from the oui5lib.validation.validateData function.
+     * @param {array} errors List of error objects returned from the {@link oui5lib.validation.validateData} function.
+     * @param {boolean} openMessageBox Show error messages in a MessageBox? Defaults to 'false'.
      */
     function handleValidationErrors(view, modelName, errors, openMessageBox) {
         if (typeof openMessageBox !== "boolean") {
@@ -70,6 +72,8 @@ jQuery.sap.declare("oui5lib.ui");
     
     /**
      * Show input validation errors. Will open a MessageBox.
+     * @memberof oui5lib.ui
+     * @inner 
      * @param {array} msgs Error messages to be shown in the box.
      */
     function showValidationErrors(msgs) {
@@ -110,6 +114,8 @@ jQuery.sap.declare("oui5lib.ui");
     
     /**
      * Remove MessageManager messages for a particular target.
+     * @memberof oui5lib.ui
+     * @inner 
      * @param {string} target Specify the target.
      */
     function removeMessages(target) {
@@ -126,6 +132,7 @@ jQuery.sap.declare("oui5lib.ui");
     /**
      * Use to check if a ComboBox value and the selected item text are equal.
      * If not, a warning message will be shown.
+     * @memberof oui5lib.ui
      * @param {sap.m.ComboBox} comboBox The ComboBox to check.
      */
     function checkComboBox(comboBox) {
@@ -154,6 +161,7 @@ jQuery.sap.declare("oui5lib.ui");
     /**
      * Use to check if a DatePicker value is a valid date.
      * If not, a warning message will be shown.
+     * @memberof oui5lib.ui
      * @param {sap.m.DatePicker} datePicker The DatePicker to check.
      */
     function checkDatePicker(datePicker) {
@@ -179,6 +187,7 @@ jQuery.sap.declare("oui5lib.ui");
 
     /**
      * Use to unset any selected item and remove all items from a ComboBox.
+     * @memberof oui5lib.ui
      * @param {sap.m.ComboBox} comboBox The ComboBox to clear.
      */
     function clearComboBox(comboBox) {

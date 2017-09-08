@@ -34,11 +34,37 @@ module.exports = function (grunt) {
                 configFile: ".eslintrc.json"
             },
             target: [
+                "<%= dirs.webroot %>/*.js",
+                "<%= dirs.lib %>/*.js",
                 "<%= dirs.view %>/**/*.js",
                 "<%= dirs.controller %>/**/*.js",
-                "<%= dirs.fragment %>/**/*.js",
-                "<%= dirs.lib %>/**/*.js"
+                "<%= dirs.fragment %>/**/*.js"
             ]
+        },
+        jasmine: {
+            src: [
+                "<%= dirs.spec %>/helpers/setup.js",
+                "<%= dirs.lib %>/*.js",
+                "<%= dirs.webroot %>/events.js",
+                "<%= dirs.webroot %>/request.js",
+                "<%= dirs.webroot %>/configuration.js",
+                "<%= dirs.webroot %>/logger.js",
+                "<%= dirs.webroot %>/util.js",
+                "<%= dirs.webroot %>/listBase.js",
+                "<%= dirs.webroot %>/itemBase.js",
+                "<%= dirs.webroot %>/mapping.js",
+                "<%= dirs.webroot %>/validation.js",
+                "<%= dirs.webroot %>/formatter.js"
+            ],
+            options: {
+                outfile: "specrunner.html",
+                vendor: [
+                    "<%= dirs.ui5resources %>/sap-ui-core.js"
+                ],
+                specs: [
+                    "<%= dirs.spec %>/*.js"
+                ]
+            }
         },
         clean: {
             doc: {
@@ -57,7 +83,8 @@ module.exports = function (grunt) {
         jsdoc: {
             dist: {
                 src: [
-                    "<%= dirs.lib %>/**/*.js",
+                    "<%= dirs.webroot %>/*.js",
+                    "<%= dirs.lib %>/*.js",
                     "<%= dirs.controller %>/**/*.js",
                     "<%= dirs.fragment %>/**/*.js"
                 ],
@@ -160,9 +187,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-eslint");
+    grunt.loadNpmTasks("grunt-contrib-jasmine");
 
     grunt.registerTask("default", ["availabletasks"]);
     grunt.registerTask("lint", ["eslint"]);
+    grunt.registerTask("test", ["jasmine"]);
     grunt.registerTask("gendoc", ["clean:doc", "jsdoc"]);
     grunt.registerTask("prepare-examples", ["clean:examples", "copy:oui5lib"]);
 

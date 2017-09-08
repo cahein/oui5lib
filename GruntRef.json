@@ -1,13 +1,14 @@
 {
-    "webroot" : "webapp",
+    "webroot": "webapp",
     "controller": "webapp/controller",
-    "fragment" : "webapp/fragment",
-    "view" : "webapp/view",
-    "i18n" : "webapp/i18n",
-    "test" : "webapp/test",
-    "spec" : "webapp/test/spec",
-    "build" : "build",
-    "tmp" : "build/tmp",
-    "dist" : "dist",
-    "examples" : "examples"
+    "fragment": "webapp/fragment",
+    "view": "webapp/view",
+    "i18n": "webapp/i18n",
+    "test": "webapp/test",
+    "spec": "webapp/test/spec",
+    "build": "build",
+    "tmp": "build/tmp",
+    "dist": "dist",
+    "examples": "examples",
+    "ui5resources": "resources"
 }

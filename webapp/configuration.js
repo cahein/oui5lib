@@ -94,6 +94,11 @@ jQuery.sap.declare("oui5lib.configuration");
         setLanguageModel(sLanguage);
     }
     
+    /**
+     * Set the language model to the component under the name 'i18n'. Will load oui5lib properties and enhance it with 'i18n/i18n.properties'.
+     * @memberof oui5lib.configuration
+     * @param {string} sLanguage 
+     */
     function setLanguageModel(sLanguage) {
         // set i18n model
         var i18nModel = new sap.ui.model.resource.ResourceModel({

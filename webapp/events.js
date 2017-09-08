@@ -7,7 +7,7 @@ jQuery.sap.declare("oui5lib.events");
      * @memberof oui5lib.events
      */
     function handleRequestFailure(channel, eventId, requestInfo) {
-        // requestInfo.xhrObj);
+        oui5lib.logger.error(eventId + " " + requestInfo.xhrObj);
     }
 
     var event = oui5lib.namespace("events");

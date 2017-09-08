@@ -21,8 +21,7 @@ sap.ui.define([
             var viewName = view.sViewName;
             var permissions = oui5lib.configuration.getViewPermissions(viewName);
             if (typeof permissions !== "undefined") {
-                if (oui5lib.currentuser.hasPermissions(permissions.profileRoles,
-                                                       permissions.userRoles)) {
+                if (oui5lib.currentuser.hasPermissions(permissions.userRoles)) {
                     return true;
                 }
             }

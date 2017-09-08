@@ -13,11 +13,14 @@ jQuery.sap.declare("oui5lib.validation");
     /**
      * Validate data against entity definition provided by the mapping.
      * @memberof oui5lib.validation
+     * @param {object} data The data to be validated.
+     * @param {object} paramDefinitions The definition of parameters.
+     * @returns {array} The list of error messages. May be empty.
      */
-    function validateData(data, paramDefs) {
+    function validateData(data, paramDefinitions) {
         var msgs = [];
-        for (var i = 0, s = paramDefs.length; i < s; i++) {
-            var paramDef = paramDefs[i];
+        for (var i = 0, s = paramDefinitions.length; i < s; i++) {
+            var paramDef = paramDefinitions[i];
             var paramName = paramDef.name;
 
             var paramValue = null;
