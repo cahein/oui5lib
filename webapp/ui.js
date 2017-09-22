@@ -85,7 +85,7 @@ jQuery.sap.declare("oui5lib.ui");
     }
 
     /**
-     * Set or remove the error value state of a control and show related message.
+     * Set or remove the error value state of a control. In case of an Error, the message shown will be the property 'valueStateText'.
      * @param {object} control  A sapui control.
      * @param {string} propertyName The name of the property. It is used for the message to the user.
      * @param {boolean} isValid Is the value valid (true), or not (false).
@@ -98,16 +98,14 @@ jQuery.sap.declare("oui5lib.ui");
         var target = control.sId + "/value";
         if (isValid) {
             removeMessages(target);
-        } else {
-            oui5lib.messages.addErrorMessage(
-                oui5lib.util.getI18nText("validation." + propertyName + ".invalid"),
-                target);
         }
         if (typeof control.setValueState === "function") {
             if (isValid) {
                 control.setValueState(sap.ui.core.ValueState.None);
+//                control.closeValueStateMessage();
             } else {
                 control.setValueState(sap.ui.core.ValueState.Error);
+//                control.openValueStateMessage();
             }
         }
     }
@@ -137,25 +135,18 @@ jQuery.sap.declare("oui5lib.ui");
      */
     function checkComboBox(comboBox) {
         var vlue = comboBox.getValue();
-        var target = comboBox.sId + "/value";
-
         var selectedItem = comboBox.getSelectedItem();
         if (selectedItem === null) {
             if (!oui5lib.validation.isBlank(vlue)) {
-                this.addWarnMessage(oui5lib.util.getI18nText("common.combobox.noItemSelected"), target);
-                comboBox.setValueState(sap.ui.core.ValueState.Warning);
-                return;
-            }
-        } else {
-            var text = selectedItem.getText();
-            if (text !== vlue) {
-                this.addWarnMessage(oui5lib.util.getI18nText("common.combobox.otherItemSelected"), target);
-                comboBox.setValueState(sap.ui.core.ValueState.Warning);
+                comboBox.setValueState("Warning");
+                var valueStateText = oui5lib.util.getI18nText("common.combobox.noItemSelected");
+                comboBox.setValueStateText(valueStateText);
                 return;
             }
         }
+        comboBox.setValueState("None");
+        var target = comboBox.sId + "/value";
         oui5lib.messages.removeMessages(target);
-        comboBox.setValueState(sap.ui.core.ValueState.None);
     }
 
     /**

@@ -13,7 +13,7 @@ sap.ui.define([
      */
     var FormController = oController.extend("oui5lib.controller.FormController", {
         defaultDateTimeDisplayFormat: "MMM d, y, HH:mm:ss",
-        defaultDateTimeValueFormat: "MMM d, y, HH:mm:ss",
+        defaultDateTimeValueFormat: "yyyy-MM-dd HH:mm:ss",
         
         defaultDateDisplayFormat: "short",
         defaultDateValueFormat: "yyyy-MM-dd",
@@ -101,16 +101,26 @@ sap.ui.define([
                 oInput.setWidth(entryDef.ui5.width);
             }
 
+            var valueText = "";
+            if (typeof entryDef.i18n.valueText === "string") {
+                valueText = entryDef.i18n.valueText;
+            } else {
+                valueText = "validation." + propertyName + ".valueText";
+            }
+            oInput.setValueStateText(
+                oui5lib.util.getI18nText(valueText)
+            );
+
             var label = null;
             if (addLabel && entryDef.i18n.label) {
                 label = this.getLabel(entryDef, oInput);
             }
-
             this.addToForm(form, label, oInput);
             return oInput;
         },
 
         addMaskInput : function(form, entityName, propertyName, addLabel) {
+            // TODO add rules
             var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
@@ -223,8 +233,7 @@ sap.ui.define([
             var oComboBox = new sap.m.ComboBox(this.getView().createId(entityName + "_" + propertyName), {
                 selectedKey: "{" + entityName + ">/" + propertyName + "}",
                 selectionChange: function(oEvent) {
-                    controller.setRecordChanged();
-                    oComboBox.setValueState(sap.ui.core.ValueState.None);
+                    oComboBox.setValueState("None");
                     
                     if (typeof onChange === "object") {
                         var c = onChange.controller;
@@ -233,6 +242,8 @@ sap.ui.define([
                     }
                 },
                 change: function() {
+                    controller.setRecordChanged();
+                    // TODO make dependent upon parameter
                     oui5lib.ui.checkComboBox(oComboBox);
                 }
             });
@@ -516,6 +527,7 @@ sap.ui.define([
             
             var textArea = new sap.m.TextArea(this.getView().createId(entityName + "_" + propertyName), {
                 value: "{" + entityName + ">/" + propertyName + "}",
+                growing: true,
                 change: function() {
                     controller.setRecordChanged();
 
@@ -535,6 +547,9 @@ sap.ui.define([
             
             if (entryDef.ui5.rows) {
                 textArea.setRows(entryDef.ui5.rows);
+            }
+            if (entryDef.ui5.cols) {
+                textArea.setCols(entryDef.ui5.cols);
             }
 
             var label = null;
