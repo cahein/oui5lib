@@ -132,7 +132,7 @@
         },
         {
             "name" : "comboItem",
-            "default" : "1",
+            "required" : true,
             "ui5" : {
                 "sapuiControl": "sap.m.ComboBox",
                 "itemsModel": "items", 
@@ -161,7 +161,7 @@
         },
         {
             "name": "selectItem",
-            "default": "2",
+            "required": true,
             "ui5" : {
                 "sapuiControl": "sap.m.Select",
                 "itemsModel": "items", 
@@ -196,7 +196,6 @@
         },
         {
             "name": "time",
-            "type": "Date",
             "ui5": {
                 "sapuiControl": "sap.m.TimePicker"
             },

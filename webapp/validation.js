@@ -14,13 +14,13 @@ jQuery.sap.declare("oui5lib.validation");
      * Validate data against entity definition provided by the mapping.
      * @memberof oui5lib.validation
      * @param {object} data The data to be validated.
-     * @param {object} paramDefinitions The definition of parameters.
+     * @param {object} propertyDefinitions The definition of properties.
      * @returns {array} The list of error messages. May be empty.
      */
-    function validateData(data, paramDefinitions) {
+    function validateData(data, propertyDefinitions) {
         var msgs = [];
-        for (var i = 0, s = paramDefinitions.length; i < s; i++) {
-            var paramDef = paramDefinitions[i];
+        for (var i = 0, s = propertyDefinitions.length; i < s; i++) {
+            var paramDef = propertyDefinitions[i];
             var paramName = paramDef.name;
 
             var paramValue = null;
@@ -35,8 +35,7 @@ jQuery.sap.declare("oui5lib.validation");
             if (typeof paramDef.required === "boolean") {
                 isRequired = paramDef.required;
             }
-            if (isRequired &&
-                (typeof paramValue === "undefined" || paramValue === null)) {
+            if (isRequired && typeof paramValue === "string" && isBlank(paramValue)) {
                 msgs.push("missing:" + paramName);
                 continue;
             }
@@ -100,7 +99,6 @@ jQuery.sap.declare("oui5lib.validation");
      * @returns {boolean} valid or not
      */
     function isValid(vlue, tests) {
-        oui5lib.logger.debug("testing value: " + vlue);
         var valid = true;
         if (tests && tests.length > 0) {
             for (var i = 0, s = tests.length; i < s; i++) {
@@ -112,7 +110,6 @@ jQuery.sap.declare("oui5lib.validation");
                     test = match[1];
                     number = parseInt(match[2]);
                 }
-                
                 switch (test) {
                 case "required":
                     if (typeof vlue === "undefined" || isBlank(vlue)) {
@@ -171,7 +168,6 @@ jQuery.sap.declare("oui5lib.validation");
                 }
             }
         }
-        oui5lib.logger.debug("valid: " + valid);
         return valid;
     }
     
@@ -344,7 +340,7 @@ jQuery.sap.declare("oui5lib.validation");
     function isBlank(vlue) {
         if (vlue === null || typeof vlue === "undefined") {
             return true;
-        }      
+        }
         for (var i = 0; i < vlue.length; i++) {
             var c = vlue.charAt(i);
             if (c != " " && c != "\n" && c != "\t") {

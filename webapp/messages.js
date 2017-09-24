@@ -4,6 +4,8 @@ jQuery.sap.declare("oui5lib.messages");
 
 /** @namespace oui5lib.messages */
 (function () {
+    var messageProcessor = null;
+    
     /**
      * Get MessageManager from the UI5 Core.
      * @memberof oui5lib.messages
@@ -13,7 +15,7 @@ jQuery.sap.declare("oui5lib.messages");
     function getMessageManager() {
         return sap.ui.getCore().getMessageManager();
     }
-
+    
     /**
      * Get MessageProcessor.
      * @memberof oui5lib.messages
@@ -21,7 +23,14 @@ jQuery.sap.declare("oui5lib.messages");
      * @returns {sap.ui.core.message.ControlMessageProcessor} The ControlMessageProcessor implementation.
      */
     function getMessageProcessor() {
-        return new sap.ui.core.message.ControlMessageProcessor();
+        if (messageProcessor === null) {
+            oui5lib.logger.info("set messageProcessor");
+            messageProcessor = new sap.ui.core.message.ControlMessageProcessor();
+            var messageManager  = getMessageManager();
+            messageManager.registerMessageProcessor(messageProcessor);
+            
+        }
+        return messageProcessor;
     }
 
     /**
@@ -35,6 +44,7 @@ jQuery.sap.declare("oui5lib.messages");
     function addMessage(msgType, msgText, target) {
         var messageManager  = getMessageManager();
         var messageProcessor = getMessageProcessor();
+        
         var msg = new sap.ui.core.message.Message({
             message: msgText,
             target: target,
@@ -51,7 +61,10 @@ jQuery.sap.declare("oui5lib.messages");
      * @param {string} target The message target.
      */
     function addErrorMessage(msgText, target) {
-        addMessage("Error", msgText, target);
+        if (target.match(/[a-zA-Z-_]*\/value$/) !== null) {
+            removeMessages(target);
+        }
+        addMessage(sap.ui.core.MessageType.Error, msgText, target);
     }
 
     /**
@@ -61,7 +74,10 @@ jQuery.sap.declare("oui5lib.messages");
      * @param {string} target The message target.
      */
     function addWarnMessage(msgText, target) {
-        addMessage("Warning", msgText, target);
+        if (target.match(/[a-zA-Z-_]*\/value$/) !== null) {
+            removeMessages(target);
+        }
+        addMessage(sap.ui.core.MessageType.Warning, msgText, target);
     }
 
     /**
