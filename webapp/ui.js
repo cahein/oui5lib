@@ -6,43 +6,6 @@ jQuery.sap.declare("oui5lib.ui");
 
 /** @namespace oui5lib.ui */
 (function() {
-
-    /**
-     * Opens a MessageBox to require the user to confirm unsaved changes.
-     * @memberof oui5lib.ui
-     * @param {function} handleClose The function to call upon user action.
-     */
-    function confirmUnsavedChanges(handleClose) {
-        if (typeof handleClose !== "function") {
-            throw TypeError("need a function to handle the onClose event");
-        }
-        jQuery.sap.require("sap.m.MessageBox");
-        sap.m.MessageBox.confirm(oui5lib.util.getI18nText("unsavedChanges.text"), {
-            initialFocus: "CANCEL",
-            onClose: handleClose
-        });
-    }
-
-    /**
-     * Opens a MessageBox to require the user to confirm deleting an entity.
-     * @memberof oui5lib.ui
-     * @param {string} msg The message to show.
-     * @param {function} handleClose  The function to call upon user action.
-     */
-    function confirmDelete(msg, handleClose) {
-        if (typeof handleClose !== "function") {
-            throw TypeError("need a function to handle the onClose event");
-        }
-        jQuery.sap.require("sap.m.MessageBox");
-        sap.m.MessageBox.show(msg, {
-            icon: "WARNING",
-            title: oui5lib.util.getI18nText("confirmDelete.title"),
-            actions: [ "DELETE", "CANCEL" ],
-            initialFocus: "CANCEL",
-            onClose: handleClose
-        });
-    }
-    
     /**
      * Handles validation errors. Use with FormController.
      * @memberof oui5lib.ui
@@ -187,9 +150,6 @@ jQuery.sap.declare("oui5lib.ui");
     }
     
     var ui = oui5lib.namespace("ui");
-    ui.confirmUnsavedChanges = confirmUnsavedChanges;
-    ui.confirmDelete = confirmDelete;
-
     ui.handleValidationErrors = handleValidationErrors;
     ui.setControlValueState = setControlValueState;
 

@@ -118,10 +118,11 @@ jQuery.sap.declare("oui5lib.messages");
         if (typeof handleClose !== "function") {
             handleClose = handleMessageBoxClosed;
         }
-        
+        var title = oui5lib.util.getI18nText("messagebox.error.title");
+
         jQuery.sap.require("sap.m.MessageBox");
         sap.m.MessageBox.error(msg, {
-            title: "{i18n>messagebox.error}",
+            title: title,
             onClose: handleClose
         });
     }
@@ -135,6 +136,42 @@ jQuery.sap.declare("oui5lib.messages");
     function handleMessageBoxClosed(sResult) {
         oui5lib.logger.info("ErrorMessage closed: " + sResult);
     }
+    
+    /**
+     * Opens a MessageBox to require the user to confirm unsaved changes.
+     * @memberof oui5lib.ui
+     * @param {function} handleClose The function to call upon user action.
+     */
+    function confirmUnsavedChanges(handleClose) {
+        if (typeof handleClose !== "function") {
+            throw TypeError("need a function to handle the onClose event");
+        }
+        jQuery.sap.require("sap.m.MessageBox");
+        sap.m.MessageBox.confirm(oui5lib.util.getI18nText("unsavedChanges.text"), {
+            initialFocus: "CANCEL",
+            onClose: handleClose
+        });
+    }
+
+    /**
+     * Opens a MessageBox to require the user to confirm deleting an entity.
+     * @memberof oui5lib.ui
+     * @param {string} msg The message to show.
+     * @param {function} handleClose  The function to call upon user action.
+     */
+    function confirmDelete(msg, handleClose) {
+        if (typeof handleClose !== "function") {
+            throw TypeError("need a function to handle the onClose event");
+        }
+        jQuery.sap.require("sap.m.MessageBox");
+        sap.m.MessageBox.show(msg, {
+            icon: "WARNING",
+            title: oui5lib.util.getI18nText("confirmDelete.title"),
+            actions: [ "DELETE", "CANCEL" ],
+            initialFocus: "CANCEL",
+            onClose: handleClose
+        });
+    }
 
     var messages = oui5lib.namespace("messages");
     messages.addErrorMessage = addErrorMessage;
@@ -143,4 +180,7 @@ jQuery.sap.declare("oui5lib.messages");
 
     messages.showNotification = showMessageToast;
     messages.showErrorMessage = showErrorMessageBox;
+    messages.confirmUnsavedChanges = confirmUnsavedChanges;
+    messages.confirmDelete = confirmDelete;
+
 }());

@@ -215,7 +215,7 @@ jQuery.sap.declare("oui5lib.request");
     function publishFailureEvent(eventId, props) {
         if (typeof sap !== "undefined" &&
             typeof sap.ui !== "undefined") {
-            var eventBus = sap.ui.getCore().getEventBus();
+            var eventBus = new sap.ui.getCore().getEventBus();
             eventBus.publish("xhr", eventId, props);
         }
     }
