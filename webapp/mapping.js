@@ -97,9 +97,9 @@ jQuery.sap.declare("oui5lib.mapping");
      */
     function loadMapping(entityName) {
         var dir = oui5lib.configuration.getMappingDir();
-        var uri = dir + "/" + entityName + ".json";
-        oui5lib.logger.info("load mapping: " + uri);
-        oui5lib.request.loadJson(uri, mappingLoaded, { entity: entityName }, false);
+        var url = dir + "/" + entityName + ".json";
+        oui5lib.logger.info("load mapping: " + url);
+        oui5lib.request.loadJson(url, mappingLoaded, { entity: entityName }, false);
     }
     
     /**

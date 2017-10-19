@@ -35,9 +35,12 @@ jQuery.sap.declare("oui5lib.validation");
             if (typeof paramDef.required === "boolean") {
                 isRequired = paramDef.required;
             }
-            if (isRequired && typeof paramValue === "string" && isBlank(paramValue)) {
-                msgs.push("missing:" + paramName);
-                continue;
+            if (isRequired) {
+                if (paramValue === null ||
+                    (typeof paramValue === "string" && isBlank(paramValue))) {
+                    msgs.push("missing:" + paramName);
+                    continue;
+                }
             }
 
             // default type is 'string'

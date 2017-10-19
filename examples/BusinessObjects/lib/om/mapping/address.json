@@ -32,7 +32,7 @@
     ],
     "request": {
         "getAddresses": {
-            "uri": "getAddresses",
+            "url": "getAddresses",
             "method": "GET",
             "params": [
                 {
@@ -43,7 +43,7 @@
             ]
         },
         "saveAddress": {
-            "uri": "saveAddresses",
+            "url": "saveAddresses",
             "method": "POST",
             "params": [
             ]

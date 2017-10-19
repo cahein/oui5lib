@@ -24,8 +24,8 @@
     <script src="../oui5lib/request.js"></script>
     <script>
       oui5lib.isTest = true;
-      oui5lib.request.getTestUri = function(requestUri) {
-  switch(requestUri) {
+      oui5lib.request.getTestUrl = function(requestUrl) {
+  switch(requestUrl) {
   case "getAddresses":
      return "../model/addresses.json";
      break;

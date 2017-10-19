@@ -28,7 +28,7 @@
     ],
     "request": {
         "getProducts": {
-            "uri": "getProducts",
+            "url": "getProducts",
             "method": "GET",
             "params": [
                 {
@@ -39,7 +39,7 @@
             ]
         },
         "saveProduct": {
-            "uri": "saveProduct",
+            "url": "saveProduct",
             "method": "POST",
             "params": [
             ]
