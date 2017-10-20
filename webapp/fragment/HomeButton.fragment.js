@@ -7,7 +7,7 @@ sap.ui.jsfragment("oui5lib.fragment.HomeButton", {
                 if (oController &&
                     typeof oController.wasRecordChanged === "function" &&
                     oController.wasRecordChanged()) {
-                    oui5lib.ui.confirmUnsavedChanges(oController.handleUnsavedChanges);
+                    oui5lib.messages.confirmUnsavedChanges(oController.handleUnsavedChanges);
                 } else {
                     var router = oui5lib.util.getComponentRouter();
                     router.vNavTo("home");

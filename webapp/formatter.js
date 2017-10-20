@@ -87,7 +87,6 @@ jQuery.sap.declare("oui5lib.formatter");
         if (typeof inFormat !== "string") {
             inFormat = dateFormat;
         }
-        
         var inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: inFormat
         });
@@ -96,8 +95,11 @@ jQuery.sap.declare("oui5lib.formatter");
         });
 
         var inDate = inDateFormat.parse(dateStr, false, true);
-        var outDate = outDateFormat.format(inDate);
-        return outDate;
+        if (inDate instanceof Date) {
+            var outDate = outDateFormat.format(inDate);
+            return outDate;
+        }
+        return "";
     }
 
     /**

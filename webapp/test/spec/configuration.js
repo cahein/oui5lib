@@ -11,7 +11,7 @@ describe("configuration", function() {
     it("should return log level", function() {
         var logLevel = oui5lib.configuration.getLogLevel();
         expect(typeof logLevel).toEqual("string");
-        expect(logLevel).toEqual("DEBUG");
+        expect(logLevel).toEqual("ERROR");
     });
     
     it("should return default language", function() {
@@ -22,11 +22,6 @@ describe("configuration", function() {
     it("should return current language as default language", function() {
         var currentLanguage = oui5lib.configuration.getCurrentLanguage();
         expect(currentLanguage).toEqual("en");
-    });
-
-    it("should return mapping directory", function() {
-        var mappingDir = oui5lib.configuration.getMappingDir();
-        expect(mappingDir).toEqual("mapping");
     });
 
     it("should return regexes defined in the configuration", function() {

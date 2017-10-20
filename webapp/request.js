@@ -15,7 +15,7 @@ jQuery.sap.declare("oui5lib.request");
         if (typeof isAsync !== "boolean") {
             isAsync = true;
         }
-        
+
         var xhr = new XMLHttpRequest();
         xhr.overrideMimeType("application/json");
         xhr.open("GET", url, isAsync);
@@ -77,7 +77,7 @@ jQuery.sap.declare("oui5lib.request");
     function addHandlers(xhr, resolve, props, isAsync) {
         xhr.onload = function() {
             if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
+                if (xhr.status === 200 || xhr.status === 0) {
                     try {
                         var data = JSON.parse(xhr.responseText);
                         if (typeof resolve === "function") {
@@ -235,6 +235,9 @@ jQuery.sap.declare("oui5lib.request");
     function publishFailureEvent(eventId, xhr, props) {
         if (typeof sap !== "undefined" &&
             typeof sap.ui !== "undefined") {
+            if (typeof props === "undefined" || props === null) {
+                props = {};
+            }
             props.xhrObj = xhr; 
             var eventBus = new sap.ui.getCore().getEventBus();
             eventBus.publish("xhr", eventId, props);

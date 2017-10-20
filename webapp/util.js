@@ -96,11 +96,27 @@ jQuery.sap.declare("oui5lib.util");
             this.deepFreeze(prop);
         }
     }
-    
+
+    function extend(){
+        for (var i = 1; i < arguments.length; i++) {
+            for (var key in arguments[i]) {
+                if(arguments[i].hasOwnProperty(key)) { 
+                    if (typeof arguments[0][key] === "object"
+                        && typeof arguments[i][key] === "object") {
+                        extend(arguments[0][key], arguments[i][key]);
+                    } else {
+                        arguments[0][key] = arguments[i][key];
+                    }
+                }
+            }
+        }
+        return arguments[0];
+    }
     var util = oui5lib.namespace("util");
     util.getComponentRouter = getComponentRouter;
     util.getI18nText = getI18nText;
     util.getJsonModelForData = getJsonModelForData;
     util.getFilterArray = getFilterArray;
     util.deepFreeze = deepFreeze;
+    util.extend = extend;
 }());

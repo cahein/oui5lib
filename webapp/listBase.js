@@ -199,7 +199,8 @@ jQuery.sap.declare("oui5lib.listBase");
             publishReadyEvent : function(name) {
                 if (typeof sap === "undefined" ||
                     typeof sap.ui === "undefined") {
-                    throw Error("Couldn't publish event " + name + ": ui5 is not loaded");
+                    throw Error("Couldn't publish event " + name
+                                + " loaded: no ui5");
                 }
                 var eventBus = sap.ui.getCore().getEventBus();
                 eventBus.publish("loaded", "ready", name);
