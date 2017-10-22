@@ -7,7 +7,7 @@ resources
 doc
 saved
 snips.txt
-jasmine
+jasmine*
 node_modules
 build
 dist
