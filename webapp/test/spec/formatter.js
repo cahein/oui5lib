@@ -39,8 +39,11 @@ describe("formatter", function() {
         var inDateStr = "4.1.2017";
         var outDateStr = oui5lib.formatter.convertDateString(inDateStr, "YYYY-MM-dd", "dd.MM.YYYY");
         expect(outDateStr).toEqual("2017-01-04");
+    });
 
-        outDateStr = oui5lib.formatter.convertDateString(inDateStr, "YYYY-MM-dd");
+    it("should return an empty string if the date string cannot be parsed", function() {
+        var inDateStr = "4.1.2017";
+        var outDateStr = oui5lib.formatter.convertDateString(inDateStr, "YYYY-MM-dd");
         expect(outDateStr).toEqual("");
     });
 

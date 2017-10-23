@@ -45,10 +45,10 @@ module.exports = function (grunt) {
             src: [
                 "<%= dirs.spec %>/helpers/setup.js",
                 "<%= dirs.lib %>/*.js",
-                "<%= dirs.webroot %>/events.js",
-                "<%= dirs.webroot %>/request.js",
                 "<%= dirs.webroot %>/configuration.js",
                 "<%= dirs.webroot %>/logger.js",
+                "<%= dirs.webroot %>/events.js",
+                "<%= dirs.webroot %>/request.js",
                 "<%= dirs.webroot %>/util.js",
                 "<%= dirs.webroot %>/listBase.js",
                 "<%= dirs.webroot %>/itemBase.js",
@@ -59,7 +59,9 @@ module.exports = function (grunt) {
             options: {
                 outfile: "specrunner.html",
                 vendor: [
-                    "<%= dirs.ui5resources %>/sap-ui-core.js"
+                    "<%= dirs.ui5resources %>/sap-ui-core.js",
+                    "<%= dirs.ui5resources %>/sap/ui/thirdparty/sinon.js",
+                    "<%= dirs.ui5resources %>/sap/ui/thirdparty/sinon-server.js"
                 ],
                 specs: [
                     "<%= dirs.spec %>/*.js"

@@ -1,5 +1,10 @@
 describe("mapping", function() {
     beforeAll(function() {
+//        this.xhr = sinon.useFakeXMLHttpRequest();
+    });
+
+    afterAll(function() {
+//        this.xhr.restore();
     });
 
     it("should return primary key", function() {

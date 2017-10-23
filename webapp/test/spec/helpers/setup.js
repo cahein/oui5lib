@@ -12,3 +12,5 @@ oui5lib.namespace = function(string) {
     return object;
 };
 oui5lib.isTest = true;
+
+jQuery.sap.require("oui5lib.request");

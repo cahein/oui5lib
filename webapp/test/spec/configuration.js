@@ -1,6 +1,9 @@
 describe("configuration", function() {
     beforeAll(function() {
     });
+    
+    afterAll(function() {
+    });
 
     it("should return array of available languages", function() {
         var availableLanguages = oui5lib.configuration.getAvailableLanguages();
