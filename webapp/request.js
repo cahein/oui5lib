@@ -6,59 +6,28 @@ jQuery.sap.declare("oui5lib.request");
     /**
      * Load JSON file.
      * @memberof oui5lib.request
-     * @param {string} uri The uri of the json to load.
+     * @param {string} url The URL of the json to load.
      * @param {function} resolve The function to call if the request is successfully completed. 
      * @param {object} props Properties to be passed with the request.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      */
-    function loadJson(uri, resolve, props, isAsync) {
-        if (typeof props === "undefined") {
-            props = {};
-        }
+    function loadJson(url, resolve, props, isAsync) {
         if (typeof isAsync !== "boolean") {
             isAsync = true;
         }
-        
-        var data = null;
-        
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", uri, isAsync);
-        
-        xhr.onload = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    try {
-                        data = JSON.parse(xhr.responseText);
-                        if (typeof resolve === "function") {
-                            resolve(data, props);
-                        }
-                    } catch (e) {
-                        throw new Error("Not valid JSON");
-                    }
-                } else {
-                    props.xhrObj = xhr; 
-                    publishFailureEvent("status", props);
-                }
-            }
-        };
-        xhr.onerror = function() {
-            props.xhrObj = xhr; 
-            publishFailureEvent("error", props);
-        };
 
-        if (isAsync) {
-            xhr.timeout = 1000;
-            xhr.ontimeout = function() {
-                props.xhrObj = xhr; 
-                publishFailureEvent("timeout", props);
-            };
-        }
+        var xhr = new XMLHttpRequest();
+        xhr.overrideMimeType("application/json");
+        xhr.open("GET", url, isAsync);
         
+        addHandlers(xhr, resolve, props, isAsync);        
+
         xhr.send();
     }
 
+    
     /**
-     * Run request with jQuery.
+     * Run XMLHttpRequest.
      * @memberof oui5lib.request
      * @param {string} entityName The name of the entity.
      * @param {string} requestName The name of the request.
@@ -74,45 +43,82 @@ jQuery.sap.declare("oui5lib.request");
             isAsync = true;
         }
         
-        var requestDef = oui5lib.mapping.getRequestDefinition(entityName, requestName);
+        var requestDef = oui5lib.mapping.getRequestDefinition(entityName,
+                                                              requestName);
+        
         var requestParams = procParams(params, requestDef);
-        oui5lib.logger.debug("processed requestParams: " + JSON.stringify(requestParams));
         if (!requestParams) {
             throw Error("required parameters missing");
         }
-        var jqXHR = $.ajax({
-            type: requestDef.method,
-            url: procUrl(requestDef),
-            data: requestParams,
-            async: isAsync,
-            dataType: "json"
-        });
-        jqXHR.done(function (xhrData, textStatus, jqXHR) {
-            oui5lib.logger.info("request status: " + jqXHR.status);
-            if (typeof resolve === "function") {
-                resolve(xhrData, requestName);
-            }
-        });
-        jqXHR.fail(function (jqXHR, textStatus, errorThrown) {
-            // error event
-            oui5lib.logger.error("error: " + errorThrown);
-        });
+        oui5lib.logger.debug("processed requestParams: "
+                             + JSON.stringify(requestParams));
+        var encodedParams = getEncodedParams(params);
+        
+        var method = requestDef.method;
+        var url = procUrl(requestDef);
+        if (!oui5lib.isTest && method === "GET") {
+            url += "?" + encodedParams;
+        }
+        
+        var xhr = new XMLHttpRequest();
+        xhr.overrideMimeType("application/json");
+        xhr.open(method, url, isAsync);
+        
+        addHandlers(xhr, resolve, { "request": requestName }, isAsync);
+
+        if (method === "POST") {
+            // xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(encodedParams);
+        } else {
+            xhr.send();
+        }
     }
     
+    function addHandlers(xhr, resolve, props, isAsync) {
+        xhr.onload = function() {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200 || xhr.status === 0) {
+                    try {
+                        var data = JSON.parse(xhr.responseText);
+                        if (typeof resolve === "function") {
+                            resolve(data, props);
+                        }
+                    } catch(e) {
+                        throw new Error("JSON is invalid ");
+                    }
+                } else {
+                    publishFailureEvent("status", xhr, props);
+                }
+            }
+        };
+        
+        xhr.onerror = function() {
+            publishFailureEvent("error", xhr, props);
+        };
+
+        if (isAsync) {
+            xhr.timeout = 500;
+            xhr.ontimeout = function() {
+                publishFailureEvent("timeout", xhr, props);
+            };
+        }
+        return xhr;
+    }
+
     /**
-     * Process the url from the mapping. If 'oui5lib.isTest' is set 'true', the url is expected to be returned by the oui5lib.request.getTestUri function.
+     * Process the url from the mapping. If 'oui5lib.isTest' is set 'true', the url is expected to be returned by the oui5lib.request.getTestUrl function.
      * @memberof oui5lib.request
      * @inner 
      * @param {object} requestDefinition
      * @returns {string} The request url.
      */
     function procUrl(requestDefinition) {
-        var requestUri = requestDefinition.uri;
-        oui5lib.logger.debug("requestUri: " + requestUri);
+        var requestUrl = requestDefinition.url;
+        oui5lib.logger.debug("requestUrl: " + requestUrl);
         if (oui5lib.isTest) {
-            return oui5lib.request.getTestUri(requestUri);
+            return oui5lib.request.getTestUrl(requestUrl);
         }
-        return requestUri;
+        return requestUrl;
     }
     
     /**
@@ -129,11 +135,12 @@ jQuery.sap.declare("oui5lib.request");
         }
         var requestParams = {};
 
-        var l = paramsDefinition.length, paramDef;
+        var l = paramsDefinition.length, paramDef,
+            isRequired, paramName, paramValue;
         while (l--) {
             paramDef = paramsDefinition[l];
-            var paramName = paramDef.name;
-            var paramValue = null;
+            paramName = paramDef.name;
+            paramValue = null;
             if (params[paramName] === undefined) {
                 if (typeof paramDef.default === "string") {
                     paramValue = paramDef.default;
@@ -141,11 +148,11 @@ jQuery.sap.declare("oui5lib.request");
             } else {
                 paramValue = params[paramName];
                 if (paramDef.type !== undefined) {
-                    paramValue = convertValue(paramValue, paramDef);
+                    paramValue = convertToString(paramValue, paramDef);
                 }
             }
 
-            var isRequired = false;
+            isRequired = false;
             if (typeof paramDef.required === "boolean") {
                 isRequired = paramDef.required;
             }
@@ -166,9 +173,26 @@ jQuery.sap.declare("oui5lib.request");
      * @param {boolean|number|Date|Array} value
      * @param {object} paramDefinition
      */
-    function convertValue(value, paramDefinition) {
+    function convertToString(value, paramDefinition) {
         var type = paramDefinition.type;
         switch (type) {
+        case "Date":
+            if (value instanceof Date &&
+                typeof paramDefinition.dateFormat === "string") {
+                value = oui5lib.formatter.getDateString(value, paramDefinition.dateFormat);
+            }
+            break;
+        case "Time":
+            if (value instanceof Date &&
+                typeof paramDefinition.timeFormat === "string") {
+                value = oui5lib.formatter.getTimeString(value, paramDefinition.timeFormat);
+            }
+            break;
+        case "Array":
+            if (value instanceof Array) {
+                value = value.toString();
+            }
+            break;
         case "boolean":
             if (typeof value === "boolean") {
                 if (value) {
@@ -176,23 +200,6 @@ jQuery.sap.declare("oui5lib.request");
                 } else {
                     return "f";
                 }
-            }
-            break;
-        case "Date":
-            if (value instanceof Date &&
-                typeof paramDefinition.dateFormat === "string") {
-                // convert
-            }
-            break;
-        case "Time":
-            if (value instanceof Date &&
-                typeof paramDefinition.timeFormat === "string") {
-                // convert
-            }
-            break;
-        case "Array":
-            if (value instanceof Array) {
-                value = value.toString();
             }
             break;
         case "int":
@@ -205,6 +212,19 @@ jQuery.sap.declare("oui5lib.request");
         return value;
     }
 
+    function getEncodedParams(params) {
+        var encodedString = "";
+        for (var prop in params) {
+            if (params.hasOwnProperty(prop)) {
+                if (encodedString.length > 0) {
+                    encodedString += "&";
+                }
+                encodedString += encodeURI(prop + "=" + params[prop]);
+            }
+        }
+        return encodedString;
+    }
+    
     /**
      * Publish event in case of an error.
      * @memberof oui5lib.request
@@ -212,10 +232,14 @@ jQuery.sap.declare("oui5lib.request");
      * @param {string} eventId One of 'status', 'error', 'timeout'.
      * @param {object} props
      */
-    function publishFailureEvent(eventId, props) {
+    function publishFailureEvent(eventId, xhr, props) {
         if (typeof sap !== "undefined" &&
             typeof sap.ui !== "undefined") {
-            var eventBus = sap.ui.getCore().getEventBus();
+            if (typeof props === "undefined" || props === null) {
+                props = {};
+            }
+            props.xhrObj = xhr; 
+            var eventBus = new sap.ui.getCore().getEventBus();
             eventBus.publish("xhr", eventId, props);
         }
     }

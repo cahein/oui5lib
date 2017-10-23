@@ -1,5 +1,5 @@
 {
-    "description": "Define Address",
+    "description": "Define Product",
     "primaryKey" : "id",
     "entity" : [
         {
@@ -7,32 +7,28 @@
             "type": "int"
         },
         {
-            "name": "firstName",
+            "name": "name",
             "required": true
         },
         {
-            "name": "lastName",
+            "name": "description",
             "required": true
         },
         {
-            "name": "street",
+            "name": "salesPrice",
+            "type": "float",
             "required": true
         },
         {
-            "name": "city",
+            "name": "stockQty",
+            "type": "int",
+            "default": 0,
             "required": true
-        },
-        {
-            "name": "postcode",
-            "required": true
-        },
-        {
-            "name": "phone"
         }
     ],
     "request": {
-        "getAddresses": {
-            "uri": "getAddresses",
+        "getProducts": {
+            "url": "getProducts",
             "method": "GET",
             "params": [
                 {
@@ -42,8 +38,8 @@
                 }
             ]
         },
-        "saveAddress": {
-            "uri": "saveAddresses",
+        "saveProduct": {
+            "url": "saveProduct",
             "method": "POST",
             "params": [
             ]

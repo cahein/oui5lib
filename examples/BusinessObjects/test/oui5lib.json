@@ -1,6 +1,0 @@
-{
-    "availableLanguages": [ "en", "de" ],
-    "defaultLanguage": "en",
-    "logLevel": "DEBUG",
-    "mappingDir": "../lib/om/mapping"
-}

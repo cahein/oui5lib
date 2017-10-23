@@ -1,4 +1,5 @@
 jQuery.sap.registerModulePath("oui5lib", "webapp"); 
+
 var oui5lib = {};
 oui5lib.namespace = function(string) {
     var object = this;

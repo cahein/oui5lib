@@ -87,7 +87,6 @@ jQuery.sap.declare("oui5lib.formatter");
         if (typeof inFormat !== "string") {
             inFormat = dateFormat;
         }
-        
         var inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: inFormat
         });

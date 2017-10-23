@@ -83,7 +83,7 @@
     ],
     "request": {
         "getCollection": {
-            "uri": "getCollection",
+            "url": "getCollection",
             "method": "GET",
             "params": [
                 {
@@ -100,7 +100,7 @@
             ]
         },
         "getEntity": {
-            "uri": "getEntity",
+            "url": "getEntity",
             "method": "GET",
             "params": [
                 {
@@ -110,7 +110,7 @@
             ]
         },
         "saveEntity": {
-            "uri": "saveEntity",
+            "url": "saveEntity",
             "method": "POST",
             "params": [
                 {

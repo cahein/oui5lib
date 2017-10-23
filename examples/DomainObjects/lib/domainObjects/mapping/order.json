@@ -64,7 +64,7 @@
     ],
     "request": {
         "getOrders": {
-            "uri": "getOrders",
+            "url": "getOrders",
             "method": "GET",
             "params": [
                 {
@@ -81,7 +81,7 @@
             ]
         },
         "getOrder": {
-            "uri": "getOrder",
+            "url": "getOrder",
             "method": "GET",
             "params": [
                 {
@@ -91,7 +91,7 @@
             ]
         },
         "saveOrder": {
-            "uri": "saveOrders",
+            "url": "saveOrders",
             "method": "POST",
             "params": [
                 {

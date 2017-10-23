@@ -44,7 +44,8 @@ module.exports = function (grunt) {
         jasmine: {
             src: [
                 "<%= dirs.spec %>/helpers/setup.js",
-                "<%= dirs.lib %>/*.js",
+                "<%= dirs.lib %>/listHelper.js",
+                "<%= dirs.webroot %>/request.js",
                 "<%= dirs.webroot %>/configuration.js",
                 "<%= dirs.webroot %>/logger.js",
                 "<%= dirs.webroot %>/events.js",
@@ -76,7 +77,7 @@ module.exports = function (grunt) {
             },
             examples: {
                 src: [
-                    "<%= dirs.examples %>/BusinessObjects/oui5lib",
+                    "<%= dirs.examples %>/DomainObjects/oui5lib",
                     "<%= dirs.examples %>/ComponentTemplate/oui5lib",
                     "<%= dirs.examples %>/FormPage/oui5lib"
                 ]
@@ -99,14 +100,18 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         cwd: "<%= dirs.webroot %>",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/BusinessObjects/oui5lib/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.webroot %>/lib",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/BusinessObjects/oui5lib/lib"
+                        src: [
+                            "init.js",
+                            "request.js",
+                            "configuration.js",
+                            "logger.js",
+                            "util.js",
+                            "mapping.js",
+                            "lib/listHelper.js",
+                            "listBase.js",
+                            "itemBase.js"
+                        ],
+                        dest: "<%= dirs.examples %>/DomainObjects/oui5lib/"
                     },
                     {
                         expand: true,

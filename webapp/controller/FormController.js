@@ -13,7 +13,7 @@ sap.ui.define([
      */
     var FormController = oController.extend("oui5lib.controller.FormController", {
         defaultDateTimeDisplayFormat: "MMM d, y, HH:mm:ss",
-        defaultDateTimeValueFormat: "MMM d, y, HH:mm:ss",
+        defaultDateTimeValueFormat: "yyyy-MM-dd HH:mm:ss",
         
         defaultDateDisplayFormat: "short",
         defaultDateValueFormat: "yyyy-MM-dd",
@@ -97,20 +97,27 @@ sap.ui.define([
                     oInput.setType(entryDef.ui5.type);
                 }
             }
+            
+            if (entryDef.i18n.placeholder) {
+                oInput.setPlaceholder(
+                    oui5lib.util.getI18nText(entryDef.i18n.placeholder)
+                );
+            }
             if (typeof entryDef.ui5.width === "string") {
                 oInput.setWidth(entryDef.ui5.width);
             }
+            this.setValueStateText(entryDef, propertyName, oInput);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
                 label = this.getLabel(entryDef, oInput);
             }
-
             this.addToForm(form, label, oInput);
             return oInput;
         },
 
         addMaskInput : function(form, entityName, propertyName, addLabel) {
+            // TODO add rules
             var entryDef = oui5lib.mapping.getPropertyDefinition(entityName, propertyName);
             if (entryDef === null) {
                 return null;
@@ -223,8 +230,7 @@ sap.ui.define([
             var oComboBox = new sap.m.ComboBox(this.getView().createId(entityName + "_" + propertyName), {
                 selectedKey: "{" + entityName + ">/" + propertyName + "}",
                 selectionChange: function(oEvent) {
-                    controller.setRecordChanged();
-                    oComboBox.setValueState(sap.ui.core.ValueState.None);
+                    oComboBox.setValueState("None");
                     
                     if (typeof onChange === "object") {
                         var c = onChange.controller;
@@ -233,15 +239,12 @@ sap.ui.define([
                     }
                 },
                 change: function() {
+                    controller.setRecordChanged();
+                    // TODO make dependent upon parameter
                     oui5lib.ui.checkComboBox(oComboBox);
                 }
             });
 
-            if (entryDef.i18n.placeholder) {
-                oComboBox.setPlaceholder(
-                    oui5lib.util.getI18nText(entryDef.i18n.placeholder)
-                );
-            }
 
             // template
             var itemTemplate = this.getItemTemplate(entryDef);
@@ -251,6 +254,17 @@ sap.ui.define([
 
             var modelName = entryDef.ui5.itemsModel;
             oComboBox.bindAggregation("items", modelName + ">/", itemTemplate, oSorter);
+            
+            if (entryDef.i18n.placeholder) {
+                oComboBox.setPlaceholder(
+                    oui5lib.util.getI18nText(entryDef.i18n.placeholder)
+                );
+            }
+            if (typeof entryDef.ui5.width === "string") {
+                oComboBox.setWidth(entryDef.ui5.width);
+            }
+
+            this.setValueStateText(entryDef, propertyName, oComboBox);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
@@ -286,11 +300,6 @@ sap.ui.define([
                 }
             });
 
-            if (entryDef.i18n.placeholder) {
-                oMultiComboBox.setPlaceholder(
-                    oui5lib.util.getI18nText(entryDef.i18n.placeholder)
-                );
-            }
 
             // template
             var itemTemplate = this.getItemTemplate(entryDef);
@@ -300,6 +309,17 @@ sap.ui.define([
             
             var modelName = entryDef.ui5.itemsModel;
             oMultiComboBox.bindAggregation("items", modelName + ">/", itemTemplate, oSorter);
+
+            if (entryDef.i18n.placeholder) {
+                oMultiComboBox.setPlaceholder(
+                    oui5lib.util.getI18nText(entryDef.i18n.placeholder)
+                );
+            }
+            if (typeof entryDef.ui5.width === "string") {
+                oMultiComboBox.setWidth(entryDef.ui5.width);
+            }
+
+            this.setValueStateText(entryDef, propertyName, oMultiComboBox);
 
             var label = null;
             if (entryDef.i18n.label) {
@@ -323,9 +343,10 @@ sap.ui.define([
             
             var oSelect = new sap.m.Select(this.getView().createId(entityName + "_" + propertyName), {
                 selectedKey : "{" + entityName + ">/" + propertyName + "}",
+                forceSelection: false,
                 change : function(oEvent) {
                     controller.setRecordChanged();
-                    oSelect.setValueState(sap.ui.core.ValueState.None);
+                    oSelect.setValueState("None");
 
                     if (typeof onChange === "object") {
                         var c = onChange.controller;
@@ -334,12 +355,18 @@ sap.ui.define([
                     }
                 }
             });
-
+            // textAlign, autoAdjustWidth
+            
             var itemTemplate = this.getItemTemplate(entryDef);
             var oSorter= this.getSorter(entryDef);
 
             var modelName = entryDef.ui5.itemsModel;
             oSelect.bindAggregation("items", modelName + ">/", itemTemplate, oSorter);
+
+            if (typeof entryDef.ui5.width === "string") {
+                oSelect.setWidth(entryDef.ui5.width);
+            }
+            this.setValueStateText(entryDef, propertyName, oSelect);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
@@ -370,6 +397,7 @@ sap.ui.define([
                 dateValue: "{" + entityName + ">/" + propertyName + "}",
                 displayFormat: dateDisplayFormat,
                 change: function(oEvent) {
+                    dateTimePicker.setValueState("None");
                     controller.setRecordChanged();
 
                     if (typeof onChange === "object") {
@@ -383,6 +411,8 @@ sap.ui.define([
             if (typeof entryDef.ui5.width === "string") {
                 dateTimePicker.setWidth(entryDef.ui5.width);
             }
+
+            this.setValueStateText(entryDef, propertyName, dateTimePicker);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
@@ -418,7 +448,7 @@ sap.ui.define([
                 dateValue: "{" + entityName + ">/" + propertyName + "}",
                 change: function(oEvent) {
                     controller.setRecordChanged();
-                    timePicker.setValueState(sap.ui.core.ValueState.None);
+                    timePicker.setValueState("None");
 
                     if (typeof onChange === "object") {
                         var c = onChange.controller;
@@ -431,6 +461,8 @@ sap.ui.define([
             if (typeof entryDef.ui5.width === "string") {
                 timePicker.setWidth(entryDef.ui5.width);
             }
+            
+            this.setValueStateText(entryDef, propertyName, timePicker);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
@@ -492,6 +524,8 @@ sap.ui.define([
                 datePicker.setWidth(entryDef.ui5.width);
             }
 
+            this.setValueStateText(entryDef, propertyName, datePicker);
+
             var label = null;
             if (addLabel && entryDef.i18n.label) {
                 label = this.getLabel(entryDef, datePicker);
@@ -516,6 +550,7 @@ sap.ui.define([
             
             var textArea = new sap.m.TextArea(this.getView().createId(entityName + "_" + propertyName), {
                 value: "{" + entityName + ">/" + propertyName + "}",
+                growing: true,
                 change: function() {
                     controller.setRecordChanged();
 
@@ -536,6 +571,11 @@ sap.ui.define([
             if (entryDef.ui5.rows) {
                 textArea.setRows(entryDef.ui5.rows);
             }
+            if (entryDef.ui5.cols) {
+                textArea.setCols(entryDef.ui5.cols);
+            }
+
+            this.setValueStateText(entryDef, propertyName, textArea);
 
             var label = null;
             if (addLabel && entryDef.i18n.label) {
@@ -557,6 +597,18 @@ sap.ui.define([
             return label;
         },
 
+        setValueStateText: function(entryDef, propertyName, control) {
+            var valueText = "";
+            if (typeof entryDef.i18n.valueText === "string") {
+                valueText = entryDef.i18n.valueText;
+            } else {
+                valueText = "validation." + propertyName + ".valueText";
+            }
+            control.setValueStateText(
+                oui5lib.util.getI18nText(valueText)
+            );
+        },
+        
         getItemTemplate: function(entryDef) {
             var modelName = entryDef.ui5.itemsModel;
             var key = entryDef.ui5.itemKey;
