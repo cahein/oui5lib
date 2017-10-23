@@ -1,0 +1,4 @@
+{
+    "logLevel": "ERROR",
+    "mappingDir": "lib/domainObjects/mapping"
+}

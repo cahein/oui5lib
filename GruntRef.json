@@ -1,5 +1,6 @@
 {
     "webroot": "webapp",
+    "lib": "webapp/lib",
     "controller": "webapp/controller",
     "fragment": "webapp/fragment",
     "view": "webapp/view",

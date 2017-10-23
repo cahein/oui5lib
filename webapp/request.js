@@ -40,7 +40,11 @@ jQuery.sap.declare("oui5lib.request");
             params = {};
         }
         if (typeof isAsync !== "boolean") {
-            isAsync = true;
+            if (oui5lib.isTest) {
+                isAsync = false;
+            } else {
+                isAsync = true;
+            }
         }
         
         var requestDef = oui5lib.mapping.getRequestDefinition(entityName,

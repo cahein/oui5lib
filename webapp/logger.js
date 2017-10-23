@@ -27,7 +27,7 @@ jQuery.sap.declare("oui5lib.logger");
     }
     
     function debug(msg) {
-        console.log(logPrefix + msg);
+        console.debug(logPrefix + msg);
     }
     
     function info(msg) {

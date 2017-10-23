@@ -1,10 +1,8 @@
 describe("Products object model", function() {
    beforeAll(function() {
-      // async loading problem
       oui5lib.request.doRequest("product", "getProducts",
                                 { "ids": ["1", "2", "3"] },
-                                oum.products.init,
-                                false);
+                                oum.products.addData);
    });
    it ("should return products", function() {
       var data = oum.products.getData(); 

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8"/>
     <title>Jasmine Spec Runner</title>
       
     <link rel="shortcut icon" type="image/png" href="jasmine-2.8.0/jasmine_favicon.png"/>
@@ -11,12 +12,7 @@
     <script src="jasmine-2.8.0/boot.js"></script>
     
     <!-- include source files here... -->
-    <script>
-      jQuery = {};
-      jQuery.sap = {};
-      jQuery.sap.declare = function() {};
-      jQuery.sap.require = function() {};
-    </script>
+    <script src="helper/jquery.js"></script>
 
     <script src="../oui5lib/init.js"></script>
     <script src="../oui5lib/request.js"></script>
