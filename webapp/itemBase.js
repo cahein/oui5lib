@@ -55,9 +55,23 @@ jQuery.sap.declare("oui5lib.itemBase");
      */
     function getProperty(key) {
         var item = this.getData();
-        if (item === null || typeof item[key] === "undefined") {
+        if (item === null) {
             return null;
         }
+
+        var keys = key.split("/");
+        if (keys.length > 1) {
+            var subitem = item;
+            for (var i = 0, s = keys.length; i < s; i++) {
+                var subkey = keys[i];
+                if (typeof subitem[subkey] === "undefined") {
+                    return null;
+                }
+                subitem = subitem[subkey];
+            }
+            return subitem;
+        }
+
         return item[key];
     }
 
@@ -70,13 +84,27 @@ jQuery.sap.declare("oui5lib.itemBase");
      */
     function setProperty(key, vlue) {
         var item = this.getData();
-        if (item === null || typeof item[key] === "undefined") {
+        if (item === null) {
             return false;
         }
-        item[key] = vlue;
         
+        var keys = key.split("/");
+        if (keys.length > 1) {
+            var subitem = item;
+            for (var i = 0, s = keys.length; i < s - 1; i++) {
+                var subkey = keys[i];
+                if (typeof subitem[subkey] === "undefined") {
+                    return false;
+                }
+                subitem = subitem[subkey];
+            }
+            subitem[keys[keys.length - 1]] = vlue;
+            this._modified = true;
+            return true;
+        }
+        
+        item[key] = vlue;
         this._modified = true;
-
         return true;
     }
     

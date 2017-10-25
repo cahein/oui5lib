@@ -1,18 +1,53 @@
 {
-    "description": "Define Product",
-    "primaryKey" : "id",
+    "description": "Define Book",
+    "primaryKey" : "isbn",
     "entity" : [
         {
-            "name": "id",
-            "type": "int"
+            "name": "isbn"
         },
         {
-            "name": "name",
+            "name": "title",
+            "type": "object",
+            "objectItem": [
+                {
+                    "name": "a",
+                    "required": true
+                },
+                {
+                    "name": "b"
+                },
+                {
+                    "name": "c",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "author"
+        },
+        {
+            "name": "edition"
+        },
+        {
+            "name": "published",
             "required": true
         },
         {
-            "name": "description",
-            "required": true
+            "name": "bibliography"
+        },
+        {
+            "name": "numbers",
+            "type": "object",
+            "objectItem": [
+                {
+                    "name": "ISBN",
+                    "required": true
+                },
+                {
+                    "name": "LCCN",
+                    "required": true
+                }
+            ]
         },
         {
             "name": "salesPrice",
@@ -32,7 +67,7 @@
             "method": "GET",
             "params": [
                 {
-                    "name": "ids",
+                    "name": "isbns",
                     "type": "Array",
                     "required": true
                 }

@@ -8,12 +8,12 @@
             "billingAddressId": 1,
             "items": [
                 {
-                    "productId": 2,
+                    "productId": "0313276439",
                     "quantity": 2,
                     "unitPrice": 4.80
                 },
                 {
-                    "productId": 1,
+                    "productId": "0521560241",
                     "quantity": 1,
                     "unitPrice": 37.90
                 }
@@ -40,12 +40,12 @@
             "orderDate": "2017-05-02 02:21:03",
             "items": [
                 {
-                    "productId": 2,
+                    "productId": "0813818702",
                     "quantity": 1,
                     "unitPrice": 2.40
                 },
                 {
-                    "productId": 3,
+                    "productId": "0889610356",
                     "quantity": 2,
                     "unitPrice": 19.80
                 }

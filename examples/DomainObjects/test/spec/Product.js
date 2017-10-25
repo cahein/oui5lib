@@ -17,12 +17,11 @@ describe("Product object", function() {
         expect(product.id).toEqual(1);
     });
     it ("should allow to modify Product data", function() {
-        var product = new oum.Product(1);
-        expect(product.getProperty("name")).toEqual("Sauzahn");
+        var product = new oum.Product("0394718747");
+        expect(product.getProperty("title/a")).toEqual("Propaganda: the formation of men's attitudes.");
         expect(product.wasModified()).toEqual(false);
-        product.setProperty("name", "Sauzahn geschmiedet");
-        expect(product.getProperty("name")).toEqual("Sauzahn geschmiedet");
+        product.setProperty("note", "Are we lost?");
+        expect(product.getProperty("note")).toEqual("Are we lost?");
         expect(product.wasModified()).toEqual(true);
     });
-
 });
