@@ -9,7 +9,8 @@ jQuery.sap.declare("oui5lib.validation");
     var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     var timeRegex = /^\d{2}:\d{2}:\d{2}$/;
     var phoneRegex = /^0{2}[1-9][\d]*$/;
-    
+    var msgs;    
+
     /**
      * Validate data against entity definition provided by the mapping.
      * @memberof oui5lib.validation
@@ -17,12 +18,26 @@ jQuery.sap.declare("oui5lib.validation");
      * @param {object} propertyDefinitions The definition of properties.
      * @returns {array} The list of error messages. May be empty.
      */
-    function validateData(data, propertyDefinitions) {
-        var msgs = [];
+    function validateData(data, propertyDefinitions, newValidation) {
+        if (typeof newValidation !== "boolean") {
+            newValidation = true;
+        }
+        if (newValidation) {
+            msgs = [];
+        }
+        
         for (var i = 0, s = propertyDefinitions.length; i < s; i++) {
             var paramDef = propertyDefinitions[i];
             var paramName = paramDef.name;
 
+            switch (paramDef.type) {
+            case "collection":
+                handleCollection(data, paramName, paramDef, msgs);
+                continue;
+            case "object":
+                handleObject(data, paramName, paramDef, msgs);
+                continue;
+            }
             var paramValue = null;
             if (typeof data[paramName] !== "undefined") {
                 paramValue = data[paramName];
@@ -57,10 +72,18 @@ jQuery.sap.declare("oui5lib.validation");
                     }
                     break;
                 case "Date":
-                case "Time":
                     if (!(paramValue instanceof Date)) {
                         msgs.push("wrongType:" + paramName);
                         continue;
+                    }
+                    break;
+                case "int":
+                case "boolean":
+                    if (typeof paramValue !== "boolean") {
+                        if (!(paramValue instanceof Boolean)) {
+                            msgs.push("wrongType:" + paramName);
+                            continue;
+                        }
                     }
                     break;
                 case "email":
@@ -380,7 +403,37 @@ jQuery.sap.declare("oui5lib.validation");
         return phoneRegex;
     }
 
+    function handleObject(data, paramName, paramDef, msgs) {
+        var object = data[paramName];
+        if (typeof object === "object") {
+            var objectItem = paramDef.objectItem;
+            validateData(object, objectItem, false);
+        } else {
+            if (typeof paramDef.required === "boolean") {
+                if (paramDef.required) {
+                    msgs.push("missing:" + paramName);
+                }
+            }
+        }
+    }
 
+    function handleCollection(data, paramName, paramDef, msgs) {
+        var collection = data[paramName];
+        if (collection instanceof Array
+            && collection.length > 0) {
+            var collectionItem = paramDef.collectionItem;
+            for (var i = 0, s = collection.length; i < s; i++) {
+                validateData(collection[i], collectionItem, false);
+            }
+        } else {
+            if (typeof paramDef.required === "boolean") {
+                if (paramDef.required) {
+                    msgs.push("missing:" + paramName);
+                }
+            }
+        }
+    }
+    
     var validation = oui5lib.namespace("validation");
     validation.validateData = validateData;
     validation.isValid = isValid;
@@ -396,3 +449,4 @@ jQuery.sap.declare("oui5lib.validation");
     validation.maxLength = maxLength;
     validation.custom = custom;
 }());
+

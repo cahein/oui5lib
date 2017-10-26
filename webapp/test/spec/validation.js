@@ -69,82 +69,115 @@ describe("validation", function() {
     it("should validate an object depending on the parameter definitions of the mapping", function() {
         var paramDefs = [
             {
-                "name" : "userId",
-                "required" : true
+                "name": "userId",
+                "required": true
             },
             {
-                "name" : "persNr",
-                "required" : true,
-                "validate" : [
+                "name": "persNr",
+                "required": true,
+                "validate": [
                     "numbersOnly",
                     "length_8"
                 ]
             },
             {
-                "name" : "name",
-                "required" : true,
-                "validate" : [
+                "name": "name",
+                "required": true,
+                "validate": [
                     "hasLetters"
                 ]
             },
             {
                 "name": "email",
                 "type": "email",
-                "validate" : [
+                "validate": [
                     "validEmail"
                 ]
             },
             {
-                "name" : "emailActive",
-                "type" : "boolean",
-                "default" : false
+                "name": "emailActive",
+                "type": "boolean",
+                "default": false
             },
             {
-                "name" : "sms",
+                "name": "sms",
                 "type": "phone",
-                "validate" : [
+                "validate": [
                     "validPhone"
                 ]
             },
             {
-                "name" : "smsActive",
-                "type" : "boolean",
-                "default" : false
+                "name": "smsActive",
+                "type": "boolean",
+                "default": false
             },
             {
-                "name" : "role",
-                "required" : true,
-                "default" : "user",
-                "allowedValues" : ["user", "administrator"]
+                "name": "role",
+                "required": true,
+                "default": "user",
+                "allowedValues": ["user", "administrator"]
+            },
+            {
+                "name": "other",
+                "required": true,
+                "type": "collection",
+                "collectionItem": [
+                    {
+                        "name": "a",
+                        "required": true
+                    },
+                    {
+                        "name": "b"
+                    }
+                ]
+            },
+            {
+                "name": "permissions",
+                "required": true,
+                "type": "object",
+                "objectItem": [
+                    {
+                        "name": "saveUser",
+                        "type": "boolean",
+                        "default": false
+                    }
+                ]
             }
         ];
 
         var userData = {
-            "persNr" : "12345",
-            "name" : "Ca Hein",
-            "email" : "<any@host.name>",
-            "emailActive" : true,
-            "sms" : "124567890",
-            "smsActive" : false,
-            "role" : "administrator"
+            "persNr": "12345",
+            "name": "Ca Hein",
+            "email": "<any@host.name>",
+            "emailActive": true,
+            "sms": "124567890",
+            "smsActive": false,
+            "role": "administrator"
         };
         var msgs = oui5lib.validation.validateData(userData, paramDefs);
-        expect(msgs.length).toEqual(3);
+        expect(msgs.length).toEqual(5);
         expect(msgs[0]).toEqual("missing:userId");
         expect(msgs[1]).toEqual("invalid:persNr");
         expect(msgs[2]).toEqual("invalid:sms");
+        expect(msgs[3]).toEqual("missing:other");
+        expect(msgs[4]).toEqual("missing:permissions");
 
         userData.persNr = "12345678";
+        userData.other = [];
+        userData.permissions = { };
         msgs = oui5lib.validation.validateData(userData, paramDefs);
-        expect(msgs.length).toEqual(2);
+        expect(msgs.length).toEqual(3);
         expect(msgs[0]).toEqual("missing:userId");
         expect(msgs[1]).toEqual("invalid:sms");
+        expect(msgs[2]).toEqual("missing:other");
 
         userData.sms = "00492345124581";
+        userData.other = [{ "b": "not required" }];
         msgs = oui5lib.validation.validateData(userData, paramDefs);
-        expect(msgs.length).toEqual(1);
+        expect(msgs.length).toEqual(2);
 
         userData.userId = "ab34uni";
+        userData.other = [{ "a": "ok" }];
         msgs = oui5lib.validation.validateData(userData, paramDefs);
         expect(msgs.length).toEqual(0);
 

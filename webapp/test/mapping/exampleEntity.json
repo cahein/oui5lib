@@ -79,6 +79,19 @@
                     "required": true
                 }
             ]
+        },
+        {
+            "name": "subkeys",
+            "type": "object",
+            "objectProperties": [
+                {
+                    "name": "a",
+                    "required": true
+                },
+                {
+                    "name": "b"
+                }
+            ]
         }
     ],
     "request": {

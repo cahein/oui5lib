@@ -43,14 +43,37 @@ jQuery.sap.declare("oui5lib.mapping");
      * Get the definition of a property.
      * @memberof oui5lib.mapping
      * @param {string} entityName The name of the entity.
-     * @param {string} propertyName The name of the property.
+     * @param {string} propertyPath The path of the property. Separate levels by '/'.
      * @returns {object} The definition of the property from the mapping.
      */
-    function getPropertyDefinition(entityName, propertyName) {
+    function getPropertyDefinition(entityName, propertyPath) {
         var defs = getDefinition(entityName);
         var props = defs.entity;
-        var def = oui5lib.listHelper.getItemByKey(props, "name", propertyName);
 
+        var def = null;
+        var keys = propertyPath.split("/");
+        if (keys.length > 1) {
+            var subprops = props;
+            for (var i = 0, s = keys.length; i < s - 1; i++) {
+                var subkey = keys[i];
+                subprops = oui5lib.listHelper.getItemByKey(subprops, "name", subkey);
+                if (subprops === null) {
+                    return null;
+                }
+                switch (subprops.type) {
+                case "object":
+                    subprops = subprops.objectProperties;
+                    break;
+                case "collection":
+                    subprops = subprops.collectionItem;
+                    break;
+                }
+            }
+            props = subprops;
+            propertyPath = keys[keys.length - 1];
+        }
+
+        def = oui5lib.listHelper.getItemByKey(props, "name", propertyPath);
         if (typeof def.type === "undefined") {
             def.type = "string";
         }
