@@ -13,16 +13,16 @@
                     "unitPrice": 4.80
                 },
                 {
-                    "productId": "0521560241",
+                    "productId": "0889610356",
                     "quantity": 1,
-                    "unitPrice": 37.90
+                    "unitPrice": 19.90
                 }
             ],
             "payments": [
                 {
                     "date": "2017-05-17",
                     "method": "bankpayment",
-                    "amount": 37.90
+                    "amount": 19.90
                 }
             ],
             "shipments": [

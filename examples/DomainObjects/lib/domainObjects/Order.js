@@ -67,6 +67,10 @@
     }
 
     function getAddress(id) {
+        var address = oum.addresses.getItem(id);
+        if (address === null) {
+            return null;
+        }
         return new oum.Address(id);
     }
     

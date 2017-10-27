@@ -64,7 +64,7 @@ jQuery.sap.declare("oui5lib.validation");
                 type = paramDef.type;
             }
 
-            if (isRequired) {
+            if (isRequired || paramValue !== null) {
                 switch(type) {
                 case "string":
                     if (typeof paramValue !== "string") {
@@ -419,11 +419,24 @@ jQuery.sap.declare("oui5lib.validation");
 
     function handleCollection(data, paramName, paramDef, msgs) {
         var collection = data[paramName];
+        var i, s;
         if (collection instanceof Array
             && collection.length > 0) {
-            var collectionItem = paramDef.collectionItem;
-            for (var i = 0, s = collection.length; i < s; i++) {
-                validateData(collection[i], collectionItem, false);
+            if (typeof paramDef.collectionItem !== "undefined") {
+                var collectionItem = paramDef.collectionItem;
+                for (i = 0, s = collection.length; i < s; i++) {
+                    validateData(collection[i], collectionItem, false);
+                }
+            } else {
+                if (typeof paramDef.allowedValues !== "undefined") {
+                    var allowedValues = paramDef.allowedValues;
+                    for (i = 0, s = collection.length; i < s; i++) {
+                        if (allowedValues.indexOf(collection[i]) === -1) {
+                            msgs.push("notAllowed:" + paramName);
+                            continue;
+                        }
+                    }
+                }
             }
         } else {
             if (typeof paramDef.required === "boolean") {

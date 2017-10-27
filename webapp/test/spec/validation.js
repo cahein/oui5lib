@@ -118,6 +118,12 @@ describe("validation", function() {
                 "allowedValues": ["user", "administrator"]
             },
             {
+                "name": "roles",
+                "required": true,
+                "type": "collection",
+                "allowedValues": ["user", "administrator"]
+            },
+            {
                 "name": "other",
                 "required": true,
                 "type": "collection",
@@ -155,33 +161,43 @@ describe("validation", function() {
             "role": "administrator"
         };
         var msgs = oui5lib.validation.validateData(userData, paramDefs);
-        expect(msgs.length).toEqual(5);
+        expect(msgs.length).toEqual(6);
         expect(msgs[0]).toEqual("missing:userId");
         expect(msgs[1]).toEqual("invalid:persNr");
         expect(msgs[2]).toEqual("invalid:sms");
-        expect(msgs[3]).toEqual("missing:other");
-        expect(msgs[4]).toEqual("missing:permissions");
+        expect(msgs[3]).toEqual("missing:roles");
+        expect(msgs[4]).toEqual("missing:other");
+        expect(msgs[5]).toEqual("missing:permissions");
 
         userData.persNr = "12345678";
+        userData.roles = [];
         userData.other = [];
         userData.permissions = { };
         msgs = oui5lib.validation.validateData(userData, paramDefs);
-        expect(msgs.length).toEqual(3);
+        expect(msgs.length).toEqual(4);
         expect(msgs[0]).toEqual("missing:userId");
         expect(msgs[1]).toEqual("invalid:sms");
-        expect(msgs[2]).toEqual("missing:other");
+        expect(msgs[2]).toEqual("missing:roles");
+        expect(msgs[3]).toEqual("missing:other");
 
         userData.sms = "00492345124581";
+        userData.roles = ["maintainer"];
         userData.other = [{ "b": "not required" }];
         msgs = oui5lib.validation.validateData(userData, paramDefs);
-        expect(msgs.length).toEqual(2);
+        expect(msgs.length).toEqual(3);
+        expect(msgs[0]).toEqual("missing:userId");
+        expect(msgs[1]).toEqual("notAllowed:roles");
+        expect(msgs[2]).toEqual("missing:a");
 
         userData.userId = "ab34uni";
-        userData.other = [{ "a": "ok" }];
+        userData.other = [{ "a": "ok", "b": false }];
+        userData.roles = ["user"];
         msgs = oui5lib.validation.validateData(userData, paramDefs);
-        expect(msgs.length).toEqual(0);
+        expect(msgs.length).toEqual(1);
+        expect(msgs[0]).toEqual("wrongType:b");
 
         userData.role = "oUser";
+        userData.other = [{ "a": "ok", "b": "is string" }];
         msgs = oui5lib.validation.validateData(userData, paramDefs);
         expect(msgs.length).toEqual(1);
         expect(msgs[0]).toEqual("notAllowed:role");

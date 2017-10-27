@@ -15,22 +15,29 @@
         }
     }
 
-    function procData(productsData) {
-        setReady();
+    function loadProducts(productIds) {
+        oui5lib.request.doRequest(
+            "product", "getProducts",
+            {
+                "isbns": productIds
+            },
+            oum.products.addData);
     }
-
-    function setReady() {
-        if (typeof sap !== "undefined" &&
-            typeof sap.ui !== "undefined") {
-            products.publishReadyEvent("products");
+    
+    function procData(productArray) {
+        for (var i = 0, s = productArray.length; i < s; i++) {
+            var product = productArray[i];
+            oum.orders.setProductLoaded(product.isbn);
         }
     }
     
     var primaryKey = oui5lib.mapping.getPrimaryKey("product");
     var listBase = oui5lib.listBase.getObject(primaryKey);
+    listBase.registerProcFunction(procData);
 
     var products = oum.namespace("products");
     products = oui5lib.util.extend(products, listBase);
 
     products.init = init;
+    products.load = loadProducts;
 }());

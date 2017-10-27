@@ -13,7 +13,7 @@ jQuery.sap.declare("oui5lib.listBase");
         
         var _primaryKey = primaryKey;
         var _model = null;
-        var _data = null;
+        var _data = [];
 
         var _itemsLoaded = {};
         var _procFunction = null;
@@ -141,6 +141,10 @@ jQuery.sap.declare("oui5lib.listBase");
              */
             getData: function() {
                 return _data;
+            },
+
+            getItemCount: function() {
+                return this.getData().length;
             },
             
             /**
