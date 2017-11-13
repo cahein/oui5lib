@@ -27,6 +27,8 @@ module.exports = function (grunt) {
                 specs: [
                     "<%= dirs.spec %>/orders.js",
                     "<%= dirs.spec %>/Order.js",
+                    "<%= dirs.spec %>/addresses.js",
+                    "<%= dirs.spec %>/Address.js",
                     "<%= dirs.spec %>/products.js",
                     "<%= dirs.spec %>/Product.js"
                 ]

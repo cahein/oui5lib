@@ -1,14 +1,16 @@
 {
-    "results": [
+    "result": true,
+    "value": [
         {
             "id": 1,
             "status": "shipped",
             "orderDate": "2017-05-16 10:01:23",
             "customerAddressId": 1,
             "billingAddressId": 1,
+            "currency": "US-$",
             "items": [
                 {
-                    "productId": "0313276439",
+                    "productId": "0394718747",
                     "quantity": 2,
                     "unitPrice": 4.80
                 },
@@ -38,9 +40,10 @@
             "customerAddressId": 2,
             "billingAddressId": 3,
             "orderDate": "2017-05-02 02:21:03",
+            "currency": "€",
             "items": [
                 {
-                    "productId": "0813818702",
+                    "productId": "1859847390",
                     "quantity": 1,
                     "unitPrice": 2.40
                 },

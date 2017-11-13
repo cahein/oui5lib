@@ -6,8 +6,8 @@
      * @param {Array} data The products array.
      */
     function init(data) {
-        if (data.results) {
-            var productsData = data.results;
+        if (data.value) {
+            var productsData = data.value;
             if (productsData instanceof Array) {
                 products.setData(productsData);
                 procData(productsData);
@@ -24,16 +24,13 @@
             oum.products.addData);
     }
     
-    function procData(productArray) {
-        for (var i = 0, s = productArray.length; i < s; i++) {
-            var product = productArray[i];
-            oum.orders.setProductLoaded(product.isbn);
-        }
+    function handleItemDataChanged(id) {
+        oum.orders.onProductLoaded(id);
     }
-    
+
     var primaryKey = oui5lib.mapping.getPrimaryKey("product");
     var listBase = oui5lib.listBase.getObject(primaryKey);
-    listBase.registerProcFunction(procData);
+    listBase.registerItemDataChangedFunction(handleItemDataChanged);
 
     var products = oum.namespace("products");
     products = oui5lib.util.extend(products, listBase);

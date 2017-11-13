@@ -3,7 +3,7 @@ describe("Products collection object", function() {
         oum.products.setData([]);
         
         spyOn(oui5lib.request, "doRequest");
-        spyOn(oum.orders, "setProductLoaded").and.callThrough();
+        spyOn(oum.orders, "onProductLoaded").and.callThrough();
     });
 
     it ("should load products", function() {
@@ -13,7 +13,8 @@ describe("Products collection object", function() {
 
         oum.products.addData(
             {
-                "results": [
+                "result": true,
+                "value": [
                     {
                         "isbn": "0871132532",
                         "title": {
@@ -57,7 +58,7 @@ describe("Products collection object", function() {
             }
         );
 
-        expect(oum.orders.setProductLoaded.calls.count()).toEqual(3);
+        expect(oum.orders.onProductLoaded.calls.count()).toEqual(3);
         expect(oum.products.getItemCount()).toEqual(3);
     });
 

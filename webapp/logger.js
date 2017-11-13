@@ -15,7 +15,7 @@ jQuery.sap.declare("oui5lib.logger");
 
     var logLevel =  oui5lib.configuration.getLogLevel();
    
-    var logPrefix = "oUI5Lib - ";
+    var logPrefix = "oui5lib - ";
 
     switch (logLevel) {
     case "ERROR":
@@ -23,11 +23,11 @@ jQuery.sap.declare("oui5lib.logger");
     case "WARN":
         console.info = function(){};
     case "INFO":
-        console.debug = function(){};
+        console.log = function(){};
     }
     
     function debug(msg) {
-        console.debug(logPrefix + msg);
+        console.log(logPrefix + msg);
     }
     
     function info(msg) {

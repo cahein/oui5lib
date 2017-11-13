@@ -7,27 +7,29 @@
             this.setData(getNewOrder());
             this.setNew(true);
         } else {
-            var orderEntry = oum.orders.getItem(id);
-            if (orderEntry === null) {
+            if (oum.orders.isItemLoaded(id)) {
+                var orderEntry = oum.orders.getItem(id);
+                this.setData(orderEntry);
+                this.id = id;
+            } else {
                 _o = this;
                 oui5lib.request.doRequest("order", "getOrder",
                                           { "id": id },
                                           this.requestSucceeded);
                 this.setLoading(true);
-            } else {
-                this.setData(orderEntry);
-                this.id = id;
             }
         }
     }
     
     var _o = null;
     
-    // 'this' may have changed
     function requestSucceeded(data) {
-        _o.setData(data);
-        _o.setLoading(false);
         oum.orders.addData(data);
+
+        var item = data.value;
+        _o.setData(oum.orders.getItem(item.id));
+        _o.id = item.id;
+        _o.setLoading(false);
     }
     
     function getNewOrder() {
@@ -50,34 +52,61 @@
         return getAddress(id);
     }
 
-    function getItems() {
+    function getAddress(id) {
+        if (oum.addresses.isItemLoaded(id)) {
+            return new oum.Address(id);
+        }
+        return null;
+    }
+
+    var listHelper = oui5lib.listHelper;
+    function getOrderItems() {
         return this.getProperty("items");
     }
 
-    function removeItem(entry) {
+    function getOrderItem(productId) {
+        var items = this.getOrderItems();
+        return listHelper.getItemByKey(items, "productId", productId);
     }
-
-    function updateItem(entry) {
-    }
-
-    function addProduct(productId, qty) {
-    }
-
-    function getPriceTotal() {
-    }
-
-    function getAddress(id) {
-        var address = oum.addresses.getItem(id);
-        if (address === null) {
-            return null;
+    
+    function removeOrderItem(productId) {
+        if (this.getOrderItem(productId) !== null) {
+            var items = this.getOrderItems();
+            listHelper.removeByKey(items, "productId", productId);
         }
-        return new oum.Address(id);
+    }
+
+    function addOrderEntry(productId, quantity) {
+        var items = this.getOrderItems();
+
+        if (this.getOrderItem(productId) === null) {
+            var product = new oum.Product(productId);
+            var item = {
+                "productId": productId,
+                "quantity": quantity,
+                "unitPrice": product.getProperty("salesPrice")
+            };
+            items.push(item);
+        }
+    }
+
+    function getOrderTotal() {
+        var items = this.getOrderItems();
+        var total = oum.orders.calculateOrderTotal(items);
+        this.setProperty("total", total);
+        return total;
     }
     
     Order.prototype = Object.create(oui5lib.itemBase);
     Order.prototype.getCustomerAddress = getCustomerAddress;
     Order.prototype.getBillingAddress = getBillingAddress;
-    Order.prototype.getProducts = getItems;
+
+    Order.prototype.getOrderItems = getOrderItems;
+    Order.prototype.getOrderItem = getOrderItem;
+    Order.prototype.addOrderEntry = addOrderEntry;
+    Order.prototype.removeOrderItem = removeOrderItem;
+
+    Order.prototype.getOrderTotal = getOrderTotal;
     
     Order.prototype.requestSucceeded = requestSucceeded;
 

@@ -26,6 +26,7 @@
     "globals": {
         "sap": true,
         "jQuery": true,
-        "oui5lib": true
+        "oui5lib": true,
+        "oum": true
     }
 }

@@ -1,25 +1,81 @@
 {
-    "results": [
+    "result": true,
+    "value": [
         {
-            "id": 1,
-            "name": "Sauzahn",
-            "description": "A usefull garden tool.",
-            "salesPrice": 39.90,
-            "stockQty": 10
+            "isbn": "0521560241",
+            "title": {
+	        "a": "A forest of time :",
+	        "b": "American Indian ways of history /",
+	        "c": "Peter Nabokov."
+            },
+            "author": "Nabokov, Peter.",
+            "edition": "",
+            "published": "New York : Cambridge University Press, 2002.",
+            "note": "",
+            "bibliography": "Includes bibliographical references and index.",
+            "numbers": {
+	        "ISBN": "0521560241 (hardback)",
+	        "LCCN": "  2001025955"
+            },
+            "salesPrice": 105.00,
+            "stockQty": 1
         },
         {
-            "id": 2,
-            "name": "Carrot Seeds",
-            "description": "This is an old variety, which has the form of a cylinder.",
-            "salesPrice": 2.40,
-            "stockQty": 100
+            "isbn": "0394718747",
+            "title": {
+                "a": "Propaganda: the formation of men's attitudes.",
+                "b": "",
+                "c": "Translated from the French by Konrad Kellen and Jean Lerner. With an introd. by Konrad Kellen."
+            },
+            "author": "Ellul, Jacques.",
+            "edition": "",
+            "published": "New York, Vintage Books [1973, c1965]",
+            "note": "",
+            "bibliography": "Bibliography: p. [315]-320.",
+            "numbers": {
+                "ISBN": "0394718747",
+                "LCCN": "   72008053 "
+            },
+            "salesPrice": 13.09,
+            "stockQty": 8
         },
         {
-            "id": 3,
-            "name": "Schneckenschutz",
-            "description": "Protects you Plants. There are 5 in one package.",
-            "salesPrice": 9.90,
-            "stockQty": 50
+            "isbn": "0889610356",
+            "title": {
+                "a": "Population target :",
+                "b": "the political economy of population control in Latin America /",
+                "c": "by Bonnie Mass."
+            },
+            "author": "Mass, Bonnie.",
+            "edition": "",
+            "published": "[Toronto : Latin American Working Group, c1976]",
+            "note": "",
+            "bibliography": "Includes bibliographical references and indexes.",
+            "numbers": {
+                "ISBN": "0889610356.",
+                "LCCN": "   77372439 "
+            },
+            "salesPrice": 15.76,
+            "stockQty": 2
+        },
+        {
+            "isbn": "1859847390",
+            "title": {
+                "a": "Late Victorian holocausts :",
+                "b": "El Niño famines and the making of the third world /",
+                "c": "Mike Davis."
+            },
+            "author": "Davis, Mike, 1946-",
+            "edition": "",
+            "published": "London ; New York : Verso, 2001.",
+            "note": "",
+            "bibliography": "Includes bibliographical references and index.",
+            "numbers": {
+                "ISBN": "1859847390 (cloth)",
+                "LCCN": "   00054989 "
+            },
+            "salesPrice": 5.60,
+            "stockQty": 28
         }
     ]
 }

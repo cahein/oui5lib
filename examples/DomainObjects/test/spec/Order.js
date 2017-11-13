@@ -8,14 +8,14 @@ describe("Order entity object", function() {
             "orderDate": "2017-05-02 02:21:03",
             "items": [
                 {
-                    "productId": "0813818702",
+                    "productId": "1859847390",
                     "quantity": 1,
-                    "unitPrice": 2.40
+                    "unitPrice": 2.4
                 },
                 {
                     "productId": "0889610356",
                     "quantity": 2,
-                    "unitPrice": 19.80
+                    "unitPrice": 19.8
                 }
             ]
         }]);
@@ -30,8 +30,8 @@ describe("Order entity object", function() {
     it ("should get an existing Order already loaded", function() {
         var order = new oum.Order(2);
         expect(order instanceof oum.Order).toBe(true);
-        expect(order.isNew()).toBe(false);
         expect(order.getProperty("id")).toEqual(2);
+        expect(order.isNew()).toBe(false);
     });
 
     it ("should get the id directly", function() {
@@ -86,5 +86,42 @@ describe("Order entity object", function() {
         var billingAddress = order.getBillingAddress();
         expect(billingAddress instanceof oum.Address).toBe(true);
         expect(billingAddress.getProperty("id")).toEqual(3);
+    });
+
+    it ("should get the order total", function() {
+        var order = oum.Order(2);
+        expect(order.getOrderTotal()).toEqual("42.00");
+    });
+    
+    it ("should get the order items", function() {
+        var order = oum.Order(2);
+        var orderItems = order.getOrderItems();
+        expect(orderItems.length).toEqual(2);
+    });
+
+    it ("should add an order item and get updated order total", function() {
+        var order = oum.Order(2);
+        var orderItems = order.getOrderItems();
+        expect(orderItems.length).toEqual(2);
+
+        order.addOrderEntry("0394718747", 1);
+        
+        orderItems = order.getOrderItems();
+        expect(orderItems.length).toEqual(3);
+        expect(order.getOrderTotal()).toEqual("55.09");
+    });
+
+    it ("should remove an order item", function() {
+        var order = oum.Order(2);
+        order.removeOrderItem("0394718747");
+        var orderItems = order.getOrderItems();
+        expect(orderItems.length).toEqual(2);
+    });
+
+    it ("should get an order item by product id", function() {
+        var order = oum.Order(2);
+        var item = order.getOrderItem("1859847390");
+        expect(item.quantity).toEqual(1);
+        expect(item.unitPrice).toEqual(2.4);
     });
 });

@@ -23,7 +23,9 @@ oui5lib.request.getTestUrl = function(requestUrl) {
     case "getOrder":
         return "../localService/mockdata/order.json";
     case "getProducts":
-        return "../localService/mockdata/booklist.json";
+        return "../localService/mockdata/products.json";
+    case "getStatuses":
+        return "../localService/mockdata/statuses.json";
     default:
         return null;
     }

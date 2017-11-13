@@ -12,11 +12,26 @@ jQuery.sap.declare("oui5lib.formatter");
     /**
      * Converts date and time strings into Javascript Date.
      * @memberof oui5lib.formatter
-     * @param {string} dateStr given Date value (format: YYYY-MM-dd)
-     * @param {string} timeStr given Time value (format: hh:mm:ss)
+     * @param {string} dateStr given date value
+     * @param {string} timeFormat given date format pattern
      * @returns {Date}
      */
-    function getDate(dateStr, timeStr){
+    function getDate(dateStr, dateFormat){
+        var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+            pattern: dateFormat
+        });
+        var date = oDateFormat.parse(dateStr, false, true);
+        return date;
+    }
+
+    /**
+     * Converts date and time strings into Javascript Date.
+     * @memberof oui5lib.formatter
+     * @param {string} dateStr given date value (format: YYYY-MM-dd)
+     * @param {string} timeStr given time value (format: hh:mm:ss)
+     * @returns {Date}
+     */
+    function getDateFromStrings(dateStr, timeStr){
         var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: "YYYY-MM-dd HH:mm:ss"
         });
@@ -61,6 +76,7 @@ jQuery.sap.declare("oui5lib.formatter");
     /**
      * Formats a given Date according to the specified date pattern.
      * @memberof oui5lib.formatter
+     * @param {Date} date The Javascript Date to be formatted.
      * @param {string} outFormat The date pattern to format to.
      * @returns {string} The formatted date or time.
      */

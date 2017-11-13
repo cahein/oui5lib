@@ -17,13 +17,19 @@ oui5lib.isTest = true;
 oui5lib.request.getTestUrl = function(requestUrl) {
     switch(requestUrl) {
     case "getAddresses":
-        return "localService/mockdata/addresses.json";
+        return "../localService/mockdata/addresses.json";
+    case "getAddress":
+        return "../localService/mockdata/address.json";
     case "getOrders":
-        return "localService/mockdata/orders.json";
+        return "../localService/mockdata/orders.json";
     case "getOrder":
-        return "localService/mockdata/order.json";
+        return "../localService/mockdata/order.json";
     case "getProducts":
-        return "localService/mockdata/products.json";
+        return "../localService/mockdata/products.json";
+    case "getProduct":
+        return "../localService/mockdata/product.json";
+    case "getStatuses":
+        return "../localService/mockdata/statuses.json";
     default:
         return null;
     }

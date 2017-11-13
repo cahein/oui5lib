@@ -82,13 +82,14 @@ jQuery.sap.declare("oui5lib.request");
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
+                    var data = null;
                     try {
-                        var data = JSON.parse(xhr.responseText);
-                        if (typeof resolve === "function") {
-                            resolve(data, props);
-                        }
+                        data = JSON.parse(xhr.responseText);
                     } catch(e) {
                         throw new Error("JSON is invalid ");
+                    }
+                    if (typeof resolve === "function") {
+                        resolve(data, props);
                     }
                 } else {
                     publishFailureEvent("status", xhr, props);
@@ -135,7 +136,7 @@ jQuery.sap.declare("oui5lib.request");
     function procParams(params, requestDefinition) {
         var paramsDefinition = requestDefinition.params;
         if (paramsDefinition === undefined || paramsDefinition.length === 0) {
-            return null;
+            return {};
         }
         var requestParams = {};
 
@@ -243,7 +244,7 @@ jQuery.sap.declare("oui5lib.request");
                 props = {};
             }
             props.xhrObj = xhr; 
-            var eventBus = new sap.ui.getCore().getEventBus();
+            var eventBus = oui5lib.util.getComponentEventBus();
             eventBus.publish("xhr", eventId, props);
         }
     }

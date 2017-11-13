@@ -1,101 +1,10 @@
 jQuery.sap.require("oui5lib.logger");
+jQuery.sap.require("oui5lib.util");
 
 jQuery.sap.declare("oui5lib.messages");
 
 /** @namespace oui5lib.messages */
 (function () {
-    var messageProcessor = null;
-    
-    /**
-     * Get MessageManager from the UI5 Core.
-     * @memberof oui5lib.messages
-     * @inner 
-     * @returns {sap.ui.core.message.MessageManager} The active MessageManager instance.
-     */
-    function getMessageManager() {
-        return sap.ui.getCore().getMessageManager();
-    }
-    
-    /**
-     * Get MessageProcessor.
-     * @memberof oui5lib.messages
-     * @inner 
-     * @returns {sap.ui.core.message.ControlMessageProcessor} The ControlMessageProcessor implementation.
-     */
-    function getMessageProcessor() {
-        if (messageProcessor === null) {
-            oui5lib.logger.info("set messageProcessor");
-            messageProcessor = new sap.ui.core.message.ControlMessageProcessor();
-            var messageManager  = getMessageManager();
-            messageManager.registerMessageProcessor(messageProcessor);
-            
-        }
-        return messageProcessor;
-    }
-
-    /**
-     * Add message to the specified target.
-     * @memberof oui5lib.messages
-     * @inner 
-     * @param {string} msgType The message type ('Error', 'Warning').
-     * @param {string} msgText The message text.
-     * @param {string} target The message target.
-     */
-    function addMessage(msgType, msgText, target) {
-        var messageManager  = getMessageManager();
-        var messageProcessor = getMessageProcessor();
-        
-        var msg = new sap.ui.core.message.Message({
-            message: msgText,
-            target: target,
-            type: msgType,
-            processor: messageProcessor
-        });
-        messageManager.addMessages(msg);
-    }
-    
-    /**
-     * Add message of type Error to the specified target.
-     * @memberof oui5lib.messages
-     * @param {string} msgText The message text.
-     * @param {string} target The message target.
-     */
-    function addErrorMessage(msgText, target) {
-        if (target.match(/[a-zA-Z-_]*\/value$/) !== null) {
-            removeMessages(target);
-        }
-        addMessage(sap.ui.core.MessageType.Error, msgText, target);
-    }
-
-    /**
-     * Add message of type Warning to the specified target.
-     * @memberof oui5lib.messages
-     * @param {string} msgText The message text.
-     * @param {string} target The message target.
-     */
-    function addWarnMessage(msgText, target) {
-        if (target.match(/[a-zA-Z-_]*\/value$/) !== null) {
-            removeMessages(target);
-        }
-        addMessage(sap.ui.core.MessageType.Warning, msgText, target);
-    }
-
-    /**
-     * Remove messages for specified target.
-     * @memberof oui5lib.messages
-     * @param {string} target The message target.
-     */
-    function removeMessages(target) {
-        var messageManager  = getMessageManager();
-        var data = messageManager.getMessageModel().getData();
-        for (var i = 0, s = data.length; i < s; i++) {
-            var msg = data[i];
-            if (msg.target === target) {
-                messageManager.removeMessages(msg);
-            }
-        }
-    }
-
     /**
      * Show notification message briefly without blocking the application.
      * @memberof oui5lib.messages
@@ -174,13 +83,8 @@ jQuery.sap.declare("oui5lib.messages");
     }
 
     var messages = oui5lib.namespace("messages");
-    messages.addErrorMessage = addErrorMessage;
-    messages.addWarnMessage = addWarnMessage;
-    messages.removeMessages = removeMessages;
-
     messages.showNotification = showMessageToast;
     messages.showErrorMessage = showErrorMessageBox;
     messages.confirmUnsavedChanges = confirmUnsavedChanges;
     messages.confirmDelete = confirmDelete;
-
 }());

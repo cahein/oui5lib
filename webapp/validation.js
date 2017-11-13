@@ -78,6 +78,15 @@ jQuery.sap.declare("oui5lib.validation");
                     }
                     break;
                 case "int":
+                    if (typeof paramValue === "string") {
+                        if (parseInt(paramValue)) {
+                            paramValue = parseInt(paramValue);
+                        }
+                    }
+                    if (typeof paramValue !== "number") {
+                        msgs.push("wrongType:" + paramName);
+                    }
+                    break;
                 case "boolean":
                     if (typeof paramValue !== "boolean") {
                         if (!(paramValue instanceof Boolean)) {

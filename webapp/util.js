@@ -18,6 +18,18 @@ jQuery.sap.declare("oui5lib.util");
     }
     
     /**
+     * Get the EventBus for the configured Component {@link oui5lib.configuration.getComponent}.
+     * @memberof oui5lib.util
+     */
+    function getComponentEventBus() {
+        var component = oui5lib.configuration.getComponent();
+        if (component !== null) {
+            return component.getEventBus();
+        }
+        return null;
+    }
+    
+    /**
      * Get i18n text.
      * @memberof oui5lib.util
      * @param {string} path The property path.
@@ -114,6 +126,7 @@ jQuery.sap.declare("oui5lib.util");
     }
     var util = oui5lib.namespace("util");
     util.getComponentRouter = getComponentRouter;
+    util.getComponentEventBus = getComponentEventBus;
     util.getI18nText = getI18nText;
     util.getJsonModelForData = getJsonModelForData;
     util.getFilterArray = getFilterArray;

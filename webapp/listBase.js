@@ -17,6 +17,8 @@ jQuery.sap.declare("oui5lib.listBase");
 
         var _itemsLoaded = {};
         var _procFunction = null;
+        var _dataChangedEventFunction = null;
+        var _itemDataChangedEventFunction = null;
         
         function isItemLoaded(id) {
             if (typeof _itemsLoaded[id] === "undefined") {
@@ -40,6 +42,18 @@ jQuery.sap.declare("oui5lib.listBase");
             registerProcFunction: function(func) {
                 if (typeof func === "function") {
                     _procFunction = func;
+                }
+            },
+
+            registerDataChangedFunction: function(func) {
+                if (typeof func === "function") {
+                    _dataChangedEventFunction = func;
+                }
+            },
+
+            registerItemDataChangedFunction: function(func) {
+                if (typeof func === "function") {
+                    _itemDataChangedEventFunction = func;
                 }
             },
             
@@ -96,18 +110,29 @@ jQuery.sap.declare("oui5lib.listBase");
                     item = _data[i];
                     id = item[_primaryKey];
                     _itemsLoaded[id] = new Date();
+
+                    if (_itemDataChangedEventFunction !== null) {
+                        _itemDataChangedEventFunction(id);
+                    }
+                }
+                if (_procFunction !== null) {
+                    _procFunction(data);
+                }
+                if (_dataChangedEventFunction !== null) {
+                    _dataChangedEventFunction();
                 }
             },
 
-            // 'this' may have changed
             addData: function(data) {
                 var entries = [], item, id;
                 if (typeof data === "object") {
-                    if (data.results === undefined) {
+                    if (data.value === undefined) {
                         entries = [ data ];
                     } else {
-                        if (data.results instanceof Array) {
-                            entries = data.results;
+                        if (data.value instanceof Array) {
+                            entries = data.value;
+                        } else if (data.value instanceof Object) {
+                            entries = [ data.value ];
                         }
                     }
                 }
@@ -130,8 +155,14 @@ jQuery.sap.declare("oui5lib.listBase");
                             _data.push(item);
                             _itemsLoaded[id] = new Date();
                         }
+                        if (_itemDataChangedEventFunction !== null) {
+                            _itemDataChangedEventFunction(id);
+                        }
                     }
                     updateModel(_data);
+                }
+                if (_dataChangedEventFunction !== null) {
+                    _dataChangedEventFunction();
                 }
             },
 
@@ -144,7 +175,11 @@ jQuery.sap.declare("oui5lib.listBase");
             },
 
             getItemCount: function() {
-                return this.getData().length;
+                return _data.length;
+            },
+
+            isItemLoaded: function(keyValue) {
+                return isItemLoaded(keyValue);
             },
             
             /**
@@ -200,7 +235,7 @@ jQuery.sap.declare("oui5lib.listBase");
              * Use to publish the om ready event
              * @param {string} name The name of the ListBase object.
              */
-            publishReadyEvent : function(name) {
+            publishReadyEvent: function(name) {
                 if (typeof sap === "undefined" ||
                     typeof sap.ui === "undefined") {
                     throw Error("Couldn't publish event " + name

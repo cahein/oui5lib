@@ -58,34 +58,11 @@ jQuery.sap.declare("oui5lib.ui");
             return;
         }
         
-        var target = control.sId + "/value";
-        if (isValid) {
-            removeMessages(target);
-        }
         if (typeof control.setValueState === "function") {
             if (isValid) {
                 control.setValueState(sap.ui.core.ValueState.None);
-//                control.closeValueStateMessage();
             } else {
                 control.setValueState(sap.ui.core.ValueState.Error);
-//                control.openValueStateMessage();
-            }
-        }
-    }
-    
-    /**
-     * Remove MessageManager messages for a particular target.
-     * @memberof oui5lib.ui
-     * @inner 
-     * @param {string} target Specify the target.
-     */
-    function removeMessages(target) {
-        var oMessageManager  = sap.ui.getCore().getMessageManager();
-        var data = oMessageManager.getMessageModel().getData();
-        for (var i = 0, s = data.length; i < s; i++) {
-            var msg = data[i];
-            if (msg.target === target) {
-                oMessageManager.removeMessages(msg);
             }
         }
     }

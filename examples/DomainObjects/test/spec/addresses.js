@@ -3,7 +3,7 @@ describe("Addresses collection object", function() {
         oum.addresses.setData([]);
         
         spyOn(oui5lib.request, "doRequest");
-        spyOn(oum.orders, "setAddressLoaded").and.callThrough();
+        spyOn(oum.orders, "onAddressLoaded").and.callThrough();
     });
     
     it ("should load addresses", function() {
@@ -13,7 +13,8 @@ describe("Addresses collection object", function() {
 
         oum.addresses.addData(
             {
-                "results": [
+                "result": true,
+                "value": [
                     {
                         "id": 1,
                         "firstName": "Donald",
@@ -34,13 +35,13 @@ describe("Addresses collection object", function() {
             }
         );
 
-        expect(oum.orders.setAddressLoaded.calls.count()).toEqual(2);
+        expect(oum.orders.onAddressLoaded.calls.count()).toEqual(2);
         
         var addressData = oum.addresses.getData();
         expect(addressData.length).toEqual(2);
     });
 
-    it ("should keep loading order", function() {
+    it ("should preserve loading order", function() {
         var addressData = oum.addresses.getData();
         expect(addressData[1].id).toEqual(2);
     });

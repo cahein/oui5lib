@@ -9,16 +9,13 @@
             oum.addresses.addData);
     }
     
-    function procData(addressArray) {
-        for (var i = 0, s = addressArray.length; i < s; i++) {
-            var address = addressArray[i];
-            oum.orders.setAddressLoaded(address.id);
-        }
+    function handleItemDataChanged(id) {
+        oum.orders.onAddressLoaded(id);
     }
-    
+
     var primaryKey = oui5lib.mapping.getPrimaryKey("address");
     var listBase = oui5lib.listBase.getObject(primaryKey);
-    listBase.registerProcFunction(procData);
+    listBase.registerItemDataChangedFunction(handleItemDataChanged);
     
     var addresses = oum.namespace("addresses");
     addresses = oui5lib.util.extend(addresses, listBase);

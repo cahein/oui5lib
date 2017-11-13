@@ -8,6 +8,7 @@ describe("Orders collection object", function() {
         oui5lib.request.doRequest("order", "getOrders",
                                   { "startDate": "2017-04-01" },
                                   oum.orders.init);
+
     });
 
     it ("should return orders", function() {
@@ -37,7 +38,7 @@ describe("Orders collection object", function() {
 
     it ("should load related products", function() {
         expect(oum.products.load.calls.count()).toEqual(1);
-        expect(oum.products.load).toHaveBeenCalledWith(["0313276439", "0889610356", "0813818702"]);
+        expect(oum.products.load).toHaveBeenCalledWith(["0394718747", "0889610356", "1859847390"]);
         var order = oum.orders.getItem(1);
         var items = order.items;
         
@@ -56,7 +57,7 @@ describe("Orders collection object", function() {
 
     it ("should calculate and add the orderTotal ", function() {
         var order = oum.orders.getItem(1);
-        expect(typeof order.total).toEqual("number");
-        expect(order.total).toEqual(29.5);
+        expect(typeof order.total).toEqual("string");
+        expect(order.total).toEqual("29.50");
     });
 });

@@ -8,11 +8,13 @@
         },
         {
             "name": "status",
-            "default": "new"
+            "default": "new",
+            "referenceTo": "status.status"
         },
         {
             "name": "orderDate",
             "type": "Date",
+            "dateFormat": "yyyy-MM-dd HH:mm:ss",
             "required": true
         },
         {
@@ -22,6 +24,9 @@
         {
             "name": "billingAddressId",
             "referenceTo": "address.id"
+        },
+        {
+            "name": "currency"
         },
         {
             "name": "items",
@@ -77,6 +82,9 @@
                     "name": "endDate",
                     "type": "Date",
                     "dateFormat": "yyyyMMddHHmmss"
+                },
+                {
+                    "name": "status"
                 }
             ]
         },

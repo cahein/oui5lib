@@ -1,23 +1,27 @@
 {
-    "id": 8,
-    "status": "new",
-    "orderDate": "2017-05-27 10:21:01",
-    "customerAddressId": 2,
-    "billingAddressId": 2,
-    "items": [
-        {
-            "productId": 2,
-            "quantity": 2,
-            "unitPrice": 4.80
-        },
-        {
-            "productId": 1,
-            "quantity": 1,
-            "unitPrice": 37.90
-        }
-    ],
-    "payments": [
-    ],
-    "shipments": [
-    ]
+    "result": true,
+    "value": {
+        "id": 8,
+        "status": "new",
+        "orderDate": "2017-05-27 10:21:01",
+        "customerAddressId": 2,
+        "billingAddressId": 2,
+        "currency": "US-$",
+        "items": [
+            {
+                "productId": "0813818702",
+                "quantity": 2,
+                "unitPrice": 4.80
+            },
+            {
+                "productId": "0871132532",
+                "quantity": 1,
+                "unitPrice": 37.90
+            }
+        ],
+        "payments": [
+        ],
+        "shipments": [
+        ]
+    }
 }

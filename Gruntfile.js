@@ -79,7 +79,8 @@ module.exports = function (grunt) {
                 src: [
                     "<%= dirs.examples %>/DomainObjects/oui5lib",
                     "<%= dirs.examples %>/ComponentTemplate/oui5lib",
-                    "<%= dirs.examples %>/FormPage/oui5lib"
+                    "<%= dirs.examples %>/FormPage/oui5lib",
+                    "<%= dirs.examples %>/OrderApp/oui5lib"
                 ]
             }
         },
@@ -184,7 +185,44 @@ module.exports = function (grunt) {
                         cwd: "<%= dirs.view %>",
                         src: "**",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib/view/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>/lib",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/lib/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.i18n %>",
+                        src: "*.properties",
+                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/i18n/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.controller %>",
+                        src: "*.js",
+                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/controller/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.fragment %>",
+                        src: "**",
+                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/fragment/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.view %>",
+                        src: "**",
+                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/view/"
                     }
+
                 ]
             }
         }
