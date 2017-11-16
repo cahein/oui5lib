@@ -1,0 +1,29 @@
+{
+    "result": true,
+    "value": [
+        {
+            "status": "new",
+            "valueState": "None"
+        },
+        {
+            "status": "processing",
+            "valueState": "Warning"
+        },
+        {
+            "status": "invoiced",
+            "valueState": "Warning"
+        },
+        {
+            "status": "shipped",
+            "valueState": "Success"
+        },
+        {
+            "status": "canceled",
+            "valueState": "None"
+        },
+        {
+            "status": "closed",
+            "valueState": "None"
+        }
+    ]
+}

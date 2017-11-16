@@ -1,0 +1,18 @@
+{
+    "description": "Define Status",
+    "primaryKey" : "status",
+    "entity" : [
+        {
+            "name": "status"
+        },
+        {
+            "name": "valueState"
+        }
+    ],
+    "request": {
+        "getStatuses": {
+            "url": "getStatuses",
+            "method": "GET"
+        }
+    }
+}

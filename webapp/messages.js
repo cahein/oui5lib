@@ -11,9 +11,12 @@ jQuery.sap.declare("oui5lib.messages");
      * @function showNotification
      * @param {string} msg The message text.
      */
-    function showMessageToast(msg) {
+    function showMessageToast(msg, duration) {
+        if (typeof duration !== "number") {
+            duration = 3000;
+        }
         jQuery.sap.require("sap.m.MessageToast");
-        sap.m.MessageToast.show(msg);
+        sap.m.MessageToast.show(msg, { duration: duration });
     }
 
     /**
