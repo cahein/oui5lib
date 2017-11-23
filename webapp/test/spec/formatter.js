@@ -25,13 +25,13 @@ describe("formatter", function() {
         var date = new Date("2014", "4", "5", "1", "00", "10");
         var dateStr = "2014-05-05";
         var timeStr = "01:00:10";
-        var dateObj = oui5lib.formatter.getDate(dateStr, timeStr);
+        var dateObj = oui5lib.formatter.getDateFromStrings(dateStr, timeStr);
         expect(dateObj).toEqual(date);
 
         date = new Date("2014", "9", "11", "23", "59", "9");
         dateStr = "2014-10-11";
         timeStr = "23:59:09";
-        dateObj = oui5lib.formatter.getDate(dateStr, timeStr);
+        dateObj = oui5lib.formatter.getDateFromStrings(dateStr, timeStr);
         expect(dateObj).toEqual(date);
     });
 

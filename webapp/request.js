@@ -1,3 +1,7 @@
+jQuery.sap.require("oui5lib.logger");
+jQuery.sap.require("oui5lib.formatter");
+jQuery.sap.require("oui5lib.util");
+
 jQuery.sap.declare("oui5lib.request");
 
 /** @namespace oui5lib.request */
@@ -36,6 +40,10 @@ jQuery.sap.declare("oui5lib.request");
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      */
     function doRequest(entityName, requestName, params, resolve, isAsync) {
+        if (typeof oui5lib.mapping !== "object") {
+            throw Error("oui5lib.mapping namespace not loaded");
+        }
+        
         if (params === undefined || params === null) {
             params = {};
         }
@@ -243,7 +251,7 @@ jQuery.sap.declare("oui5lib.request");
             if (typeof props === "undefined" || props === null) {
                 props = {};
             }
-            props.xhrObj = xhr; 
+            props.xhrObj = xhr;
             var eventBus = oui5lib.util.getComponentEventBus();
             eventBus.publish("xhr", eventId, props);
         }

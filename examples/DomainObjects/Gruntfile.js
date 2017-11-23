@@ -7,20 +7,24 @@ module.exports = function (grunt) {
 
         jasmine: {
             src: [
-                "<%= dirs.oui5lib %>/configuration.js",
-                "<%= dirs.oui5lib %>/logger.js",
-                "<%= dirs.oui5lib %>/util.js",
                 "<%= dirs.oui5lib %>/mapping.js",
-                "<%= dirs.oui5lib %>/lib/listHelper.js",
                 "<%= dirs.oui5lib %>/listBase.js",
                 "<%= dirs.oui5lib %>/itemBase.js",
                 "<%= dirs.domainObjects %>/*.js"
             ],
-            options: {
+           options: {
+               "--web-security" : false,
+               "--local-to-remote-url-access" : true,
+               "--ignore-ssl-errors" : true,
                 outfile: "specrunner.html",
                 vendor: [
                     "<%= dirs.test %>/helper/jquery.js",
                     "<%= dirs.oui5lib %>/init.js",
+                    "<%= dirs.oui5lib %>/lib/listHelper.js",
+                    "<%= dirs.oui5lib %>/configuration.js",
+                    "<%= dirs.oui5lib %>/logger.js",
+                    "<%= dirs.oui5lib %>/formatter.js",
+                    "<%= dirs.oui5lib %>/util.js",
                     "<%= dirs.oui5lib %>/request.js",
                     "<%= dirs.test %>/helper/setupGrunt.js"
                 ],

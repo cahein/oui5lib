@@ -221,7 +221,7 @@ jQuery.sap.declare("oui5lib.formatter");
     formatter.getDate = getDate;
     formatter.getDateString = getDateString;
     formatter.getTimeString = getTimeString;
-    
+    formatter.getDateFromStrings = getDateFromStrings;
     formatter.convertIndustrialMinutes = convertIndustrialMinutes;
     formatter.convertToIndustrialMinutes = convertToIndustrialMinutes;
 

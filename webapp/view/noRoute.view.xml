@@ -1,9 +1,6 @@
-<core:View xmlns:core="sap.ui.core"
-           xmlns:mvc="sap.ui.core.mvc"
-           xmlns="sap.m"
-           xmlns:html="http://www.w3.org/1999/xhtml">
+<View xmlns="sap.m">
   <MessagePage
-      title="404 Error"
-      text="This page is not available."
-      description="You are trying to access a page which is not available."/>
-</core:View>
+      title="{i18n>http.404error}"
+      text="{i18n>view.noRoute.text}"
+      description="{i18n>view.noRoute.description}"/>
+</View>

@@ -10,6 +10,7 @@ module.exports = function (grunt) {
                 options: {
                     groups: {
                         "Code quality": ["lint", "gendoc", "test"],
+                        "Distribution": ["generate-oui5lib-dist"],
                         "Examples": ["prepare-examples"],
                         "Default": ["availabletasks"]
                     },
@@ -22,6 +23,8 @@ module.exports = function (grunt) {
                         "Run Tests.",
                         "prepare-examples":
                         "Copy oui5lib for examples",
+                        "generate-oui5lib-package":
+                        "Generated oui5lib minified package",
                         "availabletasks":
                         "List available tasks."
                     },
@@ -45,24 +48,24 @@ module.exports = function (grunt) {
             src: [
                 "<%= dirs.spec %>/helpers/setup.js",
                 "<%= dirs.lib %>/listHelper.js",
-                "<%= dirs.webroot %>/request.js",
                 "<%= dirs.webroot %>/configuration.js",
                 "<%= dirs.webroot %>/logger.js",
+                "<%= dirs.webroot %>/formatter.js",
+                "<%= dirs.webroot %>/validation.js",
+                "<%= dirs.webroot %>/util.js",
                 "<%= dirs.webroot %>/events.js",
                 "<%= dirs.webroot %>/request.js",
-                "<%= dirs.webroot %>/util.js",
-                "<%= dirs.webroot %>/listBase.js",
-                "<%= dirs.webroot %>/itemBase.js",
                 "<%= dirs.webroot %>/mapping.js",
-                "<%= dirs.webroot %>/validation.js",
-                "<%= dirs.webroot %>/formatter.js"
+                "<%= dirs.webroot %>/listBase.js",
+                "<%= dirs.webroot %>/itemBase.js"
             ],
             options: {
+                "--web-security" : false,
+                "--local-to-remote-url-access" : true,
+                "--ignore-ssl-errors" : true,
                 outfile: "specrunner.html",
                 vendor: [
-                    "<%= dirs.ui5resources %>/sap-ui-core.js",
-                    "<%= dirs.ui5resources %>/sap/ui/thirdparty/sinon.js",
-                    "<%= dirs.ui5resources %>/sap/ui/thirdparty/sinon-server.js"
+                    "<%= dirs.ui5resources %>/sap-ui-core.js"
                 ],
                 specs: [
                     "<%= dirs.spec %>/*.js"
@@ -95,6 +98,38 @@ module.exports = function (grunt) {
                 dest: "doc"
             }
         },
+        concat: {
+            options: {},
+            oui5lib: {
+                src: [
+                    "<%= dirs.webroot %>/init-preload.js",
+                    "<%= dirs.webroot %>/configuration.js",
+                    "<%= dirs.webroot %>/logger.js",
+                    "<%= dirs.webroot %>/validation.js",
+                    "<%= dirs.webroot %>/formatter.js",
+                    "<%= dirs.webroot %>/util.js",
+                    "<%= dirs.webroot %>/request.js",
+                    "<%= dirs.webroot %>/events.js",
+                    "<%= dirs.webroot %>/messages.js",
+                    "<%= dirs.webroot %>/ui.js",
+                    "<%= dirs.lib %>/**/*.js",
+                    "<%= dirs.webroot %>/mapping.js",
+                    "<%= dirs.webroot %>/listBase.js",
+                    "<%= dirs.webroot %>/itemBase.js",
+                    "<%= dirs.fragment %>/**/*.js",
+                    "<%= dirs.controller %>/**/*.js",
+                ],
+                dest: "<%= dirs.dist %>/oui5lib.concat.js"
+            }
+        },
+        uglify: {
+            options: {},
+            oui5lib: {
+                src: "<%= dirs.dist %>/oui5lib.concat.js",
+                dest: "<%= dirs.dist %>/oui5lib.min.js"
+            }
+        },
+        
         copy: {
             oui5lib: {
                 files: [
@@ -103,10 +138,10 @@ module.exports = function (grunt) {
                         cwd: "<%= dirs.webroot %>",
                         src: [
                             "init.js",
-                            "request.js",
                             "configuration.js",
                             "logger.js",
                             "util.js",
+                            "request.js",
                             "mapping.js",
                             "lib/listHelper.js",
                             "listBase.js",
@@ -233,11 +268,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-jsdoc");
     grunt.loadNpmTasks("grunt-eslint");
     grunt.loadNpmTasks("grunt-contrib-jasmine");
-
+    grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.loadNpmTasks("grunt-contrib-uglify");
+    
     grunt.registerTask("default", ["availabletasks"]);
     grunt.registerTask("lint", ["eslint"]);
     grunt.registerTask("test", ["jasmine"]);
     grunt.registerTask("gendoc", ["clean:doc", "jsdoc"]);
     grunt.registerTask("prepare-examples", ["clean:examples", "copy:oui5lib"]);
+    grunt.registerTask("generate-oui5lib-dist", ["concat:oui5lib", "uglify:oui5lib"]);
 
 };

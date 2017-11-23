@@ -1,12 +1,7 @@
-jQuery.sap.require("oui5lib.request");
-
 jQuery.sap.declare("oui5lib.configuration");
 
 /** @namespace oui5lib.configuration */
 (function() {
-    var _configData = null;
-    var _configDataLoading = false;
-
     /**
      * Get the componentName from the configuration.
      */
@@ -124,7 +119,15 @@ jQuery.sap.declare("oui5lib.configuration");
         var config = getConfigData();
         return config.mappingDir;
     }
-        
+
+    function getUserProfileUrl() {
+        var userProfileUrl = getConfigData("userProfileUrl");
+        if (userProfileUrl === "undefined") {
+            return null;
+        }
+        return userProfileUrl;
+    }
+    
     /**
      * Get the regular expression string from the configuration.
      * @memberof oui5lib.configuration
@@ -149,21 +152,10 @@ jQuery.sap.declare("oui5lib.configuration");
      * @returns {object} The config data
      */
     function getConfigData() {
-        if (_configData === null && !_configDataLoading) {
-            loadConfigData();
+        if (typeof oui5lib.config === "undefined") {
+            throw new Error("oui5lib needs configuration");
         }
-        return _configData;
-    }
-    
-    function loadConfigData() {
-        var configFile = "oui5lib.json";
-        oui5lib.request.loadJson(configFile, configDataLoaded, null, false);
-        _configDataLoading = true;
-    }
-    
-    function configDataLoaded(data) {
-        _configData = data;
-        _configDataLoading = false;
+        return oui5lib.config;
     }
     
     var configuration = oui5lib.namespace("configuration");
@@ -177,8 +169,5 @@ jQuery.sap.declare("oui5lib.configuration");
     configuration.getRegex = getValidationRegex;
 
     configuration.getComponent = getComponent;
-
-    configuration.loadConfig = loadConfigData;
+    configuration.getUserProfileUrl = getUserProfileUrl;
 }());
-
-oui5lib.configuration.loadConfig();

@@ -1,9 +1,6 @@
-<core:View xmlns:core="sap.ui.core"
-           xmlns:mvc="sap.ui.core.mvc"
-           xmlns="sap.m"
-           xmlns:html="http://www.w3.org/1999/xhtml">
+<View xmlns="sap.m">
   <MessagePage
-      title="No Permissions"
+      title="Not Authorized"
       text="This page is not available."
-      description="You do not have the required permissions to access this page."/>
-</core:View>
+      description="You do not have the required permissions to access the requested page."/>
+</View>

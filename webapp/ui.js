@@ -1,5 +1,6 @@
 jQuery.sap.require("oui5lib.util");
 jQuery.sap.require("oui5lib.messages");
+jQuery.sap.require("oui5lib.validation");
 jQuery.sap.require("oui5lib.logger");
 
 jQuery.sap.declare("oui5lib.ui");

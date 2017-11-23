@@ -14,4 +14,18 @@ oui5lib.namespace = function(string) {
 };
 oui5lib.isTest = true;
 
-jQuery.sap.require("oui5lib.request");
+var xhr = new XMLHttpRequest();
+xhr.open("GET", "oui5lib.json", false);
+xhr.onload = function() {
+    if (xhr.readyState === 4) {
+        if (xhr.status === 200 || xhr.status === 0) {
+            try {
+                var configData = JSON.parse(xhr.responseText);
+                oui5lib.config = configData;
+            } catch (e) {
+                throw new Error("Not valid JSON");
+            }
+        }
+    }
+};
+xhr.send();

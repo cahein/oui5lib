@@ -9,7 +9,7 @@ jQuery.sap.declare("oui5lib.listBase");
             throw Error("cannot create listBase object without primary key");
         }
         
-        var listHelper = oui5lib.listHelper;
+        var listHelper = oui5lib.lib.listHelper;
         
         var _primaryKey = primaryKey;
         var _model = null;

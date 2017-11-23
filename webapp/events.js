@@ -1,3 +1,5 @@
+jQuery.sap.require("oui5lib.logger");
+
 jQuery.sap.declare("oui5lib.events");
 
 /** @namespace oui5lib.events */

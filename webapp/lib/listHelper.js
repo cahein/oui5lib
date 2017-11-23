@@ -86,7 +86,7 @@
         });
     }
 
-    var listhelper = oui5lib.namespace("listHelper");
+    var listhelper = oui5lib.namespace("lib.listHelper");
     listhelper.removeByKey = removeByKey;
     listhelper.getItemByKey = getItemByKey;
     listhelper.updateItemByKey = updateItemByKey;

@@ -1,13 +1,14 @@
-jQuery.sap.require("oui5lib.request");
-jQuery.sap.require("oui5lib.configuration");
-jQuery.sap.require("oui5lib.logger");
 jQuery.sap.require("oui5lib.lib.listHelper");
+jQuery.sap.require("oui5lib.configuration");
+jQuery.sap.require("oui5lib.request");
+jQuery.sap.require("oui5lib.logger");
 
 jQuery.sap.declare("oui5lib.mapping");
 
 /** @namespace oui5lib.mapping */
 (function () {
     var mappings = {};
+    var listHelper = oui5lib.lib.listHelper;
 
     /**
      * Get the mapping for the given entity. Will try to load the mapping if necessary.
@@ -56,7 +57,7 @@ jQuery.sap.declare("oui5lib.mapping");
             var subprops = props;
             for (var i = 0, s = keys.length; i < s - 1; i++) {
                 var subkey = keys[i];
-                subprops = oui5lib.listHelper.getItemByKey(subprops, "name", subkey);
+                subprops = listHelper.getItemByKey(subprops, "name", subkey);
                 if (subprops === null) {
                     return null;
                 }
@@ -73,7 +74,7 @@ jQuery.sap.declare("oui5lib.mapping");
             propertyPath = keys[keys.length - 1];
         }
 
-        def = oui5lib.listHelper.getItemByKey(props, "name", propertyPath);
+        def = listHelper.getItemByKey(props, "name", propertyPath);
         if (typeof def.type === "undefined") {
             def.type = "string";
         }

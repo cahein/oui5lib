@@ -59,7 +59,7 @@
         return null;
     }
 
-    var listHelper = oui5lib.listHelper;
+    var listHelper = oui5lib.lib.listHelper;
     function getOrderItems() {
         return this.getProperty("items");
     }
