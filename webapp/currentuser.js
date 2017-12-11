@@ -36,6 +36,9 @@ jQuery.sap.declare("oui5lib.currentuser");
     }
 
     function hasPermissionForView(viewName) {
+        if (_permissionsMap === null) {
+            return false;
+        }
         if (typeof _permissionsMap.views[viewName] !== "undefined") {
             var viewRoles = _permissionsMap.views[viewName].roles;
             return hasPermissions(viewRoles);
