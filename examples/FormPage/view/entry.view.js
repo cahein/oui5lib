@@ -41,7 +41,7 @@ sap.ui.jsview("oum.view.entry", {
       var entryPage = new sap.m.Page({
          customHeader: headerBar,
          content: [ tileContainer ],
-         footer: sap.ui.xmlfragment("oum.fragment.Footer")
+         footer: sap.ui.xmlfragment("oum.fragment.AppInfoToolbar")
       });
       return entryPage;
    }

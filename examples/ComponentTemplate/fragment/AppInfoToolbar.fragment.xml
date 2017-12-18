@@ -8,7 +8,7 @@
     <Text text="{i18n>version}" />
     <Text text="{appInfo>/appVersion}" />
     <ToolbarSpacer/>
-    <Text text="openUI5 Version: " />
+    <Text text="OpenUI5 Version: " />
     <Text text="{appInfo>/openui5Version}" />
   </Toolbar>
 </core:FragmentDefinition>
