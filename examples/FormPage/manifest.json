@@ -1,9 +1,9 @@
 {
     "start_url": "index.html",
     "sap.app": {
-        "id": "oui5libExample",
+        "id": "oui5libFormExample",
         "type": "application",
-        "title": "{{oui5libExample.title}}",
+        "title": "{{oui5libFormExample.title}}",
         "applicationVersion": {
             "version": "0.1"
         }
@@ -16,7 +16,8 @@
 	},
         "supportedThemes": [
             "sap_belize",
-            "sap_hcb"
+            "sap_belize_hcb",
+            "sap_belize_hcw"
         ]
     },
     "sap.ui5": {

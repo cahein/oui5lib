@@ -1,10 +1,9 @@
 jQuery.sap.require("oui5lib.init");
-
 jQuery.sap.require("oum.lib.configuration");
-jQuery.sap.require("oum.Router");
 
 sap.ui.define([
-    "sap/ui/core/UIComponent"
+    "sap/ui/core/UIComponent",
+    "oum/Router"
 ], function (UIComponent) {
     var Component = UIComponent.extend("oum.Component", {
         metadata: { 
@@ -16,13 +15,12 @@ sap.ui.define([
     oum.Component.prototype.init = function() {
         UIComponent.prototype.init.apply(this, arguments);
 
-        var oConfiguration = sap.ui.getCore().getConfiguration();
-        var sLanguage = oConfiguration.getLanguage();
-        if (typeof sLanguage === "string" &&
-            sLanguage.length > 2) {
-            sLanguage = sLanguage.substring(0, 2).toLowerCase();
+        var ui5Configuration = sap.ui.getCore().getConfiguration();
+        var languageCode = ui5Configuration.getLanguage();
+        if (typeof languageCode === "string" && languageCode.length > 2) {
+            languageCode = languageCode.substring(0, 2).toLowerCase();
         }
-        oui5lib.configuration.setCurrentLanguage(sLanguage);
+        oui5lib.configuration.setCurrentLanguage(languageCode);
 
         // model for Footer
         this.setModel(oum.lib.configuration.getAppInfoModel(),
@@ -38,6 +36,5 @@ sap.ui.define([
             type : "XML"
         });
     };
-
     return Component;
 });

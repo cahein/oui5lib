@@ -1,6 +1,7 @@
-<View xmlns="sap.m"
-      displayBlock="true">
+<mvc:View xmlns="sap.m"
+          xmlns:mvc="sap.ui.core.mvc"
+          displayBlock="true">
   <App id="oumApp"
        defaultTransitionName="slide"
        />
-</View>
+</mvc:View>

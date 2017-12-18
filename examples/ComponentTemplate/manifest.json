@@ -1,11 +1,11 @@
 {
     "start_url": "index.html",
     "sap.app": {
-        "id": "ui5manual",
+        "id": "oui5libComponent",
         "type": "application",
-        "title": "{{ui5manual.title}}",
+        "title": "{{oui5libComponent.title}}",
         "applicationVersion": {
-            "version": "0.1"
+            "version": "0.8"
         }
     },
     "sap.ui": {
@@ -16,7 +16,8 @@
 	},
         "supportedThemes": [
             "sap_belize",
-            "sap_hcb"
+            "sap_belize_hcb",
+            "sap_belize_hcw"
         ]
     },
     "sap.ui5": {

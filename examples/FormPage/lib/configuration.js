@@ -1,4 +1,4 @@
-jQuery.sap.require("oum.config");
+jQuery.sap.require("oum.lib.init");
 jQuery.sap.declare("oum.lib.configuration");
 
 (function() {
