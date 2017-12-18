@@ -32,14 +32,14 @@ jQuery.sap.require("oui5lib.logger");
 jQuery.sap.require("oui5lib.validation");
 jQuery.sap.require("oui5lib.formatter");
 jQuery.sap.require("oui5lib.util");
+jQuery.sap.require("oui5lib.event");
 jQuery.sap.require("oui5lib.request");
 
 if (typeof sap !== "undefined" &&
     typeof sap.ui !== "undefined") {
-    jQuery.sap.require("oui5lib.events");
 
     var eventBus = sap.ui.getCore().getEventBus();
-    eventBus.subscribe("xhr", "status", oui5lib.events.requestFailure);
-    eventBus.subscribe("xhr", "error", oui5lib.events.requestFailure);
-    eventBus.subscribe("xhr", "timeout", oui5lib.events.requestFailure);
+    eventBus.subscribe("xhr", "status", oui5lib.event.onRequestFailure);
+    eventBus.subscribe("xhr", "error", oui5lib.event.onRequestFailure);
+    eventBus.subscribe("xhr", "timeout", oui5lib.event.onRequestFailure);
 }

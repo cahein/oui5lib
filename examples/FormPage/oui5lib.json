@@ -2,6 +2,6 @@
     "availableLanguages": [ "en", "de" ],
     "defaultLanguage": "en",
     "logLevel": "DEBUG",
-    "mappingDir": "lib/mapping",
+    "mappingDirectory": "lib/mapping",
     "componentName": "oumComponent"
 }

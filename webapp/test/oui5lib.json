@@ -2,7 +2,7 @@
     "availableLanguages": [ "en", "de" ],
     "defaultLanguage": "en",
     "logLevel": "ERROR",
-    "mappingDir": "mapping",
+    "mappingDirectory": "mapping",
     "validation": {
         "dateRegex": "^\\d{4}-\\d{2}-\\d{2}$",
         "timeRegex": "^\\d{2}:\\d{2}:\\d{2}$",

@@ -111,13 +111,13 @@ jQuery.sap.declare("oui5lib.configuration");
     }
     
     /**
-     * Get the mappingDir property from the configuration.
+     * Get the mappingDirectory property from the configuration.
      * @memberof oui5lib.configuration
      * @returns {string} The mapping folder. Returns undefined if not set.
      */
     function getMappingDir() {
         var config = getConfigData();
-        return config.mappingDir;
+        return config.mappingDirectory;
     }
 
     function getUserProfileUrl() {
