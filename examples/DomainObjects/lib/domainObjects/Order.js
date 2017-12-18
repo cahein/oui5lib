@@ -7,31 +7,26 @@
             this.setData(getNewOrder());
             this.setNew(true);
         } else {
+            this.id = id;
             if (oum.orders.isItemLoaded(id)) {
                 var orderEntry = oum.orders.getItem(id);
                 this.setData(orderEntry);
-                this.id = id;
             } else {
-                _o = this;
-                oui5lib.request.doRequest("order", "getOrder",
-                                          { "id": id },
-                                          this.requestSucceeded);
                 this.setLoading(true);
+                oum.orders.addItemDataChangedListener(dataAvailable, this);
+                oum.loader.requestOrder(id);
             }
         }
     }
     
-    var _o = null;
-    
-    function requestSucceeded(data) {
-        oum.orders.addData(data);
-
-        var item = data.value;
-        _o.setData(oum.orders.getItem(item.id));
-        _o.id = item.id;
-        _o.setLoading(false);
+    function dataAvailable(orderId) {
+        if (this.id === orderId) {
+            oum.orders.removeItemDataChangedListener(dataAvailable, this);
+            this.setData(oum.orders.getItem(orderId));
+            this.setLoading(false);
+        }
     }
-    
+
     function getNewOrder() {
         var newOrder = {
             "status": "new",
@@ -42,13 +37,13 @@
         return newOrder;
     }
 
-    function getCustomerAddress() {
-        var id = this.getProperty("customerAddressId");
+    function getBillingAddress() {
+        var id = this.getProperty("billingAddressId");
         return getAddress(id);
     }
 
-    function getBillingAddress() {
-        var id = this.getProperty("billingAddressId");
+    function getShippingAddress() {
+        var id = this.getProperty("shippingAddressId");
         return getAddress(id);
     }
 
@@ -76,7 +71,7 @@
         }
     }
 
-    function addOrderEntry(productId, quantity) {
+    function addOrderItem(productId, quantity) {
         var items = this.getOrderItems();
 
         if (this.getOrderItem(productId) === null) {
@@ -98,17 +93,15 @@
     }
     
     Order.prototype = Object.create(oui5lib.itemBase);
-    Order.prototype.getCustomerAddress = getCustomerAddress;
     Order.prototype.getBillingAddress = getBillingAddress;
+    Order.prototype.getShippingAddress = getShippingAddress;
 
     Order.prototype.getOrderItems = getOrderItems;
     Order.prototype.getOrderItem = getOrderItem;
-    Order.prototype.addOrderEntry = addOrderEntry;
+    Order.prototype.addOrderEntry = addOrderItem;
     Order.prototype.removeOrderItem = removeOrderItem;
 
     Order.prototype.getOrderTotal = getOrderTotal;
     
-    Order.prototype.requestSucceeded = requestSucceeded;
-
     oum.Order = Order;
 }());

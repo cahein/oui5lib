@@ -1,14 +1,7 @@
 describe("Address object", function() {
     beforeAll(function() {
-        oum.addresses.setData([]);
-        oum.addresses.setData([{
-            "id": 3,
-            "firstname": "No Privacy",
-            "lastname": "Here",
-            "street": "Mac Goo Str. 10",
-            "city": "Fakebook",
-            "postcode": "-1"
-        }]);
+        oum.addresses.resetData();
+        oum.addresses.addData(oum.addressesData);
     });
 
     it ("should get a new Address", function() {
@@ -17,28 +10,13 @@ describe("Address object", function() {
         expect(address.isNew()).toBe(true);
     });
 
-    it ("should get an existing Address", function() {
+    it ("should get a loaded Address", function() {
         var address = new oum.Address(3);
         expect(address instanceof oum.Address).toBe(true);
         expect(address.isNew()).toBe(false);
         expect(address.id).toEqual(3);
     });
 
-    it ("should request an address", function() {
-        spyOn(oui5lib.request, "doRequest").and.callThrough();
-        var address = new oum.Address(4);
-        expect(oui5lib.request.doRequest.calls.count()).toEqual(1);
-        expect(oui5lib.request.doRequest)
-            .toHaveBeenCalledWith("address", "getAddresses",
-                                  { "ids": [4] },
-                                  oum.Address.prototype.requestSucceeded);
-
-        expect(address instanceof oum.Address).toBe(true);
-        expect(address.isNew()).toBe(false);
-        expect(address.id).toEqual(4);
-        expect(address.getProperty("firstname")).toEqual("Linus");
-    });
-    
     it ("should allow to modify Address data", function() {
         var address = new oum.Address(3);
         expect(address.getProperty("postcode")).toEqual("-1");
@@ -50,4 +28,16 @@ describe("Address object", function() {
         expect(address.getProperty("postcode")).toEqual("000");
     });
 
+    it ("should call loader to request an Address", function() {
+        oum.addresses.resetData();
+        spyOn(oum.loader, "requestAddress");
+        
+        var address = new oum.Address(3);
+        expect(address instanceof oum.Address).toBe(true);
+        expect(address.isNew()).toBe(false);
+
+        expect(oum.loader.requestAddress.calls.count()).toEqual(1);
+        expect(oum.loader.requestAddress)
+            .toHaveBeenCalledWith(3);
+    });
 });

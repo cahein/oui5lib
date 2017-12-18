@@ -83,7 +83,7 @@
         {
             "name": "subkeys",
             "type": "object",
-            "objectProperties": [
+            "objectItem": [
                 {
                     "name": "a",
                     "required": true

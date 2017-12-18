@@ -1,9 +1,9 @@
 (function() {
     /**
      * @param {Array} list The list, from which the entry shall be removed.
-     * @param {string} keyName The name of the key field. 
-     * @param keyValue The key value. Maybe a string or number.
-     * @returns {boolean} The removed entry or undefined or null.
+     * @param {String} keyName The name of the key field. 
+     * @param {String|Number} keyValue The key value. Maybe a string or number.
+     * @returns {Boolean} The removed entry or undefined or null.
      */
     function removeByKey(list, keyName, keyValue) {
         if (typeof list === "undefined" ||
@@ -23,8 +23,8 @@
     
     /**
      * @param {Array} list The list, where to find the entry.
-     * @param {string} keyName The name of the key field to compare.
-     * @param keyValue The key value. May be a string or number.
+     * @param {String} keyName The name of the key field to compare.
+     * @param {String|Number} keyValue The key value. May be a string or number.
      * @returns Returns the item.
      */
     function getItemByKey(list, keyName, keyValue) {
@@ -40,9 +40,9 @@
     
     /**
      * @param {Array} list The list, where to find the entry.
-     * @param {string} keyName The name of the key field to compare.
-     * @param updatedItem The entry to update.
-     * @returns {boolean} True (updated), or otherwise false.
+     * @param {String} keyName The name of the key field to compare.
+     * @param {Object} updatedItem The item to update.
+     * @returns {Boolean} True (updated), or otherwise false.
      */
     function updateItemByKey(list, keyName, updatedItem) {
         for (var i = 0, s = list.length; i < s; i++) {
@@ -58,9 +58,9 @@
     /**
      * Filter array by key and value.
      * @param {Array} list The array to filter.
-     * @param {string} key The key to filter by.
-     * @param {string} value The value to filter by.
-     * @returns {array} The array of filtered items.
+     * @param {String} key The key to filter by.
+     * @param {String} value The value to filter by.
+     * @returns {Array} The array of filtered items.
      */
     function filterBy(list, key, value) {
         var filtered = [];
@@ -76,8 +76,8 @@
     /**
      * Sort array by key.
      * @param {Array} list The array to sort.
-     * @param {string} key The key to sort by.
-     * @returns {array} The sorted array.
+     * @param {String} key The key to sort by.
+     * @returns {Array} The sorted array.
      */
     function sortBy(list, key) {
         return list.sort(function(a, b) {

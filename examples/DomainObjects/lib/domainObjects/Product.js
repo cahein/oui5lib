@@ -7,29 +7,24 @@
             this.setData(getNewProduct());
             this.setNew(true);
         } else {
+            this.id = id;
             if (oum.products.isItemLoaded(id)) {
-                var productEntry = oum.products.getItem(id);
-                this.setData(productEntry);
-                this.id = id;
+                var productItem = oum.products.getItem(id);
+                this.setData(productItem);
             } else {
-                _o = this;
-                oui5lib.request.doRequest("product", "getProducts",
-                                          { "isbns": [ id ] },
-                                          this.requestSucceeded);
                 this.setLoading(true);
+                oum.products.addItemDataChangedListener(dataAvailable, this);
+                oum.loader.requestProduct(id);
             }
         }
     }
 
-    var _o = null;
-    
-    function requestSucceeded(data) {
-        oum.products.addData(data);
-
-        var item = data.value[0];
-        _o.id = item.isbn;
-        _o.setData(oum.products.getItem(item.isbn));
-        _o.setLoading(false);
+    function dataAvailable(productId) {
+        if (this.id === productId) {
+            oum.products.removeItemDataChangedListener(dataAvailable, this);
+            this.setData(oum.products.getItem(productId));
+            this.setLoading(false);
+        }
     }
 
     function getNewProduct() {
@@ -49,8 +44,6 @@
     
     Product.prototype = Object.create(oui5lib.itemBase);
     Product.prototype.getName = getName;   
-
-    Product.prototype.requestSucceeded = requestSucceeded;
 
     oum.Product = Product;
 }());

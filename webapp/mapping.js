@@ -63,7 +63,7 @@ jQuery.sap.declare("oui5lib.mapping");
                 }
                 switch (subprops.type) {
                 case "object":
-                    subprops = subprops.objectProperties;
+                    subprops = subprops.objectItem;
                     break;
                 case "collection":
                     subprops = subprops.collectionItem;
@@ -75,6 +75,10 @@ jQuery.sap.declare("oui5lib.mapping");
         }
 
         def = listHelper.getItemByKey(props, "name", propertyPath);
+        return addDefaults(def);
+    }
+    
+    function addDefaults(def) {
         if (typeof def.type === "undefined") {
             def.type = "string";
         }

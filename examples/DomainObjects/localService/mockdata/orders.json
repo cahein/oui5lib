@@ -5,8 +5,8 @@
             "id": 1,
             "status": "shipped",
             "orderDate": "2017-05-16 10:01:23",
-            "customerAddressId": 1,
             "billingAddressId": 1,
+            "shippingAddressId": 1,
             "currency": "US-$",
             "items": [
                 {
@@ -37,8 +37,8 @@
         {
             "id": 2,
             "status": "processing",
-            "customerAddressId": 2,
-            "billingAddressId": 3,
+            "billingAddressId": 2,
+            "shippingAddressId": 3,
             "orderDate": "2017-05-02 02:21:03",
             "currency": "€",
             "items": [

@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                 "<%= dirs.webroot %>/formatter.js",
                 "<%= dirs.webroot %>/validation.js",
                 "<%= dirs.webroot %>/util.js",
-                "<%= dirs.webroot %>/events.js",
+                "<%= dirs.webroot %>/event.js",
                 "<%= dirs.webroot %>/request.js",
                 "<%= dirs.webroot %>/mapping.js",
                 "<%= dirs.webroot %>/listBase.js",
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
                     "<%= dirs.webroot %>/formatter.js",
                     "<%= dirs.webroot %>/util.js",
                     "<%= dirs.webroot %>/request.js",
-                    "<%= dirs.webroot %>/events.js",
+                    "<%= dirs.webroot %>/event.js",
                     "<%= dirs.webroot %>/messages.js",
                     "<%= dirs.webroot %>/ui.js",
                     "<%= dirs.lib %>/**/*.js",
@@ -145,7 +145,8 @@ module.exports = function (grunt) {
                             "mapping.js",
                             "lib/listHelper.js",
                             "listBase.js",
-                            "itemBase.js"
+                            "itemBase.js",
+                            "event.js"
                         ],
                         dest: "<%= dirs.examples %>/DomainObjects/oui5lib/"
                     },

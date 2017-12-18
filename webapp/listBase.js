@@ -16,9 +16,10 @@ jQuery.sap.declare("oui5lib.listBase");
         var _data = [];
 
         var _itemsLoaded = {};
+        
         var _procFunction = null;
-        var _dataChangedEventFunction = null;
-        var _itemDataChangedEventFunction = null;
+        var _dataChangedEventListeners = [];
+        var _itemDataChangedEventListeners = [];
         
         function isItemLoaded(id) {
             if (typeof _itemsLoaded[id] === "undefined") {
@@ -33,41 +34,64 @@ jQuery.sap.declare("oui5lib.listBase");
             }
         }
         
+        function removeListener(listeners, listener, context) {
+            for (var i = 0, s = listeners.length;
+                 i < s; i++) {
+                var func = listeners[i][0];
+                var ctx = listeners[i][1];
+                if (func === listener && ctx === context) {
+                    listeners.splice(i, 1);
+                }
+            }
+
+        }
+        
         /**
          * The ListBase is a base of functions commonly useful for an array of objects.
          * @mixin
          * @example oui5lib.listBase.getObject(primaryKey);
          */
         var ListBase = {
+            /**
+             * Register a function to be called to process incoming data through both the setData and addData function. The item data will be passed as only parameter to the function.
+             * @param func The function. 
+             */
             registerProcFunction: function(func) {
                 if (typeof func === "function") {
                     _procFunction = func;
                 }
             },
 
-            registerDataChangedFunction: function(func) {
-                if (typeof func === "function") {
-                    _dataChangedEventFunction = func;
+            /**
+             * Add a listener function to be called at the end of the setData and addData functions.
+             * @param listener The function to be added to the event. 
+             */
+            addDataChangedListener: function(listener, context ) {
+                if (typeof listener === "function") {
+                    _dataChangedEventListeners.push([listener, context]);
+                }
+            },
+            removeDataChangedListener: function(listener, context) {
+                if (typeof listener === "function") {
+                    removeListener(_dataChangedEventListeners,
+                                   listener, context);
                 }
             },
 
-            registerItemDataChangedFunction: function(func) {
-                if (typeof func === "function") {
-                    _itemDataChangedEventFunction = func;
+            /**
+             * Add a function to be called when some item data was added or updated. The primary key value will be passed as only parameter to the function.
+             * @param listener The function to be added to the event. 
+             * @param referer The context object for the listener function. 
+             */
+            addItemDataChangedListener: function(listener, context) {
+                if (typeof listener === "function") {
+                    _itemDataChangedEventListeners.push([listener, context]);
                 }
             },
-            
-            /**
-             * Set the model.
-             * @param model The loaded model. 
-             */
-            setModel: function(model) {
-                if (model === undefined || model === null) {
-                    throw Error("setModel requires a model to be set");
-                }
-                if (typeof model.getData === "function") {
-                    _model = model;
-                    _data = model.getData();
+            removeItemDataChangedListener: function(listener, context) {
+                if (typeof listener === "function") {
+                    removeListener(_itemDataChangedEventListeners,
+                                   listener, context);
                 }
             },
             
@@ -85,8 +109,7 @@ jQuery.sap.declare("oui5lib.listBase");
                     return null;
                 }
                 if (_model === null) {
-                    var model = new sap.ui.model.json.JSONModel();
-                    _model = model;
+                    _model = new sap.ui.model.json.JSONModel();
                 }
                 if (_data.length > 100) {
                     _model.setSizeLimit(_data.length);
@@ -96,95 +119,97 @@ jQuery.sap.declare("oui5lib.listBase");
             },
 
             /**
-             * Set the data.
-             * @param {array} data We expect a Javascript array.
+             * Add the data.
+             * @param {Object|Array} data May be either a single object or an array of objects. Already loaded objects with the same primary key will be updated. 
              */
-            setData: function(data) {
-                if (!(data instanceof Array)) {
-                    throw new TypeError("listBase.setData only accepts an Array");
-                }
-                _itemsLoaded = {};
-                _data = data;
-                var item, id;
-                for (var i = 0, s = _data.length; i < s; i++) {
-                    item = _data[i];
-                    id = item[_primaryKey];
-                    _itemsLoaded[id] = new Date();
-
-                    if (_itemDataChangedEventFunction !== null) {
-                        _itemDataChangedEventFunction(id);
-                    }
-                }
-                if (_procFunction !== null) {
-                    _procFunction(data);
-                }
-                if (_dataChangedEventFunction !== null) {
-                    _dataChangedEventFunction();
-                }
-            },
-
             addData: function(data) {
-                var entries = [], item, id;
-                if (typeof data === "object") {
-                    if (data.value === undefined) {
-                        entries = [ data ];
-                    } else {
-                        if (data.value instanceof Array) {
-                            entries = data.value;
-                        } else if (data.value instanceof Object) {
-                            entries = [ data.value ];
-                        }
-                    }
+                var entries;
+                if (data instanceof Array) {
+                    entries = data;
+                } else if (data instanceof Object) {
+                    entries = [ data ];
                 }
-                
+                if (typeof entries === "undefined") {
+                    throw new TypeError("listBase.addData requires an Array");
+                }
+
                 if (entries.length > 0) {
                     if (_procFunction !== null) {
                         _procFunction(entries);
                     }
-                    
-                    for (var i = 0, s = entries.length; i < s; i++) { 
-                        item = entries[i];
+
+                    var id;
+                    entries.forEach(function(item) {
                         id = item[_primaryKey];
+                        
                         var alreadyLoaded = isItemLoaded(id);
                         if (alreadyLoaded) {
-                            listHelper.updateItemByKey(_data, _primaryKey, item);
+                            listHelper.updateItemByKey(_data,
+                                                       _primaryKey,
+                                                       item);
                         } else {
                             if (_data === null) {
                                 _data = [];
                             }
+
                             _data.push(item);
                             _itemsLoaded[id] = new Date();
                         }
-                        if (_itemDataChangedEventFunction !== null) {
-                            _itemDataChangedEventFunction(id);
+                        if (_itemDataChangedEventListeners.length > 0) {
+                            _itemDataChangedEventListeners.forEach(
+                                function(listener) {
+                                    listener[0].call(listener[1], id);
+                                }
+                            );
                         }
-                    }
+                    });
                     updateModel(_data);
                 }
-                if (_dataChangedEventFunction !== null) {
-                    _dataChangedEventFunction();
+                if (_dataChangedEventListeners.length > 0) {
+                    _dataChangedEventListeners.forEach(
+                        function(listener) {
+                            listener[0].call(listener[1]);
+                        }
+                    );
                 }
             },
 
             /**
+             * Reset the data. Will empty the data array.
+             */
+            resetData: function() {
+                _itemsLoaded = {};
+                _data = null;
+            },
+            
+
+            /**
              * Get the data.
-             * @returns {array} A Javascript array.
+             * @returns {array} An array.
              */
             getData: function() {
                 return _data;
             },
 
+            /**
+             * Get the number of item objects currently loaded.
+             * @returns {number} The length of the data array.
+             */
             getItemCount: function() {
                 return _data.length;
             },
 
+            /**
+             * Query if an item with the given primary key is currently loaded.
+             * @returns {boolean} Is loaded (true) or not (false).
+             */
             isItemLoaded: function(keyValue) {
                 return isItemLoaded(keyValue);
             },
             
             /**
-             * Get an entry from the data.
-             * @param {object} value The primaryKey value of the entry to be returned.
+             * Get an item with a given primary key. Will return null if no such item exists. It is better to test before with the isItemLoaded function.
+             * @param {object} value The primaryKey value of the item to be returned.
              * @returns {array} The object with the given primaryKey value.
              */
             getItem: function(value) {
@@ -192,8 +217,9 @@ jQuery.sap.declare("oui5lib.listBase");
             },
 
             /**
-             * Add an entry to the data.
+             * Add an item to the data.
              * @param {object} data The object to be added to the data array.
+             * @returns {boolean} True if the item could be added. False means there is already an item with the same primary key value.
              */
             addItem: function(data) {
                 if (this.getItem(data[_primaryKey]) === null) {
@@ -206,10 +232,10 @@ jQuery.sap.declare("oui5lib.listBase");
             
             /**
              * Update an entry of the data.
-             * @param {object} data The object to be updated.
+             * @param {object} item The object to be updated.
              */
-            updateItem: function(data) {
-                return listHelper.updateItemByKey(_data, _primaryKey, data);
+            updateItem: function(item) {
+                return listHelper.updateItemByKey(_data, _primaryKey, item);
             },
 
             /**
@@ -229,20 +255,6 @@ jQuery.sap.declare("oui5lib.listBase");
             
             sortBy: function(key) {
                 return listHelper.sortBy(_data, key);
-            },
-            
-            /**
-             * Use to publish the om ready event
-             * @param {string} name The name of the ListBase object.
-             */
-            publishReadyEvent: function(name) {
-                if (typeof sap === "undefined" ||
-                    typeof sap.ui === "undefined") {
-                    throw Error("Couldn't publish event " + name
-                                + " loaded: no ui5");
-                }
-                var eventBus = sap.ui.getCore().getEventBus();
-                eventBus.publish("loaded", "ready", name);
             }
         };
         return ListBase;

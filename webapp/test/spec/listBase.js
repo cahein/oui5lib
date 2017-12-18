@@ -9,6 +9,7 @@ describe("ListBase", function() {
         { id: 4, name: "entry 3", description: "forth entry of the data array", type: "C"},
         { id: 5, name: "entry 4", description: "fifth entry of the data array", type: "B"},
     ];
+    var itemToAdd = { id: 5, type: "D"};
     
     beforeAll(function() {
         // runs before all tests in this block
@@ -27,15 +28,15 @@ describe("ListBase", function() {
         }
     });
     
-    it ("should only allow array data to be set", function() {
+    it ("should throw a TypeError unless adding an object or array to the collection", function() {
         try {
-            listBase.setData({});
+            listBase.addData();
         } catch (e) {
             expect(e.name).toEqual("TypeError");
         }
 
         try {
-            listBase.setData();
+            listBase.addData(null);
         } catch (e) {
             expect(e.name).toEqual("TypeError");
         }
@@ -44,9 +45,25 @@ describe("ListBase", function() {
         expect(data.length).toEqual(0);
     });
     
-    it ("should allow array data to be set", function() {
-        listBase.setData(testData);
+    it ("should add an object to the collection", function() {
+        listBase.addData(itemToAdd);
         var data = listBase.getData();
+        expect(data).toEqual([itemToAdd]);
+    });
+    
+    it ("should empty the collection", function() {
+        var data = listBase.getData();
+        expect(data.length).toEqual(1);
+        listBase.resetData();
+
+        data = listBase.getData();
+        expect(data).toBe(null);
+    });
+    
+    it ("should add an array of objects to the collection", function() {
+        listBase.addData(testData);
+        var data = listBase.getData();
+        expect(data.length).toEqual(5);
         expect(data).toEqual(testData);
     });
     
@@ -63,9 +80,10 @@ describe("ListBase", function() {
         entry = listBase.getItem(1);
         expect(entry.name).toEqual("entry 0");
     });
-    
+
     it ("should update an entry", function() {
-        var entryIn = { id: 2, name: "entry 1 updated", description: "updated entry"};
+        var entryIn = { id: 2, name: "entry 1 updated",
+                        description: "updated entry"};
         var updated = listBase.updateItem(entryIn);
         expect(updated).toBe(true);
 
@@ -77,7 +95,8 @@ describe("ListBase", function() {
         var data = listBase.getData();
         expect(data.length).toEqual(5);
         
-        var entry = { id: 1, name: "entry 5", description: "primary key is not unique"};
+        var entry = { id: 1, name: "entry 5",
+                      description: "primary key is not unique"};
         var bool = listBase.addItem(entry);
         expect(bool).toBe(false);
         
@@ -86,7 +105,8 @@ describe("ListBase", function() {
     });
     
     it ("should add an entry with unique primary key", function() {
-        var entry = { id: 6, name: "entry 5", description: "primary key is unique"};
+        var entry = { id: 6, name: "entry 5",
+                      description: "primary key is unique"};
         var bool = listBase.addItem(entry);
         expect(bool).toBe(true);
         

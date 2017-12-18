@@ -7,38 +7,26 @@
             this.setData(getNewAddress());
             this.setNew(true);
         } else {
+            this.id = id;
             if (oum.addresses.isItemLoaded(id)) {
-                var addressEntry = oum.addresses.getItem(id);
-                this.setData(addressEntry);
-                this.id = id;
+                var addressItem = oum.addresses.getItem(id);
+                this.setData(addressItem);
             } else {
-                _o = this;
-                oui5lib.request.doRequest("address", "getAddresses",
-                                          { "ids": [ id ] },
-                                          this.requestSucceeded);
                 this.setLoading(true);
+                oum.addresses.addItemDataChangedListener(dataAvailable, this);
+                oum.loader.requestAddress(id);
             }
         }
     }
 
-    var _o = null;
-
-    function requestSucceeded(data) {
-        oum.addresses.addData(data);
-
-        var item = data.value[0];
-        _o.id = item.id;
-        _o.setData(oum.addresses.getItem(item.id));
-        _o.setLoading(false);
-        
+    function dataAvailable(addressId) {
+        if (this.id === addressId) {
+            oum.addresses.removeItemDataChangedListener(dataAvailable, this);
+            this.setData(oum.addresses.getItem(addressId));
+            this.setLoading(false);
+        }
     }
 
-    function getName() {
-        var firstName = this.getProperty("firstname");
-        var lastName = this.getProperty("lastname");
-        return firstName + " " + lastName;
-    }
-    
     function getNewAddress() {
         var newAddress = {
             "firstName": "",
@@ -50,9 +38,14 @@
         return newAddress;
     }
 
+    function getName() {
+        var firstName = this.getProperty("firstname");
+        var lastName = this.getProperty("lastname");
+        return firstName + " " + lastName;
+    }
+    
     Address.prototype = Object.create(oui5lib.itemBase);
     Address.prototype.getName = getName;
-    Address.prototype.requestSucceeded = requestSucceeded;
     
     oum.Address = Address;
 }());

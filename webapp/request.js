@@ -1,6 +1,7 @@
 jQuery.sap.require("oui5lib.logger");
 jQuery.sap.require("oui5lib.formatter");
 jQuery.sap.require("oui5lib.util");
+jQuery.sap.require("oui5lib.event");
 
 jQuery.sap.declare("oui5lib.request");
 
@@ -11,7 +12,8 @@ jQuery.sap.declare("oui5lib.request");
      * Load JSON file.
      * @memberof oui5lib.request
      * @param {string} url The URL of the json to load.
-     * @param {function} resolve The function to call if the request is successfully completed. 
+     * @param {function} resolve The function to call if the request
+     * is successfully completed. 
      * @param {object} props Properties to be passed with the request.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      */
@@ -36,10 +38,12 @@ jQuery.sap.declare("oui5lib.request");
      * @param {string} entityName The name of the entity.
      * @param {string} requestName The name of the request.
      * @param {object} params The request parameters.
-     * @param {function} resolve The function to call if the request is successfully completed.
+     * @param {function} resolve The function to call if the request
+     * is successfully completed.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      */
-    function doRequest(entityName, requestName, params, resolve, isAsync) {
+    function doRequest(entityName, requestName, params,
+                       resolve, isAsync) {
         if (typeof oui5lib.mapping !== "object") {
             throw Error("oui5lib.mapping namespace not loaded");
         }
@@ -76,7 +80,9 @@ jQuery.sap.declare("oui5lib.request");
         xhr.overrideMimeType("application/json");
         xhr.open(method, url, isAsync);
         
-        addHandlers(xhr, resolve, { "request": requestName }, isAsync);
+        addHandlers(xhr, resolve, { "entity": entityName,
+                                    "request": requestName
+                                  }, isAsync);
 
         if (method === "POST") {
             // xhr.setRequestHeader("Content-Type", "application/json");
@@ -94,25 +100,28 @@ jQuery.sap.declare("oui5lib.request");
                     try {
                         data = JSON.parse(xhr.responseText);
                     } catch(e) {
-                        throw new Error("JSON is invalid ");
+                        throw new Error("JSON is invalid");
                     }
                     if (typeof resolve === "function") {
                         resolve(data, props);
                     }
                 } else {
-                    publishFailureEvent("status", xhr, props);
+                    oui5lib.event.publishRequestFailureEvent("status",
+                                                             xhr, props);
                 }
             }
         };
         
         xhr.onerror = function() {
-            publishFailureEvent("error", xhr, props);
+            oui5lib.event.publishRequestFailureEvent("error",
+                                                     xhr, props);
         };
 
         if (isAsync) {
             xhr.timeout = 500;
             xhr.ontimeout = function() {
-                publishFailureEvent("timeout", xhr, props);
+                oui5lib.event.publishRequestFailureEvent("timeout",
+                                                         xhr, props);
             };
         }
         return xhr;
@@ -148,10 +157,8 @@ jQuery.sap.declare("oui5lib.request");
         }
         var requestParams = {};
 
-        var l = paramsDefinition.length, paramDef,
-            isRequired, paramName, paramValue;
-        while (l--) {
-            paramDef = paramsDefinition[l];
+        var isRequired, paramName, paramValue;
+        paramsDefinition.forEach(function(paramDef) {
             paramName = paramDef.name;
             paramValue = null;
             if (params[paramName] === undefined) {
@@ -175,7 +182,7 @@ jQuery.sap.declare("oui5lib.request");
             if (paramValue !== null) {
                 requestParams[paramName] = paramValue;
             }
-        }
+        });
         return requestParams;
     }
     
@@ -236,25 +243,6 @@ jQuery.sap.declare("oui5lib.request");
             }
         }
         return encodedString;
-    }
-    
-    /**
-     * Publish event in case of an error.
-     * @memberof oui5lib.request
-     * @inner 
-     * @param {string} eventId One of 'status', 'error', 'timeout'.
-     * @param {object} props
-     */
-    function publishFailureEvent(eventId, xhr, props) {
-        if (typeof sap !== "undefined" &&
-            typeof sap.ui !== "undefined") {
-            if (typeof props === "undefined" || props === null) {
-                props = {};
-            }
-            props.xhrObj = xhr;
-            var eventBus = oui5lib.util.getComponentEventBus();
-            eventBus.publish("xhr", eventId, props);
-        }
     }
 
     var request = oui5lib.namespace("request");

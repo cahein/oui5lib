@@ -4,57 +4,46 @@
     "entity" : [
         {
             "name": "isbn"
-        },
-        {
+        },{
             "name": "title",
             "type": "object",
             "objectItem": [
                 {
                     "name": "a",
                     "required": true
-                },
-                {
+                },{
                     "name": "b"
-                },
-                {
+                },{
                     "name": "c",
                     "required": true
                 }
             ]
-        },
-        {
+        },{
             "name": "author"
-        },
-        {
+        },{
             "name": "edition"
-        },
-        {
+        },{
             "name": "published",
             "required": true
-        },
-        {
+        },{
             "name": "bibliography"
-        },
-        {
+        },{
             "name": "numbers",
             "type": "object",
             "objectItem": [
                 {
                     "name": "ISBN",
                     "required": true
-                },
-                {
+                },{
                     "name": "LCCN",
                     "required": true
                 }
             ]
-        },
-        {
+        },{
             "name": "salesPrice",
             "type": "float",
             "required": true
-        },
-        {
+        },{
             "name": "stockQty",
             "type": "int",
             "default": 0,
