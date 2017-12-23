@@ -1,9 +1,9 @@
-/** @namespace oum.relationsHandler */
+/** @namespace oum.do.relationsHandler */
 (function() {
     var _missingData = {};
 
     function procOrders(orders) {
-        var addressTypes = oum.orders.getAddressTypes();
+        var addressTypes = oum.do.orders.getAddressTypes();
 
         var addressesToLoad = [];
         var productsToLoad = [];
@@ -12,7 +12,7 @@
             var addressId;
             addressTypes.forEach(function(type) {
                 addressId = order[type + "AddressId"];
-                if (!oum.addresses.isItemLoaded(addressId)) {
+                if (!oum.do.addresses.isItemLoaded(addressId)) {
                     if (addressesToLoad.indexOf(addressId) === -1) {
                         addressesToLoad.push(addressId);
                         addMissing(order.id, "address", addressId);
@@ -22,7 +22,7 @@
             var items = order.items;
             items.forEach(function(item) {
                 var productId = item.productId;
-                if (!oum.products.isItemLoaded(productId)) {
+                if (!oum.do.products.isItemLoaded(productId)) {
                     if (productsToLoad.indexOf(productId) === -1) {
                         productsToLoad.push(productId);
                         addMissing(order.id, "product", productId);
@@ -31,10 +31,10 @@
             });
         });
         if (addressesToLoad.length > 0) {
-            oum.loader.loadAddresses(addressesToLoad);
+            oum.do.loader.loadAddresses(addressesToLoad);
         }
         if (productsToLoad.length > 0) {
-            oum.loader.loadProducts(productsToLoad);
+            oum.do.loader.loadProducts(productsToLoad);
         }
     }
     
@@ -113,20 +113,21 @@
     }
     
     function updateOrderStatuses() {
-        var orders = oum.orders.getData();
+        var orders = oum.do.orders.getData();
         orders.forEach(function(order) {
-            oum.orders.procStatus(order);
+            oum.do.orders.procStatus(order);
         });
     }
     
     function completeOrder(orderId) {
-        console.error(orderId);
-        //var order = oum.orders.getItem(orderId);
-        //oum.orders.procAddresses(order);
-        //oum.orders.procOrderedItems(order);
+        var order = oum.do.orders.getItem(orderId);
+        if (order !== null) {
+            oum.do.orders.procAddresses(order);
+            oum.do.orders.procOrderedItems(order);
+        }
     }
 
-    var relationsHandler = oum.namespace("relationsHandler");
+    var relationsHandler = oum.namespace("do.relationsHandler");
     relationsHandler.processOrderReferences = procOrders;
     relationsHandler.onDataLoaded = onDataLoaded;
     relationsHandler.clearMissingData = clearMissingData;

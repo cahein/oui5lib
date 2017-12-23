@@ -1,28 +1,28 @@
 (function () {
     function Order(id) {
-        if (!(this instanceof oum.Order)) {
-            return new oum.Order(id);
+        if (!(this instanceof oum.do.Order)) {
+            return new oum.do.Order(id);
         }
         if (id === undefined || id === null) {
             this.setData(getNewOrder());
             this.setNew(true);
         } else {
             this.id = id;
-            if (oum.orders.isItemLoaded(id)) {
-                var orderEntry = oum.orders.getItem(id);
+            if (oum.do.orders.isItemLoaded(id)) {
+                var orderEntry = oum.do.orders.getItem(id);
                 this.setData(orderEntry);
             } else {
                 this.setLoading(true);
-                oum.orders.addItemDataChangedListener(dataAvailable, this);
-                oum.loader.loadOrder(id);
+                oum.do.orders.addItemDataChangedListener(dataAvailable, this);
+                oum.do.loader.loadOrder(id);
             }
         }
     }
     
     function dataAvailable(orderId) {
         if (this.id === orderId) {
-            oum.orders.removeItemDataChangedListener(dataAvailable, this);
-            this.setData(oum.orders.getItem(orderId));
+            oum.do.orders.removeItemDataChangedListener(dataAvailable, this);
+            this.setData(oum.do.orders.getItem(orderId));
             this.setLoading(false);
         }
     }
@@ -48,8 +48,8 @@
     }
 
     function getAddress(id) {
-        if (oum.addresses.isItemLoaded(id)) {
-            return new oum.Address(id);
+        if (oum.do.addresses.isItemLoaded(id)) {
+            return new oum.do.Address(id);
         }
         return null;
     }
@@ -75,7 +75,7 @@
         var items = this.getOrderItems();
 
         if (this.getOrderItem(productId) === null) {
-            var product = new oum.Product(productId);
+            var product = new oum.do.Product(productId);
             var item = {
                 "productId": productId,
                 "quantity": quantity,
@@ -87,7 +87,7 @@
 
     function getOrderTotal() {
         var items = this.getOrderItems();
-        var total = oum.orders.calculateOrderTotal(items);
+        var total = oum.do.orders.calculateOrderTotal(items);
         this.setProperty("total", total);
         return total;
     }
@@ -103,5 +103,5 @@
 
     Order.prototype.getOrderTotal = getOrderTotal;
     
-    oum.Order = Order;
+    oum.do.Order = Order;
 }());

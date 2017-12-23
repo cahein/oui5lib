@@ -1,28 +1,28 @@
 (function () {
     function Address(id) {
-        if (!(this instanceof oum.Address)) {
-            return new oum.Address(id);
+        if (!(this instanceof oum.do.Address)) {
+            return new oum.do.Address(id);
         }
         if (id === undefined || id === null) {
             this.setData(getNewAddress());
             this.setNew(true);
         } else {
             this.id = id;
-            if (oum.addresses.isItemLoaded(id)) {
-                var addressItem = oum.addresses.getItem(id);
+            if (oum.do.addresses.isItemLoaded(id)) {
+                var addressItem = oum.do.addresses.getItem(id);
                 this.setData(addressItem);
             } else {
                 this.setLoading(true);
-                oum.addresses.addItemDataChangedListener(dataAvailable, this);
-                oum.loader.loadAddress(id);
+                oum.do.addresses.addItemDataChangedListener(dataAvailable, this);
+                oum.do.loader.loadAddress(id);
             }
         }
     }
 
     function dataAvailable(addressId) {
         if (this.id === addressId) {
-            oum.addresses.removeItemDataChangedListener(dataAvailable, this);
-            this.setData(oum.addresses.getItem(addressId));
+            oum.do.addresses.removeItemDataChangedListener(dataAvailable, this);
+            this.setData(oum.do.addresses.getItem(addressId));
             this.setLoading(false);
         }
     }
@@ -47,5 +47,5 @@
     Address.prototype = Object.create(oui5lib.itemBase);
     Address.prototype.getName = getName;
     
-    oum.Address = Address;
+    oum.do.Address = Address;
 }());

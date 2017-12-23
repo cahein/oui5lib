@@ -1,4 +1,4 @@
-/** @namespace oum.loader */
+/** @namespace oum.do.loader */
 (function() {
     function loadOrder(orderId) {
         oui5lib.request.sendMappingRequest(
@@ -11,7 +11,7 @@
     function loadOrders(startDate, endDate, status, reset) {
         if (typeof reset === "boolean" && reset) {
             oui5lib.logger.info("resetting orders");
-            oum.orders.resetData();
+            oum.do.orders.resetData();
         }
         
         var queryParams = { "startDate": startDate };
@@ -68,29 +68,29 @@
             }
             switch(entity) {
             case "order":
-                oum.orders.addData(data);
+                oum.do.orders.addData(data);
                 break;
             case "product":
-                oum.products.addData(data);
+                oum.do.products.addData(data);
                 break;
             case "address":
-                oum.addresses.addData(data);
+                oum.do.addresses.addData(data);
                 break;
             case "status":
-                oum.statuses.init(data);
+                oum.do.statuses.init(data);
                 break;
             default:
                 break;
             }
             
-            oum.relationsHandler.onDataLoaded(entity, data);
+            oum.do.relationsHandler.onDataLoaded(entity, data);
         } else {
             oui5lib.logger.error("No data returned: " + entity);
         }
     }
     
     
-    var loader = oum.namespace("loader");
+    var loader = oum.namespace("do.loader");
     loader.loadOrders = loadOrders;
     loader.loadOrder = loadOrder;
     loader.loadAddresses = loadAddresses;

@@ -1,9 +1,9 @@
-/** @namespace oum.orders */
+/** @namespace oum.do.orders */
 (function() {
     var _addressTypes = ["billing", "shipping"];
     
     function procData(orders) {
-        oum.relationsHandler.processOrderReferences(orders);
+        oum.do.relationsHandler.processOrderReferences(orders);
         
         orders.forEach(function(order) {
             var orderDateString = order.orderDate;
@@ -27,8 +27,8 @@
         var address, addressId;
         _addressTypes.forEach(function(type) {
             addressId = order[type + "AddressId"];
-            if (oum.addresses.isItemLoaded(addressId)) {
-                address = new oum.Address(addressId);
+            if (oum.do.addresses.isItemLoaded(addressId)) {
+                address = new oum.do.Address(addressId);
                 order[type + "Name"] = address.getName();
             }
         });
@@ -38,17 +38,17 @@
         var items = order.items;
         items.forEach(function(item) {
             var productId = item.productId;
-            if (oum.products.isItemLoaded(productId)) {
-                var product = new oum.Product(productId);
+            if (oum.do.products.isItemLoaded(productId)) {
+                var product = new oum.do.Product(productId);
                 item.productName = product.getName();
             }
         });
     }
 
     function procStatus(order) {
-        if (oum.statuses.isInitialized()) {
+        if (oum.do.statuses.isInitialized()) {
             var status = order.status;
-            var statusItem = oum.statuses.getItem(status);
+            var statusItem = oum.do.statuses.getItem(status);
             order.valueState = statusItem.valueState; 
         } else {
             oui5lib.logger.info("statuses not yet loaded");
@@ -74,7 +74,7 @@
     var listBase = oui5lib.listBase.getObject(primaryKey);
     listBase.registerProcFunction(procData);
 
-    var orders = oum.namespace("orders");
+    var orders = oum.namespace("do.orders");
     orders = oui5lib.util.extend(orders, listBase);
     
     orders.calculateOrderTotal = calculateOrderTotal;

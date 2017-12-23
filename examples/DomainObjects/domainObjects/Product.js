@@ -1,28 +1,28 @@
 (function () {
     function Product(id) {
-        if (!(this instanceof oum.Product)) {
-            return new oum.Product(id);
+        if (!(this instanceof oum.do.Product)) {
+            return new oum.do.Product(id);
         }
         if (id === undefined || id === null) {
             this.setData(getNewProduct());
             this.setNew(true);
         } else {
             this.id = id;
-            if (oum.products.isItemLoaded(id)) {
-                var productItem = oum.products.getItem(id);
+            if (oum.do.products.isItemLoaded(id)) {
+                var productItem = oum.do.products.getItem(id);
                 this.setData(productItem);
             } else {
                 this.setLoading(true);
-                oum.products.addItemDataChangedListener(dataAvailable, this);
-                oum.loader.loadProduct(id);
+                oum.do.products.addItemDataChangedListener(dataAvailable, this);
+                oum.do.loader.loadProduct(id);
             }
         }
     }
 
     function dataAvailable(productId) {
         if (this.id === productId) {
-            oum.products.removeItemDataChangedListener(dataAvailable, this);
-            this.setData(oum.products.getItem(productId));
+            oum.do.products.removeItemDataChangedListener(dataAvailable, this);
+            this.setData(oum.do.products.getItem(productId));
             this.setLoading(false);
         }
     }
@@ -45,5 +45,5 @@
     Product.prototype = Object.create(oui5lib.itemBase);
     Product.prototype.getName = getName;   
 
-    oum.Product = Product;
+    oum.do.Product = Product;
 }());

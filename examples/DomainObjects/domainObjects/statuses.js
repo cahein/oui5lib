@@ -1,4 +1,4 @@
-/** @namespace oum.statuses */
+/** @namespace oum.do.statuses */
 (function() {
     var initialized = false;
     
@@ -22,11 +22,11 @@
     var primaryKey = oui5lib.mapping.getPrimaryKey("status");
     var listBase = oui5lib.listBase.getObject(primaryKey);
 
-    var statuses = oum.namespace("statuses");
+    var statuses = oum.namespace("do.statuses");
     statuses = oui5lib.util.extend(statuses, listBase);
 
     statuses.init = init;
     statuses.isInitialized = isInitialized;
 }());
 
-oum.loader.loadStatuses();
+oum.do.loader.loadStatuses();

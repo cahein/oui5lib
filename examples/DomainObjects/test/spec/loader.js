@@ -1,5 +1,5 @@
 describe("Loader object", function() {
-    var loader = oum.loader;
+    var loader = oum.do.loader;
     beforeAll(function() {
         spyOn(oui5lib.request, "sendMappingRequest");
     });
@@ -53,7 +53,7 @@ describe("Loader object", function() {
         oui5lib.request.sendMappingRequest.calls.reset();
         
         var ids = ["0871132532", "0853455341", "080613125"];
-        oum.loader.loadProducts(ids);
+        oum.do.loader.loadProducts(ids);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
         expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("product", "getProducts",
@@ -65,7 +65,7 @@ describe("Loader object", function() {
         oui5lib.request.sendMappingRequest.calls.reset();
 
         var ids = [1, 2];
-        oum.loader.loadAddresses(ids);
+        oum.do.loader.loadAddresses(ids);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
         expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("address", "getAddresses",

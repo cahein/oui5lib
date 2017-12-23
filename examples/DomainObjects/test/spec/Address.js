@@ -1,24 +1,24 @@
 describe("Address object", function() {
     beforeAll(function() {
-        oum.addresses.resetData();
-        oum.addresses.addData(oum.fixture.addressesData);
+        oum.do.addresses.resetData();
+        oum.do.addresses.addData(oum.fixture.addressesData);
     });
 
     it ("should get a new Address", function() {
-        var address = new oum.Address();
-        expect(address instanceof oum.Address).toBe(true);
+        var address = new oum.do.Address();
+        expect(address instanceof oum.do.Address).toBe(true);
         expect(address.isNew()).toBe(true);
     });
 
     it ("should get a loaded Address", function() {
-        var address = new oum.Address(3);
-        expect(address instanceof oum.Address).toBe(true);
+        var address = new oum.do.Address(3);
+        expect(address instanceof oum.do.Address).toBe(true);
         expect(address.isNew()).toBe(false);
         expect(address.id).toEqual(3);
     });
 
     it ("should allow to modify Address data", function() {
-        var address = new oum.Address(3);
+        var address = new oum.do.Address(3);
         expect(address.getProperty("postcode")).toEqual("-1");
         expect(address.wasModified()).toEqual(false);
         address.setProperty("note", "Don't go there");
@@ -29,15 +29,15 @@ describe("Address object", function() {
     });
 
     it ("should call loader to request an Address", function() {
-        oum.addresses.resetData();
-        spyOn(oum.loader, "loadAddress");
+        oum.do.addresses.resetData();
+        spyOn(oum.do.loader, "loadAddress");
         
-        var address = new oum.Address(3);
-        expect(address instanceof oum.Address).toBe(true);
+        var address = new oum.do.Address(3);
+        expect(address instanceof oum.do.Address).toBe(true);
         expect(address.isNew()).toBe(false);
 
-        expect(oum.loader.loadAddress.calls.count()).toEqual(1);
-        expect(oum.loader.loadAddress)
+        expect(oum.do.loader.loadAddress.calls.count()).toEqual(1);
+        expect(oum.do.loader.loadAddress)
             .toHaveBeenCalledWith(3);
     });
 });

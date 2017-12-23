@@ -1,16 +1,16 @@
 describe("RelationsHandler object", function() {
-   var loader = oum.loader;
+   var loader = oum.do.loader;
    beforeAll(function() {
       spyOn(oui5lib.request, "sendMappingRequest");
    });
    beforeEach(function() {
-      oum.addresses.resetData();
-      oum.products.resetData();
+      oum.do.addresses.resetData();
+      oum.do.products.resetData();
       oui5lib.request.sendMappingRequest.calls.reset();
    });
 
    it ("should request referenced product and address data of orders", function() {
-      oum.relationsHandler.processOrderReferences(oum.fixture.ordersData);
+      oum.do.relationsHandler.processOrderReferences(oum.fixture.ordersData);
       expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(2);
       expect(oui5lib.request.sendMappingRequest)
          .toHaveBeenCalledWith("address", "getAddresses",
@@ -23,14 +23,14 @@ describe("RelationsHandler object", function() {
    });
 
    it ("should handle incoming data and publish related events", function() {
-      oum.relationsHandler.clearMissingData();
-      oum.relationsHandler.processOrderReferences(oum.fixture.ordersData);
+      oum.do.relationsHandler.clearMissingData();
+      oum.do.relationsHandler.processOrderReferences(oum.fixture.ordersData);
 
       spyOn(oui5lib.event, "publishReadyEvent");
 
-      oum.relationsHandler.onDataLoaded("address",
+      oum.do.relationsHandler.onDataLoaded("address",
                                         [ { id: 1 }, { id: 2 }, { id: 3 } ]);
-      oum.relationsHandler.onDataLoaded("product",
+      oum.do.relationsHandler.onDataLoaded("product",
                                         [ { isbn: "0394718747" },
                                           { isbn: "0889610356" } ]);
       expect(oui5lib.event.publishReadyEvent.calls.count()).toEqual(1);
@@ -38,7 +38,7 @@ describe("RelationsHandler object", function() {
          .toHaveBeenCalledWith({ entity: "order", id: "1" });
 
       
-      oum.relationsHandler.onDataLoaded("product",
+      oum.do.relationsHandler.onDataLoaded("product",
                                         [ { isbn: "1859847390" } ]);
       expect(oui5lib.event.publishReadyEvent.calls.count()).toEqual(3);
       expect(oui5lib.event.publishReadyEvent)
