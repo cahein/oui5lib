@@ -1,5 +1,11 @@
 describe("formatter", function() {
-    it("should format a Date to a date string", function() {
+   it("should get a Date object from a  date string", function() {
+      var dateString = "6.8.1945";
+      var dateFormat = "d.M.yyyy";
+      var date = oui5lib.formatter.getDateFromString(dateString, dateFormat);
+      expect(date instanceof Date).toBe(true);
+   });
+   it("should format a Date to a date string", function() {
         var date = new Date("2015", "10", "25");
         var dateStr = oui5lib.formatter.getDateString(date);
         expect(dateStr).toEqual("2015-11-25");

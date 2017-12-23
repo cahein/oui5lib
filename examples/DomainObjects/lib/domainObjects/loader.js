@@ -1,6 +1,6 @@
 /** @namespace oum.loader */
 (function() {
-    function requestOrder(orderId) {
+    function loadOrder(orderId) {
         oui5lib.request.sendMappingRequest(
             "order", "getOrder",
             { "id": orderId },
@@ -8,8 +8,9 @@
         );
     }
 
-    function requestOrders(startDate, endDate, status, reset) {
+    function loadOrders(startDate, endDate, status, reset) {
         if (typeof reset === "boolean" && reset) {
+            oui5lib.logger.info("resetting orders");
             oum.orders.resetData();
         }
         
@@ -27,11 +28,11 @@
         );
     }
 
-    function requestAddress(addressId) {
-        requestAddresses([addressId]);
+    function loadAddress(addressId) {
+        loadAddresses([addressId]);
     }
 
-    function requestAddresses(addressIds) {
+    function loadAddresses(addressIds) {
         oui5lib.request.sendMappingRequest(
             "address", "getAddresses",
             { "ids": addressIds },
@@ -39,11 +40,11 @@
         );
     }
 
-    function requestProduct(productId) {
-        requestProducts([productId]);
+    function loadProduct(productId) {
+        loadProducts([productId]);
     }
 
-    function requestProducts(productIds) {
+    function loadProducts(productIds) {
         oui5lib.request.sendMappingRequest(
             "product", "getProducts",
             { "isbns": productIds },
@@ -51,7 +52,7 @@
         );
     }
     
-    function requestStatuses() {
+    function loadStatuses() {
         oui5lib.request.sendMappingRequest(
             "status", "getStatuses",
             null,
@@ -62,6 +63,9 @@
         var entity = requestInfo.entity;
         if (responseObject.result) {
             var data = responseObject.value;
+            if (!(data instanceof Array) && data instanceof Object) {
+                data = [ data ];
+            }
             switch(entity) {
             case "order":
                 oum.orders.addData(data);
@@ -87,13 +91,13 @@
     
     
     var loader = oum.namespace("loader");
-    loader.requestOrders = requestOrders;
-    loader.requestOrder = requestOrder;
-    loader.requestAddresses = requestAddresses;
-    loader.requestAddress = requestAddress;
-    loader.requestProducts = requestProducts;
-    loader.requestProduct = requestProduct;
-    loader.requestStatuses = requestStatuses;
+    loader.loadOrders = loadOrders;
+    loader.loadOrder = loadOrder;
+    loader.loadAddresses = loadAddresses;
+    loader.loadAddress = loadAddress;
+    loader.loadProducts = loadProducts;
+    loader.loadProduct = loadProduct;
+    loader.loadStatuses = loadStatuses;
 
     // for testing only
     loader.handleSuccessfulResponse = handleSuccessfulResponse;

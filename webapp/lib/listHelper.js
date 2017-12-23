@@ -6,8 +6,7 @@
      * @returns {Boolean} The removed entry or undefined or null.
      */
     function removeByKey(list, keyName, keyValue) {
-        if (typeof list === "undefined" ||
-            list.length === 0) {
+        if (!isAnArray(list) || list.length === 0) {
             return null;
         }
 
@@ -28,6 +27,9 @@
      * @returns Returns the item.
      */
     function getItemByKey(list, keyName, keyValue) {
+        if (!isAnArray(list)) {
+            return null;
+        }
         var item = null;
         for (var i = 0, s = list.length; i < s; i++) {
             if (list[i][keyName] == keyValue) {
@@ -45,6 +47,9 @@
      * @returns {Boolean} True (updated), or otherwise false.
      */
     function updateItemByKey(list, keyName, updatedItem) {
+        if (!isAnArray(list)) {
+            return false;
+        }
         for (var i = 0, s = list.length; i < s; i++) {
             var item = list[i];
             if (item[keyName] == updatedItem[keyName]) {
@@ -86,6 +91,13 @@
         });
     }
 
+    function isAnArray(list) {
+        if (typeof list === "undefined" || list === null) {
+            return false;
+        }
+        return (list instanceof Array);
+    }
+    
     var listhelper = oui5lib.namespace("lib.listHelper");
     listhelper.removeByKey = removeByKey;
     listhelper.getItemByKey = getItemByKey;

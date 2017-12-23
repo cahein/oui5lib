@@ -1,7 +1,7 @@
 describe("Address object", function() {
     beforeAll(function() {
         oum.addresses.resetData();
-        oum.addresses.addData(oum.addressesData);
+        oum.addresses.addData(oum.fixture.addressesData);
     });
 
     it ("should get a new Address", function() {
@@ -30,14 +30,14 @@ describe("Address object", function() {
 
     it ("should call loader to request an Address", function() {
         oum.addresses.resetData();
-        spyOn(oum.loader, "requestAddress");
+        spyOn(oum.loader, "loadAddress");
         
         var address = new oum.Address(3);
         expect(address instanceof oum.Address).toBe(true);
         expect(address.isNew()).toBe(false);
 
-        expect(oum.loader.requestAddress.calls.count()).toEqual(1);
-        expect(oum.loader.requestAddress)
+        expect(oum.loader.loadAddress.calls.count()).toEqual(1);
+        expect(oum.loader.loadAddress)
             .toHaveBeenCalledWith(3);
     });
 });

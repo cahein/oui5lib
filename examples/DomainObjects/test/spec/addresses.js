@@ -1,7 +1,7 @@
 describe("Addresses collection object", function() {
     beforeAll(function() {
         oum.addresses.resetData();
-        oum.addresses.addData(oum.addressesData);
+        oum.addresses.addData(oum.fixture.addressesData);
     });
     
     it ("should preserve loading order", function() {

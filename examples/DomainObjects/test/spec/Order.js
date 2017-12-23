@@ -5,7 +5,7 @@ describe("Order entity object", function() {
 
         spyOn(oum.relationsHandler, "processOrderReferences");
         oum.orders.resetData();
-        oum.orders.addData(oum.ordersData);
+        oum.orders.addData(oum.fixture.ordersData);
     });
 
     it ("should get a new Order", function() {
@@ -22,9 +22,14 @@ describe("Order entity object", function() {
         expect(order.isNew()).toBe(false);
     });
 
+    it ("should get the Order id as property", function() {
+        var order = new oum.Order(1);
+        expect(order.getProperty("id")).toEqual(1);
+    });
+
     it ("should get the Order id directly", function() {
-        var order = new oum.Order(2);
-        expect(order.id).toEqual(order.getProperty("id"));
+        var order = new oum.Order(1);
+        expect(order.id).toEqual(1);
     });
     
     it ("should allow modification of Order data", function() {
@@ -36,6 +41,17 @@ describe("Order entity object", function() {
         expect(order.wasModified()).toEqual(true);
     });
     
+    it ("should call loader to request an Order", function() {
+        spyOn(oum.loader, "loadOrder");
+        
+        expect(oum.orders.isItemLoaded(8)).toBe(false);
+        var order = new oum.Order(8);
+        expect(oum.loader.loadOrder)
+            .toHaveBeenCalledWith(8);
+    });
+
+
+
     it ("should have functions to get the billing and shipping addresses", function() {
         var order = new oum.Order();
         expect(typeof order.getBillingAddress).toEqual("function"); 
@@ -43,8 +59,7 @@ describe("Order entity object", function() {
     });
 
     it ("should get related address entity objects", function() {
-        oum.addresses.resetData();
-        oum.addresses.addData(oum.addressesData);
+        oum.addresses.addData(oum.fixture.addressesData, true);
 
         var order = new oum.Order(2);
         var billingAddress = order.getBillingAddress();
@@ -56,6 +71,8 @@ describe("Order entity object", function() {
         expect(shippingAddress.getProperty("id")).toEqual(3);
         
     });
+
+
 
     it ("should get the order total", function() {
         var order = oum.Order(2);
@@ -73,7 +90,7 @@ describe("Order entity object", function() {
         var orderItems = order.getOrderItems();
         expect(orderItems.length).toEqual(2);
 
-        oum.products.addData(oum.productsData);
+        oum.products.addData(oum.fixture.productsData);
 
         order.addOrderEntry("0394718747", 1);
         
@@ -94,13 +111,5 @@ describe("Order entity object", function() {
         var item = order.getOrderItem("1859847390");
         expect(item.quantity).toEqual(1);
         expect(item.unitPrice).toEqual(2.4);
-    });
-
-    it ("should call loader to request an Order", function() {
-        spyOn(oum.loader, "requestOrder");
-        
-        var order = new oum.Order(8);
-        expect(oum.loader.requestOrder)
-            .toHaveBeenCalledWith(8);
     });
 });

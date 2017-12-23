@@ -97,29 +97,6 @@ jQuery.sap.declare("oui5lib.listBase");
             },
             
             /**
-             * Get the model. The sizeLimit is set to hold all data.
-             * Returns null if no data are set.
-             * @returns {sap.ui.model.json.JSONModel} The JSONModel.
-             */
-            getModel: function() {
-                if (typeof sap === "undefined" ||
-                    typeof sap.ui === "undefined") {
-                    throw Error("openui5 is not loaded");
-                }
-                if (_data === null) {
-                    return null;
-                }
-                if (_model === null) {
-                    _model = new sap.ui.model.json.JSONModel();
-                }
-                if (_data.length > 100) {
-                    _model.setSizeLimit(_data.length);
-                }
-                _model.setData(_data);
-                return _model;
-            },
-
-            /**
              * Add the data.
              * @param {Object|Array} data May be either a single object or an array of objects. Already loaded objects with the same primary key will be updated. 
              */
@@ -259,6 +236,29 @@ jQuery.sap.declare("oui5lib.listBase");
             
             sortBy: function(key) {
                 return listHelper.sortBy(_data, key);
+            },
+
+            /**
+             * Get the model. The sizeLimit is set to hold all data.
+             * Returns null if no data are set.
+             * @returns {sap.ui.model.json.JSONModel} The JSONModel.
+             */
+            getModel: function() {
+                if (typeof sap === "undefined" ||
+                    typeof sap.ui === "undefined") {
+                    throw Error("openui5 is not loaded");
+                }
+                if (_data === null) {
+                    return null;
+                }
+                if (_model === null) {
+                    _model = new sap.ui.model.json.JSONModel();
+                }
+                if (_data.length > 100) {
+                    _model.setSizeLimit(_data.length);
+                }
+                _model.setData(_data);
+                return _model;
             }
         };
         return ListBase;

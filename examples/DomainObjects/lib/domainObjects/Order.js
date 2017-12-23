@@ -14,7 +14,7 @@
             } else {
                 this.setLoading(true);
                 oum.orders.addItemDataChangedListener(dataAvailable, this);
-                oum.loader.requestOrder(id);
+                oum.loader.loadOrder(id);
             }
         }
     }

@@ -1,7 +1,7 @@
 describe("Products collection object", function() {
     beforeAll(function() {
         oum.products.resetData();
-        oum.products.addData(oum.productsData);
+        oum.products.addData(oum.fixture.productsData);
     });
     it ("should preserve loading order", function() {
         var data = oum.products.getData();

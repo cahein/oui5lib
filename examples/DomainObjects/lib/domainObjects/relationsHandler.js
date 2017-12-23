@@ -31,10 +31,10 @@
             });
         });
         if (addressesToLoad.length > 0) {
-            oum.loader.requestAddresses(addressesToLoad);
+            oum.loader.loadAddresses(addressesToLoad);
         }
         if (productsToLoad.length > 0) {
-            oum.loader.requestProducts(productsToLoad);
+            oum.loader.loadProducts(productsToLoad);
         }
     }
     
@@ -54,10 +54,14 @@
         });
     }
 
+    function clearMissingData() {
+        _missingData = {};
+    }
+
 
 
     function addMissing(orderId, type, id) {
-        orderId = "o" + orderId;
+        orderId = "order" + orderId;
         if (_missingData[orderId] === undefined) {
             _missingData[orderId] = {};
         }
@@ -89,7 +93,7 @@
                         delete orderMissing[entity];
                         if (!orderMissing.hasOwnProperty("address") &&
                             !orderMissing.hasOwnProperty("product")) {
-                            orderId = idString.substring(1);
+                            orderId = idString.substring(5);
                             completeOrder(orderId);
                         
                             oui5lib.event.publishReadyEvent({
@@ -116,12 +120,14 @@
     }
     
     function completeOrder(orderId) {
-        var order = oum.orders.getItem(orderId);
-        oum.orders.procAddresses(order);
-        oum.orders.procOrderedItems(order);
+        console.error(orderId);
+        //var order = oum.orders.getItem(orderId);
+        //oum.orders.procAddresses(order);
+        //oum.orders.procOrderedItems(order);
     }
 
     var relationsHandler = oum.namespace("relationsHandler");
     relationsHandler.processOrderReferences = procOrders;
     relationsHandler.onDataLoaded = onDataLoaded;
+    relationsHandler.clearMissingData = clearMissingData;
 }());

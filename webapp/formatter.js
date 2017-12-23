@@ -16,7 +16,7 @@ jQuery.sap.declare("oui5lib.formatter");
      * @param {string} timeFormat given date format pattern
      * @returns {Date}
      */
-    function getDate(dateStr, dateFormat){
+    function getDateFromString(dateStr, dateFormat){
         var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: dateFormat
         });
@@ -218,7 +218,7 @@ jQuery.sap.declare("oui5lib.formatter");
     var formatter = oui5lib.namespace("formatter");
     formatter.base64Encode = base64Encode;
     formatter.base64Decode = base64Decode;
-    formatter.getDate = getDate;
+    formatter.getDateFromString = getDateFromString;
     formatter.getDateString = getDateString;
     formatter.getTimeString = getTimeString;
     formatter.getDateFromStrings = getDateFromStrings;

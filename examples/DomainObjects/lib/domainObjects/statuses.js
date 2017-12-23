@@ -29,4 +29,4 @@
     statuses.isInitialized = isInitialized;
 }());
 
-oum.loader.requestStatuses();
+oum.loader.loadStatuses();

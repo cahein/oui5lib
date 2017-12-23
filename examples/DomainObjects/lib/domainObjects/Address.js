@@ -14,7 +14,7 @@
             } else {
                 this.setLoading(true);
                 oum.addresses.addItemDataChangedListener(dataAvailable, this);
-                oum.loader.requestAddress(id);
+                oum.loader.loadAddress(id);
             }
         }
     }

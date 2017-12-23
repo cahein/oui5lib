@@ -1,4 +1,9 @@
-oum.ordersData = [
+oum.fixture = {};
+oum.fixture.startDate = "20171001";
+oum.fixture.endDate = "20171201";
+oum.fixture.status = "processing";
+
+oum.fixture.ordersData = [
     {
         "id": 1,
         "status": "shipped",
@@ -76,7 +81,7 @@ oum.ordersData = [
     }
 ];
 
-oum.productsData = [
+oum.fixture.productsData = [
     {
         "isbn": "0521560241",
         "title": {
@@ -155,7 +160,7 @@ oum.productsData = [
     }
 ];
 
-oum.addressesData = [
+oum.fixture.addressesData = [
     {
         "id": 1,
         "firstname": "Donald",
@@ -179,13 +184,5 @@ oum.addressesData = [
         "street": "Mac Goo Str. 10",
         "city": "Fakebook",
         "postcode": "-1"
-    },
-    {
-        "id": 4,
-        "firstname": "Linus",
-        "lastname": "Thorwald",
-        "street": "Open OS 1",
-        "city": "Source City",
-        "postcode": "789"
     }
 ];

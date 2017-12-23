@@ -1,7 +1,7 @@
 describe("Product object", function() {
     beforeAll(function() {
         oum.products.resetData();
-        oum.products.addData(oum.productsData);
+        oum.products.addData(oum.fixture.productsData);
     });
 
     it ("should get a new Product", function() {
@@ -30,14 +30,14 @@ describe("Product object", function() {
     it ("should call loader to request a Product", function() {
         oum.products.resetData();
         
-        spyOn(oum.loader, "requestProduct");
+        spyOn(oum.loader, "loadProduct");
 
         var product = new oum.Product("0521560241");
         expect(product instanceof oum.Product).toBe(true);
         expect(product.isNew()).toBe(false);
 
-        expect(oum.loader.requestProduct.calls.count()).toEqual(1);
-        expect(oum.loader.requestProduct)
+        expect(oum.loader.loadProduct.calls.count()).toEqual(1);
+        expect(oum.loader.loadProduct)
             .toHaveBeenCalledWith("0521560241");
 
     });

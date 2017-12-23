@@ -4,8 +4,8 @@
         "id": 8,
         "status": "new",
         "orderDate": "2017-05-27 10:21:01",
-        "customerAddressId": 2,
         "billingAddressId": 2,
+        "shippingAddressId": 2,
         "currency": "US-$",
         "items": [
             {

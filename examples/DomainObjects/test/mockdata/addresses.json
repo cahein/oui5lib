@@ -2,14 +2,6 @@
     "result": true,
     "value": [
         {
-            "id": 4,
-            "firstname": "Linus",
-            "lastname": "Thorwald",
-            "street": "Open OS 1",
-            "city": "Source City",
-            "postcode": "789"
-        },
-        {
             "id": 1,
             "firstname": "Donald",
             "lastname": "Knuth",
