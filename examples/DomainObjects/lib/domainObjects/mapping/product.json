@@ -51,8 +51,12 @@
         }
     ],
     "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:3000"
+        },
         "getProducts": {
-            "url": "getProducts",
+            "pathname": "getProducts",
             "method": "GET",
             "params": [
                 {
@@ -63,7 +67,7 @@
             ]
         },
         "saveProduct": {
-            "url": "saveProduct",
+            "pathname": "saveProduct",
             "method": "POST",
             "params": [
             ]

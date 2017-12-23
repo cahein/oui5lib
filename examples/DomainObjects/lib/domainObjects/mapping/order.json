@@ -68,8 +68,12 @@
         }
     ],
     "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:3000"
+        },
         "getOrders": {
-            "url": "getOrders",
+            "pathname": "getOrders",
             "method": "GET",
             "params": [
                 {
@@ -89,7 +93,7 @@
             ]
         },
         "getOrder": {
-            "url": "getOrder",
+            "pathname": "getOrder",
             "method": "GET",
             "params": [
                 {
@@ -99,7 +103,7 @@
             ]
         },
         "saveOrder": {
-            "url": "saveOrders",
+            "pathname": "saveOrders",
             "method": "POST",
             "params": [
                 {

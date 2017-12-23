@@ -4,22 +4,22 @@ describe("RelationsHandler object", function() {
         oum.addresses.resetData();
         oum.products.resetData();
 
-        spyOn(oui5lib.request, "doRequest");
+        spyOn(oui5lib.request, "sendMappingRequest");
     });
 
     it ("should request referenced product and address data of orders", function() {
-        oui5lib.request.doRequest.calls.reset();
+        oui5lib.request.sendMappingRequest.calls.reset();
 
         oum.relationsHandler.processOrderReferences(oum.ordersData);
-        expect(oui5lib.request.doRequest.calls.count()).toEqual(2);
-        expect(oui5lib.request.doRequest)
+        expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(2);
+        expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("address", "getAddresses",
                                   {"ids": [ 1, 2, 3] },
-                                  oum.loader.dataRequestSucceeded);
-        expect(oui5lib.request.doRequest)
+                                  oum.loader.handleSuccessfulResponse);
+        expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("product", "getProducts",
                                   {"isbns": [ "0394718747", "0889610356", "1859847390"] },
-                                  oum.loader.dataRequestSucceeded);
+                                  oum.loader.handleSuccessfulResponse);
     });
 
     it ("should handle the relations of incoming data", function() {

@@ -27,19 +27,19 @@ jQuery.sap.declare("oui5lib.logger");
     }
     
     function debug(msg) {
-        console.log(logPrefix + msg);
+        console.log(logPrefix + "DEBUG " + msg);
     }
     
     function info(msg) {
-        console.info(logPrefix + msg);
+        console.info(logPrefix + "INFO " + msg);
     }
     
     function warn(msg) {
-        console.warn(logPrefix + msg);
+        console.warn(logPrefix + "WARN " +  msg);
     }
     
     function error(msg) {
-        console.error(logPrefix + msg);
+        console.error(logPrefix + "ERROR " + msg);
     }
     
     var logger = oui5lib.namespace("logger");

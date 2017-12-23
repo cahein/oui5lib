@@ -31,8 +31,12 @@
         }
     ],
     "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:3000"
+        },
         "getAddresses": {
-            "url": "getAddresses",
+            "pathname": "getAddresses",
             "method": "GET",
             "params": [
                 {
@@ -43,7 +47,7 @@
             ]
         },
         "saveAddress": {
-            "url": "saveAddresses",
+            "pathname": "saveAddresses",
             "method": "POST",
             "params": [
             ]

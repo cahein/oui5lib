@@ -110,7 +110,7 @@
             "required": false,
             "default": true,
             "ui5": {
-                "sapuiControl" : "sap.m.Switch"
+                "control" : "sap.m.Switch"
             },
             "i18n" : {
                 "label" : "exampleEntity.switchBool",
@@ -123,7 +123,7 @@
             "required": false,
             "default": true,
             "ui5": {
-                "sapuiControl" : "sap.m.CheckBox"
+                "control" : "sap.m.CheckBox"
             },
             "i18n" : {
                 "label" : "exampleEntity.checkBool",
@@ -134,7 +134,7 @@
             "name" : "comboItem",
             "required" : true,
             "ui5" : {
-                "sapuiControl": "sap.m.ComboBox",
+                "control": "sap.m.ComboBox",
                 "itemsModel": "items", 
                 "itemKey": "key", 
                 "itemText": "text",
@@ -148,7 +148,7 @@
         {
             "name" : "multiComboItem",
             "ui5" : {
-                "sapuiControl": "sap.m.MultiComboBox",
+                "control": "sap.m.MultiComboBox",
                 "itemsModel": "items", 
                 "itemKey": "key", 
                 "itemText": "text",
@@ -163,7 +163,7 @@
             "name": "selectItem",
             "required": true,
             "ui5" : {
-                "sapuiControl": "sap.m.Select",
+                "control": "sap.m.Select",
                 "itemsModel": "items", 
                 "itemKey": "key", 
                 "itemText": "text",
@@ -178,7 +178,7 @@
             "type": "Date",
             "required": true,
             "ui5": {
-                "sapuiControl": "sap.m.DateTimePicker"
+                "control": "sap.m.DateTimePicker"
             },
             "i18n": {
                 "label": "exampleEntity.dateTime"
@@ -188,7 +188,7 @@
             "name": "date",
             "type": "Date",
             "ui5": {
-                "sapuiControl": "sap.m.DatePicker"
+                "control": "sap.m.DatePicker"
             },
             "i18n": {
                 "label": "exampleEntity.date"
@@ -197,7 +197,7 @@
         {
             "name": "time",
             "ui5": {
-                "sapuiControl": "sap.m.TimePicker"
+                "control": "sap.m.TimePicker"
             },
             "i18n": {
                 "label": "exampleEntity.time"
@@ -207,7 +207,7 @@
 	    "name": "textarea",
 	    "required": true,
 	    "ui5": {
-		"sapuiControl": "sap.m.TextArea",
+		"control": "sap.m.TextArea",
 		"rows": 10
 	    },
 	    "i18n": {

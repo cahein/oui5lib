@@ -1,6 +1,5 @@
 jQuery.sap.require("oui5lib.logger");
 jQuery.sap.require("oui5lib.formatter");
-jQuery.sap.require("oui5lib.util");
 jQuery.sap.require("oui5lib.event");
 
 jQuery.sap.declare("oui5lib.request");
@@ -9,50 +8,65 @@ jQuery.sap.declare("oui5lib.request");
 (function () {
 
     /**
-     * Load JSON file.
+     * Send XMLHttpRequest expecting JSON.
      * @memberof oui5lib.request
      * @param {string} url The URL of the json to load.
      * @param {function} resolve The function to call if the request
      * is successfully completed. 
      * @param {object} props Properties to be passed with the request.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
+     * @param {string} httpVerb GET or POST.
+     * @param {string} encodedParams The url-encoded parameters string.
      */
-    function loadJson(url, resolve, props, isAsync) {
+    function loadJson(url, resolve, props, isAsync, httpVerb, encodedParams) {
         if (typeof isAsync !== "boolean") {
             isAsync = true;
+        }
+        if (typeof httpVerb === "undefined") {
+            httpVerb = "GET";
+        }
+        if (typeof encodedParams !== "undefined" && httpVerb === "GET") {
+            var protocolRegex = /^https?.*/;
+            if (protocolRegex.test(url)) {
+                url += "?" + encodedParams;
+            }
         }
 
         var xhr = new XMLHttpRequest();
         xhr.overrideMimeType("application/json");
-        xhr.open("GET", url, isAsync);
+        xhr.open(httpVerb, url, isAsync);
         
         addHandlers(xhr, resolve, props, isAsync);        
 
-        xhr.send();
+        if (httpVerb === "POST") {
+            xhr.send(encodedParams);
+        } else {
+            xhr.send();
+        }
     }
 
     
     /**
-     * Run XMLHttpRequest.
+     * Run XMLHttpRequest defined in the mapping.
      * @memberof oui5lib.request
      * @param {string} entityName The name of the entity.
      * @param {string} requestName The name of the request.
-     * @param {object} params The request parameters.
+     * @param {object} params The data provided for the request.
      * @param {function} resolve The function to call if the request
      * is successfully completed.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      */
-    function doRequest(entityName, requestName, params,
-                       resolve, isAsync) {
+    function sendMappingRequest(entityName, requestName, params,
+                                resolve, isAsync) {
         if (typeof oui5lib.mapping !== "object") {
-            throw Error("oui5lib.mapping namespace not loaded");
+            throw new Error("oui5lib.mapping namespace not loaded");
         }
         
         if (params === undefined || params === null) {
             params = {};
         }
         if (typeof isAsync !== "boolean") {
-            if (oui5lib.isTest) {
+            if (oui5lib.configuration.getEnvironment() === "testing") {
                 isAsync = false;
             } else {
                 isAsync = true;
@@ -62,34 +76,17 @@ jQuery.sap.declare("oui5lib.request");
         var requestDef = oui5lib.mapping.getRequestDefinition(entityName,
                                                               requestName);
         
-        var requestParams = procParams(params, requestDef);
-        if (!requestParams) {
-            throw Error("required parameters missing");
-        }
-        oui5lib.logger.debug("processed requestParams: "
-                             + JSON.stringify(requestParams));
-        var encodedParams = getEncodedParams(params);
-        
-        var method = requestDef.method;
-        var url = procUrl(requestDef);
-        if (!oui5lib.isTest && method === "GET") {
-            url += "?" + encodedParams;
-        }
-        
-        var xhr = new XMLHttpRequest();
-        xhr.overrideMimeType("application/json");
-        xhr.open(method, url, isAsync);
-        
-        addHandlers(xhr, resolve, { "entity": entityName,
-                                    "request": requestName
-                                  }, isAsync);
+        var requestParams = procParameters(params, requestDef);
+        var encodedParams = getEncodedParams(requestParams);
+        oui5lib.logger.info("request parameter string: " + encodedParams);
 
-        if (method === "POST") {
-            // xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.send(encodedParams);
-        } else {
-            xhr.send();
-        }
+        var httpVerb = requestDef.method;
+        var url = procUrl(requestDef);
+        oui5lib.logger.info("request url: " + url);
+
+        loadJson(url, resolve, { "entity": entityName,
+                                 "request": requestName
+                               }, isAsync, httpVerb, encodedParams);
     }
     
     function addHandlers(xhr, resolve, props, isAsync) {
@@ -128,18 +125,35 @@ jQuery.sap.declare("oui5lib.request");
     }
 
     /**
-     * Process the url from the mapping. If 'oui5lib.isTest' is set 'true', the url is expected to be returned by the oui5lib.request.getTestUrl function.
+     * Process the URL. Depends upon the environment. For the production environment the URL is generated from the mapping.
      * @memberof oui5lib.request
      * @inner 
      * @param {object} requestDefinition
      * @returns {string} The request url.
      */
     function procUrl(requestDefinition) {
-        var requestUrl = requestDefinition.url;
-        oui5lib.logger.debug("requestUrl: " + requestUrl);
-        if (oui5lib.isTest) {
-            return oui5lib.request.getTestUrl(requestUrl);
+        var pathname = requestDefinition.pathname;
+
+        switch (oui5lib.configuration.getEnvironment()) {
+        case "development":
+            if (typeof oui5lib.request.getDevelopmentUrl === "function") {
+                return oui5lib.request.getDevelopmentUrl(pathname);
+            }
+            break;
+        case "testing":
+            if (typeof oui5lib.request.getTestingUrl === "function") {
+                return oui5lib.request.getTestingUrl(pathname);
+            }
+            break;
+        case "staging":
+            if (typeof oui5lib.request.getStagingUrl === "function") {
+                return oui5lib.request.getStagingUrl(pathname);
+            }
+            break;
         }
+        var protocol = requestDefinition.protocol;
+        var host = requestDefinition.host;
+        var requestUrl = protocol + "://" + host + "/" + pathname;
         return requestUrl;
     }
     
@@ -150,14 +164,14 @@ jQuery.sap.declare("oui5lib.request");
      * @param {object} params
      * @param {object} requestDefinition
      */
-    function procParams(params, requestDefinition) {
+    function procParameters(params, requestDefinition) {
         var paramsDefinition = requestDefinition.params;
         if (paramsDefinition === undefined || paramsDefinition.length === 0) {
             return {};
         }
         var requestParams = {};
 
-        var isRequired, paramName, paramValue;
+        var paramName, paramValue;
         paramsDefinition.forEach(function(paramDef) {
             paramName = paramDef.name;
             paramValue = null;
@@ -167,17 +181,13 @@ jQuery.sap.declare("oui5lib.request");
                 }
             } else {
                 paramValue = params[paramName];
-                if (paramDef.type !== undefined) {
+                if (paramDef.type !== "string") {
                     paramValue = convertToString(paramValue, paramDef);
                 }
             }
 
-            isRequired = false;
-            if (typeof paramDef.required === "boolean") {
-                isRequired = paramDef.required;
-            }
-            if (isRequired && paramValue === null) {
-                return false;
+            if (paramDef.required && paramValue === null) {
+               throw new Error("required parameter missing: " + paramName);
             }
             if (paramValue !== null) {
                 requestParams[paramName] = paramValue;
@@ -199,13 +209,15 @@ jQuery.sap.declare("oui5lib.request");
         case "Date":
             if (value instanceof Date &&
                 typeof paramDefinition.dateFormat === "string") {
-                value = oui5lib.formatter.getDateString(value, paramDefinition.dateFormat);
+                value = oui5lib.formatter.getDateString(value,
+                                                        paramDefinition.dateFormat);
             }
             break;
         case "Time":
             if (value instanceof Date &&
                 typeof paramDefinition.timeFormat === "string") {
-                value = oui5lib.formatter.getTimeString(value, paramDefinition.timeFormat);
+                value = oui5lib.formatter.getTimeString(value,
+                                                        paramDefinition.timeFormat);
             }
             break;
         case "Array":
@@ -247,5 +259,5 @@ jQuery.sap.declare("oui5lib.request");
 
     var request = oui5lib.namespace("request");
     request.loadJson = loadJson;
-    request.doRequest = doRequest;
+    request.sendMappingRequest = sendMappingRequest;
 }());

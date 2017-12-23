@@ -65,6 +65,7 @@ jQuery.sap.declare("oui5lib.listBase");
             /**
              * Add a listener function to be called at the end of the setData and addData functions.
              * @param listener The function to be added to the event. 
+             * @param context The context object for the listener function. 
              */
             addDataChangedListener: function(listener, context ) {
                 if (typeof listener === "function") {
@@ -81,7 +82,7 @@ jQuery.sap.declare("oui5lib.listBase");
             /**
              * Add a function to be called when some item data was added or updated. The primary key value will be passed as only parameter to the function.
              * @param listener The function to be added to the event. 
-             * @param referer The context object for the listener function. 
+             * @param context The context object for the listener function. 
              */
             addItemDataChangedListener: function(listener, context) {
                 if (typeof listener === "function") {
@@ -122,7 +123,10 @@ jQuery.sap.declare("oui5lib.listBase");
              * Add the data.
              * @param {Object|Array} data May be either a single object or an array of objects. Already loaded objects with the same primary key will be updated. 
              */
-            addData: function(data) {
+            addData: function(data, reset) {
+                if (typeof reset === "boolean" && reset) {
+                    this.resetData();
+                }
                 var entries;
                 if (data instanceof Array) {
                     entries = data;

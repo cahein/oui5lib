@@ -14,7 +14,7 @@
             "name": "email",
             "required": true,
             "validate": [
-                "validEmail"
+                "email"
             ],
             "ui5": {
                 "control": "sap.m.Input",
@@ -67,8 +67,8 @@
         },
         {
             "name": "items",
-            "type": "collection",
-            "collectionItem": [
+            "type": "array",
+            "arrayItem": [
                 {
                     "name": "oEntityId",
                     "required": true
@@ -95,10 +95,13 @@
         }
     ],
     "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:8801"
+        },
         "getCollection": {
-            "url": "getCollection",
-            "method": "GET",
-            "params": [
+            "pathname": "getCollection",
+            "parameters": [
                 {
                     "name": "startDate",
                     "type": "Date",
@@ -113,9 +116,10 @@
             ]
         },
         "getEntity": {
-            "url": "getEntity",
-            "method": "GET",
-            "params": [
+            "protocol": "https",
+            "host": "localhost:8802",
+            "pathname": "getEntity",
+            "parameters": [
                 {
                     "name": "id",
                     "required": true
@@ -123,9 +127,9 @@
             ]
         },
         "saveEntity": {
-            "url": "saveEntity",
+            "pathname": "saveEntity",
             "method": "POST",
-            "params": [
+            "parameters": [
                 {
                     "name": "entityString",
                     "required": true

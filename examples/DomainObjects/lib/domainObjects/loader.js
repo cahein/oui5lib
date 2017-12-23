@@ -1,10 +1,10 @@
 /** @namespace oum.loader */
 (function() {
     function requestOrder(orderId) {
-        oui5lib.request.doRequest(
+        oui5lib.request.sendMappingRequest(
             "order", "getOrder",
             { "id": orderId },
-            dataRequestSucceeded
+            handleSuccessfulResponse
         );
     }
 
@@ -20,10 +20,10 @@
         if (typeof status === "string") {
             queryParams.status = status;
         }
-        oui5lib.request.doRequest(
+        oui5lib.request.sendMappingRequest(
             "order", "getOrders",
             queryParams,
-            dataRequestSucceeded
+            handleSuccessfulResponse
         );
     }
 
@@ -32,10 +32,10 @@
     }
 
     function requestAddresses(addressIds) {
-        oui5lib.request.doRequest(
+        oui5lib.request.sendMappingRequest(
             "address", "getAddresses",
             { "ids": addressIds },
-            dataRequestSucceeded
+            handleSuccessfulResponse
         );
     }
 
@@ -44,24 +44,24 @@
     }
 
     function requestProducts(productIds) {
-        oui5lib.request.doRequest(
+        oui5lib.request.sendMappingRequest(
             "product", "getProducts",
             { "isbns": productIds },
-            dataRequestSucceeded
+            handleSuccessfulResponse
         );
     }
     
     function requestStatuses() {
-        oui5lib.request.doRequest(
+        oui5lib.request.sendMappingRequest(
             "status", "getStatuses",
             null,
-            dataRequestSucceeded);
+            handleSuccessfulResponse);
     }
     
-    function dataRequestSucceeded(responseObject, requestInfo) {
+    function handleSuccessfulResponse(responseObject, requestInfo) {
+        var entity = requestInfo.entity;
         if (responseObject.result) {
             var data = responseObject.value;
-            var entity = requestInfo.entity;
             switch(entity) {
             case "order":
                 oum.orders.addData(data);
@@ -80,6 +80,8 @@
             }
             
             oum.relationsHandler.onDataLoaded(entity, data);
+        } else {
+            oui5lib.logger.error("No data returned: " + entity);
         }
     }
     
@@ -94,5 +96,5 @@
     loader.requestStatuses = requestStatuses;
 
     // for testing only
-    loader.dataRequestSucceeded = dataRequestSucceeded;
+    loader.handleSuccessfulResponse = handleSuccessfulResponse;
 }());

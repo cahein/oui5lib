@@ -13,8 +13,7 @@ oum.namespace = function(string) {
     return object;
 };
 
-oui5lib.isTest = true;
-oui5lib.request.getTestUrl = function(requestUrl) {
+oui5lib.request.getDevelopmentUrl = function(requestUrl) {
     switch(requestUrl) {
     case "getAddresses":
         return "../localService/mockdata/addresses.json";

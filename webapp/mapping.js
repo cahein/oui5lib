@@ -7,22 +7,7 @@ jQuery.sap.declare("oui5lib.mapping");
 
 /** @namespace oui5lib.mapping */
 (function () {
-    var mappings = {};
     var listHelper = oui5lib.lib.listHelper;
-
-    /**
-     * Get the mapping for the given entity. Will try to load the mapping if necessary.
-     * @memberof oui5lib.mapping
-     * @inner 
-     * @param {string} entityName The name of the entity.
-     * @returns {object} The mapping object.
-     */
-    function getDefinition(entityName) {
-        if (typeof mappings[entityName] === "undefined") {
-            loadMapping(entityName);
-        }
-        return mappings[entityName];
-    }
 
     /**
      * Get the primary key of the specified entity.
@@ -31,13 +16,11 @@ jQuery.sap.declare("oui5lib.mapping");
      * @returns {string} The primaryKey property from the mapping.
      */
     function getPrimaryKey(entityName) {
-        var defs = getDefinition(entityName);
-        return defs.primaryKey;
+        return getEntityDefinition(entityName).primaryKey;
     }
 
     function getPropertyDefinitions(entityName) {
-        var defs = getDefinition(entityName);
-        return defs.entity;
+        return getEntityDefinition(entityName).entity;
     }
     
     /**
@@ -48,25 +31,24 @@ jQuery.sap.declare("oui5lib.mapping");
      * @returns {object} The definition of the property from the mapping.
      */
     function getPropertyDefinition(entityName, propertyPath) {
-        var defs = getDefinition(entityName);
-        var props = defs.entity;
+        var props = getPropertyDefinitions(entityName);
 
-        var def = null;
         var keys = propertyPath.split("/");
         if (keys.length > 1) {
             var subprops = props;
             for (var i = 0, s = keys.length; i < s - 1; i++) {
                 var subkey = keys[i];
+
                 subprops = listHelper.getItemByKey(subprops, "name", subkey);
                 if (subprops === null) {
                     return null;
                 }
-                switch (subprops.type) {
+                switch(subprops.type) {
                 case "object":
                     subprops = subprops.objectItem;
                     break;
-                case "collection":
-                    subprops = subprops.collectionItem;
+                case "array":
+                    subprops = subprops.arrayItem;
                     break;
                 }
             }
@@ -74,35 +56,7 @@ jQuery.sap.declare("oui5lib.mapping");
             propertyPath = keys[keys.length - 1];
         }
 
-        def = listHelper.getItemByKey(props, "name", propertyPath);
-        return addDefaults(def);
-    }
-    
-    function addDefaults(def) {
-        if (typeof def.type === "undefined") {
-            def.type = "string";
-        }
-        var tests = [];
-        if (typeof def.validate !== "undefined") {
-            if (def.validate instanceof Array) {
-                tests = def.validate;
-            }
-        }
-        
-        if (typeof def.required !== "boolean") {
-            def.required = false;
-        }
-        if (def.required && tests.indexOf("required") === -1) {
-            tests.push("required");
-        }
-
-        if (typeof def.i18n === "undefined") {
-            def.i18n = {};
-        }
-        if (typeof def.ui5 === "undefined") {
-            def.ui5 = {};
-        }
-        return def;
+        return listHelper.getItemByKey(props, "name", propertyPath);
     }
     
     /**
@@ -113,8 +67,23 @@ jQuery.sap.declare("oui5lib.mapping");
      * @returns {object} The definition of the request from the mapping.
      */
     function getRequestDefinition(entityName, requestName) {
-        var defs = getDefinition(entityName);
-        return defs.request[requestName];
+        return getEntityDefinition(entityName).request[requestName];
+    }
+
+    var _mappings = {};
+
+    /**
+     * Get the mapping for the given entity. Will try to load the mapping if necessary.
+     * @memberof oui5lib.mapping
+     * @inner 
+     * @param {string} entityName The name of the entity.
+     * @returns {object} The mapping object.
+     */
+    function getEntityDefinition(entityName) {
+        if (typeof _mappings[entityName] === "undefined") {
+            loadMapping(entityName);
+        }
+        return _mappings[entityName];
     }
 
     /**
@@ -139,12 +108,98 @@ jQuery.sap.declare("oui5lib.mapping");
      */
     function mappingLoaded(data, props) {
         if (typeof data === "object") {
-            if (props !== undefined && typeof props.entity === "string") {
-                mappings[props.entity] = data;
+            if (data.entity !== undefined) {
+                procPropertyArray(data.entity, true);
             }
+            if (data.request !== undefined) {
+                var requestDefaults = data.request.defaults;
+                for (var requestName in data.request) {
+                    if (requestName === "defaults") {
+                        continue;
+                    }
+                    var requestDef = data.request[requestName];
+                    if (requestDefaults !== undefined) {
+                        setRequestDefaults(requestDef, requestDefaults);
+                    }
+                    if (requestDef.params !== undefined) {
+                        procPropertyArray(requestDef.params);
+                    }
+                }
+            }
+            _mappings[props.entity] = data;
         }
     }
 
+    function setRequestDefaults(requestDef, requestDefaults) {
+        var defaultKeys = ["protocol", "host"];
+        defaultKeys.forEach(function(key) {
+            if (requestDef[key] === undefined) {
+                if (requestDefaults[key] !== undefined) {
+                    requestDef[key] = requestDefaults[key];
+                }
+            }
+        });
+        if (typeof requestDef.method === "string" &&
+            ["GET", "POST"].indexOf(requestDef.method) > -1) {
+            return;
+        }
+        requestDef.method = "GET";
+    }
+    
+    function procPropertyArray(propertyDefs, isEntityProp) {
+        if (propertyDefs === undefined) {
+            return;
+        }
+        if (typeof isEntityProp !== "boolean") {
+            isEntityProp = false;
+        }
+
+        propertyDefs.forEach(function(propertyDef) {
+            setPropertyDefaults(propertyDef);
+            if (isEntityProp) {
+                setEntityPropertyDefaults(propertyDef);
+            }
+            switch(propertyDef.type) {
+            case "array":
+                procPropertyArray(propertyDef.arrayItem);
+                break;
+            case "object":
+                procPropertyArray(propertyDef.objectItem);
+                break;
+            }
+        });
+    }
+
+    function setPropertyDefaults(propertyDef) {
+        if (typeof propertyDef.type === "undefined") {
+            propertyDef.type = "string";
+        }
+        if (typeof propertyDef.required !== "boolean") {
+            propertyDef.required = false;
+        }
+    }
+
+    function setEntityPropertyDefaults(propertyDef) {
+        var tests = [];
+        if (typeof propertyDef.validate !== "undefined" &&
+            propertyDef.validate instanceof Array) {
+           tests = propertyDef.validate;
+        }
+        if (propertyDef.required) {
+            tests.push("required");
+        }
+        if (tests.length > 0) {
+            propertyDef.validate = tests;
+        }
+        
+        if (typeof propertyDef.i18n === "undefined") {
+            propertyDef.i18n = {};
+        }
+        if (typeof propertyDef.ui5 === "undefined") {
+            propertyDef.ui5 = {};
+        }
+    }
+    
     var mapping = oui5lib.namespace("mapping");
     mapping.getPrimaryKey = getPrimaryKey;
     mapping.getPropertyDefinitions = getPropertyDefinitions;

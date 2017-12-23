@@ -13,18 +13,20 @@ describe("mapping", function() {
     });
 
     it("should return first level property definition", function() {
-        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity", "id");
+        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity",
+                                                         "id");
         expect(prop.name).toEqual("id");
         expect(prop.type).toEqual("int");
     });
 
     it("should return second level property definition", function() {
-        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity", "subkeys/a");
+        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity",
+                                                         "subkeys/a");
         expect(prop.name).toEqual("a");
         expect(prop.type).toEqual("string");
     });
 
-    it("should return collection property definition", function() {
+    it("should return array property definition", function() {
         var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity", "items/quantity");
         expect(prop.name).toEqual("quantity");
         expect(prop.type).toEqual("int");

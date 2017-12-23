@@ -10,8 +10,12 @@
         }
     ],
     "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:3000"
+        },
         "getStatuses": {
-            "url": "getStatuses",
+            "pathname": "getStatuses",
             "method": "GET"
         }
     }

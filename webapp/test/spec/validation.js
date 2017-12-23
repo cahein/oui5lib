@@ -66,16 +66,35 @@ describe("validation", function() {
         expect(oui5lib.validation.maxLength("abcde", 6)).toBe(true);
     });
 
+    it("should test the minimum value", function() {
+        expect(oui5lib.validation.min("a3", 4)).toBe(false);
+        expect(oui5lib.validation.min(3, 4)).toBe(false);
+        expect(oui5lib.validation.min(4, 4)).toBe(true);
+        expect(oui5lib.validation.min(5, 4)).toBe(true);
+    });
+    it("should test the maximum value", function() {
+        expect(oui5lib.validation.max(3, 8)).toBe(true);
+        expect(oui5lib.validation.max(8, 8)).toBe(true);
+        expect(oui5lib.validation.max(10, 8)).toBe(false);
+        expect(oui5lib.validation.max("b10", 8)).toBe(false);
+    });
+
     it("should validate an object depending on the parameter definitions of the mapping", function() {
         var paramDefs = [
             {
                 "name": "userId",
-                "required": true
+                "required": true,
+                "type": "string",
+                "validate": [
+                    "required"
+                ]
             },
             {
                 "name": "persNr",
                 "required": true,
+                "type": "string",
                 "validate": [
+                    "required",
                     "numbersOnly",
                     "length_8"
                 ]
@@ -83,27 +102,32 @@ describe("validation", function() {
             {
                 "name": "name",
                 "required": true,
+                "type": "string",
                 "validate": [
+                    "required",
                     "hasLetters"
                 ]
             },
             {
                 "name": "email",
+                "required": false,
                 "type": "email",
                 "validate": [
-                    "validEmail"
+                    "email"
                 ]
             },
             {
                 "name": "emailActive",
+                "required": false,
                 "type": "boolean",
                 "default": false
             },
             {
                 "name": "sms",
+                "required": false,
                 "type": "phone",
                 "validate": [
-                    "validPhone"
+                    "phone"
                 ]
             },
             {
@@ -114,6 +138,7 @@ describe("validation", function() {
             {
                 "name": "role",
                 "required": true,
+                "type": "string",
                 "default": "user",
                 "allowedValues": ["user", "administrator"]
             },
@@ -130,10 +155,16 @@ describe("validation", function() {
                 "collectionItem": [
                     {
                         "name": "a",
-                        "required": true
+                        "required": true,
+                        "type": "string",
+                        "validate": [
+                            "required"
+                        ]
                     },
                     {
-                        "name": "b"
+                        "name": "b",
+                        "required": false,
+                        "type": "string"
                     }
                 ]
             },
@@ -144,6 +175,7 @@ describe("validation", function() {
                 "objectItem": [
                     {
                         "name": "saveUser",
+                        "required": false,
                         "type": "boolean",
                         "default": false
                     }
@@ -186,7 +218,7 @@ describe("validation", function() {
         msgs = oui5lib.validation.validateData(userData, paramDefs);
         expect(msgs.length).toEqual(3);
         expect(msgs[0]).toEqual("missing:userId");
-        expect(msgs[1]).toEqual("notAllowed:roles");
+        expect(msgs[1]).toEqual("notAllowed:roles:maintainer");
         expect(msgs[2]).toEqual("missing:a");
 
         userData.userId = "ab34uni";

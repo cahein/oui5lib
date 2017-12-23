@@ -4,18 +4,13 @@ jQuery.sap.declare("oui5lib.validation");
 
 /** @namespace oui5lib.validation */
 (function() {
-    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-
-    var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    var timeRegex = /^\d{2}:\d{2}:\d{2}$/;
-    var phoneRegex = /^0{2}[1-9][\d]*$/;
     var msgs;    
 
     /**
      * Validate data against entity definition provided by the mapping.
      * @memberof oui5lib.validation
      * @param {object} data The data to be validated.
-     * @param {object} propertyDefinitions The definition of properties.
+     * @param {object} propertyDefinitions The definition of properties from the mapping.
      * @returns {array} The list of error messages. May be empty.
      */
     function validateData(data, propertyDefinitions, newValidation) {
@@ -27,118 +22,147 @@ jQuery.sap.declare("oui5lib.validation");
         }
         
         for (var i = 0, s = propertyDefinitions.length; i < s; i++) {
-            var paramDef = propertyDefinitions[i];
-            var paramName = paramDef.name;
+            var propDef = propertyDefinitions[i];
+            var propName = propDef.name;
 
-            switch (paramDef.type) {
+            switch (propDef.type) {
             case "collection":
-                handleCollection(data, paramName, paramDef, msgs);
+                handleCollection(data[propName], propDef, msgs);
                 continue;
             case "object":
-                handleObject(data, paramName, paramDef, msgs);
+                if (typeof data[propName] === "object") {
+                    validateData(data[propName], propDef.objectItem, false);
+                } else {
+                    if (propDef.required) {
+                        msgs.push("missing:" + propName);
+                    }
+                }
                 continue;
             }
-            var paramValue = null;
-            if (typeof data[paramName] !== "undefined") {
-                paramValue = data[paramName];
-            } else if (typeof paramDef.default !== "undefined") {
-                paramValue = paramDef.default;
-            }
             
+            var propValue = null;
+            if (typeof data[propName] !== "undefined") {
+                propValue = data[propName];
+            } else if (typeof propDef.default !== "undefined") {
+                propValue = propDef.default;
+            }
+
             // required
-            var isRequired = false;
-            if (typeof paramDef.required === "boolean") {
-                isRequired = paramDef.required;
-            }
-            if (isRequired) {
-                if (paramValue === null ||
-                    (typeof paramValue === "string" && isBlank(paramValue))) {
-                    msgs.push("missing:" + paramName);
+            if (propDef.required) {
+                if (propValue === null ||
+                    (typeof propValue === "string" && isBlank(propValue))) {
+                    msgs.push("missing:" + propName);
                     continue;
                 }
             }
-
-            // default type is 'string'
-            var type = "string";
-            if (typeof paramDef.type !== "undefined") {
-                type = paramDef.type;
-            }
-
-            if (isRequired || paramValue !== null) {
-                switch(type) {
-                case "string":
-                    if (typeof paramValue !== "string") {
-                        msgs.push("wrongType:" + paramName);
-                    }
-                    break;
-                case "Date":
-                    if (!(paramValue instanceof Date)) {
-                        msgs.push("wrongType:" + paramName);
-                        continue;
-                    }
-                    break;
-                case "int":
-                    if (typeof paramValue === "string") {
-                        if (parseInt(paramValue)) {
-                            paramValue = parseInt(paramValue);
-                        }
-                    }
-                    if (typeof paramValue !== "number") {
-                        msgs.push("wrongType:" + paramName);
-                    }
-                    break;
-                case "boolean":
-                    if (typeof paramValue !== "boolean") {
-                        if (!(paramValue instanceof Boolean)) {
-                            msgs.push("wrongType:" + paramName);
-                            continue;
-                        }
-                    }
-                    break;
-                case "email":
-                case "phone":
-                    
+            // wrong type
+            if (propDef.required || propValue !== null) {
+                if (hasWrongType(propDef.type, propValue)) {
+                    msgs.push("wrongType:" + propName);
+                    continue;
                 }
             }
-            
             // run validation tests
-            var tests = null;
-            if (typeof paramDef.validate !== "undefined" &&
-                paramDef.validate instanceof Array) {
-                tests = paramDef.validate;
-            }
-            if (tests !== null) {
-                if (!this.isValid(paramValue, tests)) {
-                    msgs.push("invalid:" + paramName);
+            if (propDef.validate !== undefined &&
+                propDef.validate instanceof Array) {
+                if (!isValid(propValue, propDef.validate)) {
+                    msgs.push("invalid:" + propName);
                     continue;
                 }
             }
-
             // allowedValues
-            if (typeof paramDef.allowedValues !== "undefined") {
-                var allowedValues = paramDef.allowedValues;
-                if (allowedValues.indexOf(paramValue) === -1) {
-                    msgs.push("notAllowed:" + paramName);
+            if (typeof propDef.allowedValues !== "undefined") {
+                var allowedValues = propDef.allowedValues;
+                if (!isValueAllowed(allowedValues, propValue)) {
+                    msgs.push("notAllowed:" + propName);
                     continue;
                 }
             }
         }
         return msgs;
     }
+
+    function isValueAllowed(allowedValues, value) {
+        if (allowedValues.indexOf(value) === -1) {
+            return false;
+        }
+        return true;
+    }
+
+    function hasWrongType(type, value) {
+        switch(type) {
+        case "string":
+            if (typeof value !== "string") {
+                return true;
+            }
+            break;
+        case "int":
+            if (typeof value === "string") {
+                if (parseInt(value)) {
+                    value = parseInt(value);
+                }
+            }
+            if (typeof value !== "number") {
+                return true;
+            }
+            break;
+        case "boolean":
+            if (typeof value !== "boolean") {
+                if (!(value instanceof Boolean)) {
+                    return true;
+                }
+            }
+            break;
+        case "Date":
+            if (!(value instanceof Date)) {
+                return true;
+            }
+            break;
+        case "email":
+        case "phone":
+            break;
+        }
+        return false;
+    }
+
+    function handleCollection(data, propDef, msgs) {
+        if (data instanceof Array && data.length > 0) {
+            if (typeof propDef.collectionItem !== "undefined") {
+                var collectionDefs = propDef.collectionItem;
+                // an array of objects
+                data.forEach(function(item) {
+                    validateData(item, collectionDefs, false);
+                });
+            } else {
+                // an array of strings
+                if (typeof propDef.allowedValues !== "undefined") {
+                    var allowedValues = propDef.allowedValues;
+                    data.forEach(function(value) {
+                        if (!isValueAllowed(allowedValues, value)) {
+                            msgs.push("notAllowed:" + propDef.name + ":" + value);
+                        }
+                    });
+                }
+            }
+        } else {
+            if (propDef.required) {
+                msgs.push("missing:" + propDef.name);
+            }
+        }
+    }
+    
     
     /**
-     * Test validity of value against a list of tests.
+     * Test validity of value against a list of constraints.
      * @memberof oui5lib.validation
-     * @param vlue The value to be tested.
-     * @param {array} tests The tests to be run.
+     * @param value The value to be validated.
+     * @param {array} tests The list of contraints.
      * @returns {boolean} valid or not
      */
-    function isValid(vlue, tests) {
+    function isValid(value, tests) {
         var valid = true;
-        if (tests && tests.length > 0) {
-            for (var i = 0, s = tests.length; i < s; i++) {
-                var test = tests[i];
-
+        if (tests instanceof Array && tests.length > 0) {
+            tests.forEach(function(test) {
                 var match = test.match(/([a-zA-Z]+)_(\d+)/);
                 var number = null;
                 if (match !== null && match.length === 3) {
@@ -147,192 +171,205 @@ jQuery.sap.declare("oui5lib.validation");
                 }
                 switch (test) {
                 case "required":
-                    if (typeof vlue === "undefined" || isBlank(vlue)) {
+                    if (typeof value === "undefined" || isBlank(value)) {
                         valid = false;
                     }
                     break;
-                case "numbersOnly":
-                    if (!numbersOnly(vlue)) {
+                case "minimum":
+                    if (!min(value, number)) {
                         valid = false;
                     }
                     break;
-                case "min":
-                    if (!min(vlue, number)) {
-                        valid = false;
-                    }
-                    break;
-                case "max":
-                    if (!max(vlue, number)) {
-                        valid = false;
-                    }
-                    break;
-                case "hasLetters":
-                    if (!hasLetters(vlue)) {
+                case "maximum":
+                    if (!max(value, number)) {
                         valid = false;
                     }
                     break;
                 case "length":
-                    if (!verifyLength(vlue, number)) {
+                    if (!verifyLength(value, number)) {
                         valid = false;
                     }
                     break;
                 case "minLength":
-                    if (!minLength(vlue, number)) {
+                    if (!minLength(value, number)) {
                         valid = false;
                     }
                     break;
                 case "maxLength":
-                    if (!maxLength(vlue, number)) {
+                    if (!maxLength(value, number)) {
                         valid = false;
                     }
                     break;
-                case "validEmail":
-                    if (!isBlank(vlue)) {
-                        if (!custom("email", vlue)) {
+                case "numbersOnly":
+                    if (!isBlank(value)) {
+                        if (!numbersOnly(value)) {
                             valid = false;
                         }
                     }
                     break;
-                case "validPhone":
-                    if (!(isBlank(vlue))) {
-                        if (!custom("phone", vlue)) {
+                case "noNumbers":
+                    if (!isBlank(value)) {
+                        if (!noNumbers(value)) {
+                            valid = false;
+                        }
+                    }
+                    break;
+                case "containsLetters":
+                    if (!(isBlank(value))) {
+                        if (!hasLetters(value)) {
+                            valid = false;
+                        }
+                    }
+                    break;
+                case "email":
+                case "phone":
+                    if (!(isBlank(value))) {
+                        if (!custom(test, value)) {
                             valid = false;
                         }
                     }
                     break;
                 }
-            }
+            });
         }
         return valid;
     }
     
     /**
-     * Custom validations. Currently validates email, phone.
+     * Custom regular expression validations. Currently validates email, phone.
      * @param {string} fnme Available: 'email', 'phone'
-     * @param {string} vlue The value to be tested.
+     * @param {string} value The value to be tested.
      * @returns {boolean}
      */
-    function custom(fnme, vlue) {
+    function custom(fnme, value) {
         var regex;
 
         switch(fnme) {
         case "email":
-            regex = emailRegex;
+            regex = oui5lib.configuration.getEmailRegex();
             break;
         case "phone":
-            regex = getPhoneRegex();
+            regex = oui5lib.configuration.getPhoneRegex();
             break;
         }
-        return regex.test(vlue);
+        return regex.test(value);
     }
 
     /**
      * Tests if value is a valid date. Default pattern: YYYY-MM-DD
      * @memberof oui5lib.validation
-     * @param vlue The value to be validated.
+     * @param value The value to be validated.
      * @param {string} regex The regular expression to validate against.
      * @returns {boolean}
      */
-    function isValidDateString(vlue, regex) {
+    function isValidDateString(value, regex) {
         if (!(regex instanceof RegExp)) {
-            regex = getDateRegex();
+            regex = oui5lib.configuration.getDateRegex();
         }
-        return regex.test(vlue);
+        return regex.test(value);
     }
 
     /**
      * Tests if value is a valid time string. Default pattern: HH:mm:ss
      * @memberof oui5lib.validation
-     * @param {string} vlue The value to be validated.
+     * @param {string} value The value to be validated.
      * @param {string} regex The regular expression to validate against.
      * @returns {boolean}
      */
-    function isValidTimeString(vlue, regex) {
+    function isValidTimeString(value, regex) {
         if (!(regex instanceof RegExp)) {
-            regex = getTimeRegex();
+            regex = oui5lib.configuration.getTimeRegex();
         }
-        return regex.test(vlue);
+        return regex.test(value);
     }
     
     /**
-     * Tests if value contains only digits.
-     * @memberof oui5lib.validation
-     * @param vlue The value to be tested.
-     * @returns {boolean}
-     */
-    function numbersOnly(vlue) {
-        if (!isBlank(vlue)) {
-            var regex = /^[\d]+$/;
-            return regex.test(vlue);
-        }
-        return true;
-    }
-
-    /**
      * Tests if an integer or float has a certain minimum value.
      * @memberof oui5lib.validation
-     * @param {string|number} vlue The number to be tested.
+     * @param {string|number} value The number to be tested.
      * @param {int} number The minimum.
      * @returns {boolean}
      */
-    function min(vlue, number) {
-        if (isNaN(vlue)) {
-            return false;
+    function min(value, number) {
+        value = getFloatValue(value);
+        if (value) {
+            if (value >= number) {
+                return true;
+            }
         }
-
-        if (typeof vlue === "string") {
-            vlue = parseFloat(vlue);
-        }
-        if (vlue < number) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     /**
      * Tests if an integer or float has a certain maximum value.
      * @memberof oui5lib.validation
-     * @param {string|number} vlue The number to be tested.
+     * @param {string|number} value The number to be tested.
      * @param {int} number The minimum.
      * @returns {boolean}
      */
-    function max(vlue, number) {
-        if (isNaN(vlue)) {
+    function max(value, number) {
+        value = getFloatValue(value);
+        if (value) {
+            if (value <= number) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getFloatValue(value) {
+        if (isNaN(value)) {
             return false;
         }
         
-        if (typeof vlue === "string") {
-            vlue = parseFloat(vlue);
+        if (typeof value === "string") {
+            value = parseFloat(value);
         }
-        if (vlue > number) {
-            return false;
-        }
-        return true;
+        return value;
+    }
+    
+    /**
+     * Tests if value contains only digits.
+     * @memberof oui5lib.validation
+     * @param value The value to be tested.
+     * @returns {boolean}
+     */
+    function numbersOnly(value) {
+        var regex = /^[\d]+$/;
+        return regex.test(value);
     }
 
     /**
-     * Tests if value contains any letters.
+     * Tests if value contains no digits.
      * @memberof oui5lib.validation
-     * @param vlue The value to be tested.
+     * @param value The value to be tested.
      * @returns {boolean}
      */
-    function hasLetters(vlue) {
-        if (!isBlank(vlue)) {
-            var regex = /[A-Za-z]+/;
-            return regex.test(vlue);
-        }
-        return true;
+    function noNumbers(value) {
+        var regex = /^[^\d]+$/;
+        return regex.test(value);
+    }
+
+/**
+     * Tests if value contains any letters.
+     * @memberof oui5lib.validation
+     * @param value The value to be tested.
+     * @returns {boolean}
+     */
+    function hasLetters(value) {
+        var regex = /[A-Za-z]+/;
+        return regex.test(value);
     }
 
     /**
      * Tests if a string has a certain length.
      * @memberof oui5lib.validation
-     * @param {string|array} vlue The string or array to be tested.
+     * @param {string|array} value The string or array to be tested.
      * @param {int} number The required length.
      * @returns {boolean}
      */
-    function verifyLength(vlue, number) {
-        if (vlue.length !== number) {
+    function verifyLength(value, number) {
+        if (value.length !== number) {
             return false;
         }
         return true;
@@ -341,12 +378,12 @@ jQuery.sap.declare("oui5lib.validation");
     /**
      * Tests if a string has a certain minimum length.
      * @memberof oui5lib.validation
-     * @param {string|array} vlue The string or array to be tested.
+     * @param {string|array} value The string or array to be tested.
      * @param {int} number The length minimum.
      * @returns {boolean}
      */
-    function minLength(vlue, number) {
-        if (vlue.length < number) {
+    function minLength(value, number) {
+        if (value.length < number) {
             return false;
         }
         return true;
@@ -355,12 +392,12 @@ jQuery.sap.declare("oui5lib.validation");
     /**
      * Tests if a string is not longer than a certain maximum length.
      * @memberof oui5lib.validation
-     * @param {string|array} vlue The string or array to be tested.
+     * @param {string|array} value The string or array to be tested.
      * @param {int} number The length maximum.
      * @returns {boolean}
      */
-    function maxLength(vlue, number) {
-        if (vlue.length > number) {
+    function maxLength(value, number) {
+        if (value.length > number) {
             return false;
         }
         return true;
@@ -369,91 +406,20 @@ jQuery.sap.declare("oui5lib.validation");
     /**
      * Tests if value is null or empty.
      * @memberof oui5lib.validation
-     * @param vlue The value to be tested.
+     * @param value The value to be tested.
      * @returns {boolean}
      */
-    function isBlank(vlue) {
-        if (vlue === null || typeof vlue === "undefined") {
+    function isBlank(value) {
+        if (value === null || typeof value === "undefined") {
             return true;
         }
-        for (var i = 0; i < vlue.length; i++) {
-            var c = vlue.charAt(i);
+        for (var i = 0; i < value.length; i++) {
+            var c = value.charAt(i);
             if (c != " " && c != "\n" && c != "\t") {
                 return false;
             }
         }
         return true;
-    }
-
-    function getDateRegex() {
-        var customRegex = oui5lib.configuration.getRegex("date");
-        if (customRegex !== null &&
-            customRegex instanceof RegExp) {
-            return customRegex;
-        }
-        return dateRegex;
-    }
-
-    function getTimeRegex() {
-        var customRegex = oui5lib.configuration.getRegex("time");
-        if (customRegex !== null &&
-            customRegex instanceof RegExp) {
-            return customRegex;
-        }
-        return timeRegex;
-    }
-
-    function getPhoneRegex() {
-        var customRegex = oui5lib.configuration.getRegex("phone");
-        if (customRegex !== null &&
-            customRegex instanceof RegExp) {
-            return customRegex;
-        }
-        return phoneRegex;
-    }
-
-    function handleObject(data, paramName, paramDef, msgs) {
-        var object = data[paramName];
-        if (typeof object === "object") {
-            var objectItem = paramDef.objectItem;
-            validateData(object, objectItem, false);
-        } else {
-            if (typeof paramDef.required === "boolean") {
-                if (paramDef.required) {
-                    msgs.push("missing:" + paramName);
-                }
-            }
-        }
-    }
-
-    function handleCollection(data, paramName, paramDef, msgs) {
-        var collection = data[paramName];
-        var i, s;
-        if (collection instanceof Array
-            && collection.length > 0) {
-            if (typeof paramDef.collectionItem !== "undefined") {
-                var collectionItem = paramDef.collectionItem;
-                for (i = 0, s = collection.length; i < s; i++) {
-                    validateData(collection[i], collectionItem, false);
-                }
-            } else {
-                if (typeof paramDef.allowedValues !== "undefined") {
-                    var allowedValues = paramDef.allowedValues;
-                    for (i = 0, s = collection.length; i < s; i++) {
-                        if (allowedValues.indexOf(collection[i]) === -1) {
-                            msgs.push("notAllowed:" + paramName);
-                            continue;
-                        }
-                    }
-                }
-            }
-        } else {
-            if (typeof paramDef.required === "boolean") {
-                if (paramDef.required) {
-                    msgs.push("missing:" + paramName);
-                }
-            }
-        }
     }
     
     var validation = oui5lib.namespace("validation");
@@ -469,6 +435,8 @@ jQuery.sap.declare("oui5lib.validation");
     validation.verifyLength = verifyLength;
     validation.minLength = minLength;
     validation.maxLength = maxLength;
+    validation.min = min;
+    validation.max = max;
     validation.custom = custom;
 }());
 

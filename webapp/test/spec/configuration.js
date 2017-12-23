@@ -28,16 +28,16 @@ describe("configuration", function() {
     });
 
     it("should return regexes defined in the configuration", function() {
-        var dateRegex = oui5lib.configuration.getRegex("date");
+        var dateRegex = oui5lib.configuration.getDateRegex();
         expect(dateRegex instanceof RegExp).toBe(true);
 
-        var timeRegex = oui5lib.configuration.getRegex("time");
+        var timeRegex = oui5lib.configuration.getTimeRegex();
         expect(timeRegex instanceof RegExp).toBe(true);
 
-        var phoneRegex = oui5lib.configuration.getRegex("phone");
+        var phoneRegex = oui5lib.configuration.getPhoneRegex();
         expect(phoneRegex instanceof RegExp).toBe(true);
 
-        var emailRegex = oui5lib.configuration.getRegex("email");
-        expect(emailRegex).toBe(null);
+        var emailRegex = oui5lib.configuration.getEmailRegex();
+        expect(emailRegex instanceof RegExp).toBe(true);
     });
 });

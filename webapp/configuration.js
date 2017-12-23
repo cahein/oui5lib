@@ -120,6 +120,14 @@ jQuery.sap.declare("oui5lib.configuration");
         return config.mappingDirectory;
     }
 
+    function getEnvironment() {
+        var config = getConfigData();
+        if (config.environment === undefined) {
+            return "production";
+        }
+        return config.environment;
+    }
+
     function getUserProfileUrl() {
         var userProfileUrl = getConfigData("userProfileUrl");
         if (userProfileUrl === "undefined") {
@@ -145,7 +153,48 @@ jQuery.sap.declare("oui5lib.configuration");
         }
         return null;
     }
-        
+
+    var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    var timeRegex = /^\d{2}:\d{2}:\d{2}$/;
+    var phoneRegex = /^0{2}[1-9][\d]*$/;
+    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+
+    function getDateRegex() {
+        var customRegex = getValidationRegex("date");
+        if (customRegex !== null &&
+            customRegex instanceof RegExp) {
+            return customRegex;
+        }
+        return dateRegex;
+    }
+
+    function getTimeRegex() {
+        var customRegex = getValidationRegex("time");
+        if (customRegex !== null &&
+            customRegex instanceof RegExp) {
+            return customRegex;
+        }
+        return timeRegex;
+    }
+
+    function getPhoneRegex() {
+        var customRegex = getValidationRegex("phone");
+        if (customRegex !== null &&
+            customRegex instanceof RegExp) {
+            return customRegex;
+        }
+        return phoneRegex;
+    }
+
+    function getEmailRegex() {
+        var customRegex = getValidationRegex("email");
+        if (customRegex !== null &&
+            customRegex instanceof RegExp) {
+            return customRegex;
+        }
+        return emailRegex;
+    }
+
     /**
      * Get config data. Loads configuration file, if necessary.
      * @memberof oui5lib.configuration
@@ -166,7 +215,12 @@ jQuery.sap.declare("oui5lib.configuration");
 
     configuration.getLogLevel = getLogLevel;
     configuration.getMappingDir = getMappingDir;
-    configuration.getRegex = getValidationRegex;
+    configuration.getEnvironment = getEnvironment;
+
+    configuration.getDateRegex = getDateRegex;
+    configuration.getTimeRegex = getTimeRegex;
+    configuration.getPhoneRegex = getPhoneRegex;
+    configuration.getEmailRegex = getEmailRegex;
 
     configuration.getComponent = getComponent;
     configuration.getUserProfileUrl = getUserProfileUrl;
