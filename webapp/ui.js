@@ -95,13 +95,16 @@ jQuery.sap.declare("oui5lib.ui");
      */
     function checkDatePicker(datePicker) {
         var value = datePicker.getValue();
+        oui5lib.logger.debug( "date field value: " + value);
         if (value === null) {
             return false;
         }
-        oui5lib.logger.debug( "date field value: " + value);
-
+        var dateValue = datePicker.getDateValue();
         var oDate = new Date(value);
-        if (oDate == "Invalid Date") {
+        if (oDate == "Invalid Date" ||
+            !(oDate.getFullYear() === dateValue.getFullYear() &&
+              oDate.getMonth() === dateValue.getMonth() &&
+              oDate.getDate() === dateValue.getDate())) {
             datePicker.setValueState("Warning");
             return false;
         } else {
