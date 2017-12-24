@@ -26,8 +26,8 @@ jQuery.sap.declare("oui5lib.validation");
             var propName = propDef.name;
 
             switch (propDef.type) {
-            case "collection":
-                handleCollection(data[propName], propDef, msgs);
+            case "array":
+                handleArray(data[propName], propDef, msgs);
                 continue;
             case "object":
                 if (typeof data[propName] === "object") {
@@ -125,13 +125,13 @@ jQuery.sap.declare("oui5lib.validation");
         return false;
     }
 
-    function handleCollection(data, propDef, msgs) {
+    function handleArray(data, propDef, msgs) {
         if (data instanceof Array && data.length > 0) {
-            if (typeof propDef.collectionItem !== "undefined") {
-                var collectionDefs = propDef.collectionItem;
+            if (typeof propDef.arrayItem !== "undefined") {
+                var arrayDefs = propDef.arrayItem;
                 // an array of objects
                 data.forEach(function(item) {
-                    validateData(item, collectionDefs, false);
+                    validateData(item, arrayDefs, false);
                 });
             } else {
                 // an array of strings
@@ -160,6 +160,12 @@ jQuery.sap.declare("oui5lib.validation");
      * @returns {boolean} valid or not
      */
     function isValid(value, tests) {
+        if (tests.indexOf("required") > -1) {
+            if ((typeof value === "string") && isBlank(value)) {
+                return false;
+            }
+        }
+
         var valid = true;
         if (tests instanceof Array && tests.length > 0) {
             tests.forEach(function(test) {
@@ -169,12 +175,24 @@ jQuery.sap.declare("oui5lib.validation");
                     test = match[1];
                     number = parseInt(match[2]);
                 }
-                switch (test) {
-                case "required":
-                    if (typeof value === "undefined" || isBlank(value)) {
-                        valid = false;
+
+                if (value instanceof Date) {
+                    switch (test) {
+                    case "future":
+                        if (!isFuture(value)) {
+                            valid = false;
+                        }
+                        break;
+                    case "past":                        
+                        if (!isPast(value)) {
+                            valid = false;
+                        }
+                        break;
                     }
-                    break;
+                    return valid;
+                }
+                
+                switch (test) {
                 case "minimum":
                     if (!min(value, number)) {
                         valid = false;
@@ -254,33 +272,19 @@ jQuery.sap.declare("oui5lib.validation");
         }
         return regex.test(value);
     }
-
-    /**
-     * Tests if value is a valid date. Default pattern: YYYY-MM-DD
-     * @memberof oui5lib.validation
-     * @param value The value to be validated.
-     * @param {string} regex The regular expression to validate against.
-     * @returns {boolean}
-     */
-    function isValidDateString(value, regex) {
-        if (!(regex instanceof RegExp)) {
-            regex = oui5lib.configuration.getDateRegex();
+    function isFuture(value) {
+        var now = new Date();
+        if (now.getTime() < value.getTime()) {
+            return true;
         }
-        return regex.test(value);
+        return false;
     }
-
-    /**
-     * Tests if value is a valid time string. Default pattern: HH:mm:ss
-     * @memberof oui5lib.validation
-     * @param {string} value The value to be validated.
-     * @param {string} regex The regular expression to validate against.
-     * @returns {boolean}
-     */
-    function isValidTimeString(value, regex) {
-        if (!(regex instanceof RegExp)) {
-            regex = oui5lib.configuration.getTimeRegex();
+    function isPast(value) {
+        var now = new Date();
+        if (now.getTime() > value.getTime()) {
+            return true;
         }
-        return regex.test(value);
+        return false;
     }
     
     /**
@@ -410,7 +414,7 @@ jQuery.sap.declare("oui5lib.validation");
      * @returns {boolean}
      */
     function isBlank(value) {
-        if (value === null || typeof value === "undefined") {
+        if (typeof value === "undefined" || value === null) {
             return true;
         }
         for (var i = 0; i < value.length; i++) {
@@ -421,22 +425,53 @@ jQuery.sap.declare("oui5lib.validation");
         }
         return true;
     }
+
+    
+    /**
+     * Tests if value is a valid date. Default pattern: YYYY-MM-DD
+     * @memberof oui5lib.validation
+     * @param value The value to be validated.
+     * @param {string} regex The regular expression to validate against.
+     * @returns {boolean}
+     */
+    function isValidDateString(value, regex) {
+        if (!(regex instanceof RegExp)) {
+            regex = oui5lib.configuration.getDateRegex();
+        }
+        return regex.test(value);
+    }
+
+    /**
+     * Tests if value is a valid time string. Default pattern: HH:mm:ss
+     * @memberof oui5lib.validation
+     * @param {string} value The value to be validated.
+     * @param {string} regex The regular expression to validate against.
+     * @returns {boolean}
+     */
+    function isValidTimeString(value, regex) {
+        if (!(regex instanceof RegExp)) {
+            regex = oui5lib.configuration.getTimeRegex();
+        }
+        return regex.test(value);
+    }
+
     
     var validation = oui5lib.namespace("validation");
     validation.validateData = validateData;
     validation.isValid = isValid;
+    validation.isValidDate = isValidDateString;
+    validation.isValidTime = isValidTimeString;
     validation.isBlank = isBlank;
 
     // only for testing
     validation.numbersOnly = numbersOnly;
     validation.hasLetters = hasLetters;
-    validation.isValidDate = isValidDateString;
-    validation.isValidTime = isValidTimeString;
     validation.verifyLength = verifyLength;
     validation.minLength = minLength;
     validation.maxLength = maxLength;
     validation.min = min;
     validation.max = max;
     validation.custom = custom;
+
 }());
 

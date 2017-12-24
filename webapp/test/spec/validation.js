@@ -145,14 +145,14 @@ describe("validation", function() {
             {
                 "name": "roles",
                 "required": true,
-                "type": "collection",
+                "type": "array",
                 "allowedValues": ["user", "administrator"]
             },
             {
                 "name": "other",
                 "required": true,
-                "type": "collection",
-                "collectionItem": [
+                "type": "array",
+                "arrayItem": [
                     {
                         "name": "a",
                         "required": true,

@@ -72,7 +72,7 @@
             "name": "email",
             "required": true,
             "validate": [
-                "validEmail"
+                "email"
             ],
             "ui5": {
                 "control": "sap.m.Input",
@@ -85,7 +85,7 @@
         {
             "name": "phone",
             "validate": [
-                "validPhone"
+                "phone"
             ],
             "ui5": {
                 "control": "sap.m.Input"

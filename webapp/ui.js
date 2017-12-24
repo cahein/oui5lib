@@ -25,7 +25,7 @@ jQuery.sap.declare("oui5lib.ui");
             oui5lib.logger.debug( "error: " + error[0] + " : " + error[1]);
             var fnme = error[1];
             var control = view.byId(modelName + "_" + fnme);
-            setControlValueState(control, fnme, false);
+            setControlValueState(control, false);
 
             msgs.push("Invalid: " + error[0] + " " + error[1]);                
         }
@@ -49,21 +49,20 @@ jQuery.sap.declare("oui5lib.ui");
     }
 
     /**
-     * Set or remove the error value state of a control. In case of an Error, the message shown will be the property 'valueStateText'.
+     * Set or remove the error value state of a control.
      * @param {object} control  A sapui control.
-     * @param {string} propertyName The name of the property. It is used for the message to the user.
      * @param {boolean} isValid Is the value valid (true), or not (false).
      */
-    function setControlValueState(control, propertyName, isValid) {
+    function setControlValueState(control, isValid) {
         if (typeof control === "undefined") {
             return;
         }
         
         if (typeof control.setValueState === "function") {
             if (isValid) {
-                control.setValueState(sap.ui.core.ValueState.None);
+                control.setValueState("None");
             } else {
-                control.setValueState(sap.ui.core.ValueState.Error);
+                control.setValueState("Error");
             }
         }
     }
@@ -86,8 +85,6 @@ jQuery.sap.declare("oui5lib.ui");
             }
         }
         comboBox.setValueState("None");
-        var target = comboBox.sId + "/value";
-        oui5lib.messages.removeMessages(target);
     }
 
     /**
@@ -103,16 +100,12 @@ jQuery.sap.declare("oui5lib.ui");
         }
         oui5lib.logger.debug( "date field value: " + value);
 
-        var target = datePicker.sId + "/value";
         var oDate = new Date(value);
         if (oDate == "Invalid Date") {
-            datePicker.setValueState(sap.ui.core.ValueState.Warning);
-            oui5lib.messages.addWarnMessage(
-                oui5lib.util.getI18nText("common.date.invalid"), target);
+            datePicker.setValueState("Warning");
             return false;
         } else {
-            datePicker.setValueState(sap.ui.core.ValueState.None);
-            oui5lib.messages.removeMessages(target);
+            datePicker.setValueState("None");
         }
         return true;
     }
