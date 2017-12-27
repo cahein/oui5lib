@@ -81,10 +81,7 @@
                 "formexample": {
                     "viewName": "formExample"
                 },
-                "mformexample": {
-                    "viewName": "mFormExample"
-                },
-                "simpleformexample": {
+               	"simpleformexample": {
                     "viewName": "simpleFormExample"
                 },
                 "splitApp": {

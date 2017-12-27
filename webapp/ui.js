@@ -1,6 +1,5 @@
 jQuery.sap.require("oui5lib.util");
 jQuery.sap.require("oui5lib.messages");
-jQuery.sap.require("oui5lib.validation");
 jQuery.sap.require("oui5lib.logger");
 
 jQuery.sap.declare("oui5lib.ui");
@@ -95,7 +94,6 @@ jQuery.sap.declare("oui5lib.ui");
      */
     function checkDatePicker(datePicker) {
         var value = datePicker.getValue();
-        oui5lib.logger.debug( "date field value: " + value);
         if (value === null) {
             return false;
         }

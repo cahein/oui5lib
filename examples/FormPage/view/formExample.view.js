@@ -17,7 +17,7 @@ sap.ui.jsview("oum.view.formExample", {
         });
         
         oController.addInput(formContainer, "exampleEntity", "first_name");
-        oController.addFormElement(formContainer, "exampleEntity", "last_name");
+        oController.addInputToLastFormElement(formContainer, "exampleEntity", "last_name");
         
         oController.addInput(formContainer, "exampleEntity", "number");
         oController.addInput(formContainer, "exampleEntity", "integer");

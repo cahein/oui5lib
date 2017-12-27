@@ -83,6 +83,9 @@ jQuery.sap.declare("oui5lib.mapping");
         if (typeof _mappings[entityName] === "undefined") {
             loadMapping(entityName);
         }
+        if(typeof _mappings[entityName] === "undefined") {
+           throw new Error("couldn't load mapping for entity " + entityName);
+        }
         return _mappings[entityName];
     }
 
