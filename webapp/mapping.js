@@ -10,53 +10,52 @@ jQuery.sap.declare("oui5lib.mapping");
     var listHelper = oui5lib.lib.listHelper;
 
     /**
-     * Get the primary key of the specified entity.
+     * Get the primary key of the entity.
      * @memberof oui5lib.mapping
      * @param {string} entityName The name of the entity.
      * @returns {string} The primaryKey property from the mapping.
      */
     function getPrimaryKey(entityName) {
-        return getEntityDefinition(entityName).primaryKey;
+        return getMapping(entityName).primaryKey;
     }
 
-    function getPropertyDefinitions(entityName) {
-        return getEntityDefinition(entityName).entity;
+    function getEntityAttributeSpecs(entityName) {
+        return getMapping(entityName).entity;
     }
     
     /**
-     * Get the definition of a property.
+     * Get the specification of an entity attribute.
      * @memberof oui5lib.mapping
      * @param {string} entityName The name of the entity.
-     * @param {string} propertyPath The path of the property. Separate levels by '/'.
-     * @returns {object} The definition of the property from the mapping.
+     * @param {string} propertyPath The path of the entity attribute. Separate levels by '/'.
+     * @returns {object} The specification from the mapping.
      */
-    function getPropertyDefinition(entityName, propertyPath) {
-        var props = getPropertyDefinitions(entityName);
+    function getEntityAttributeSpec(entityName, propertyPath) {
+        var attributeSpecs = getEntityAttributeSpecs(entityName);
 
-        var keys = propertyPath.split("/");
-        if (keys.length > 1) {
-            var subprops = props;
-            for (var i = 0, s = keys.length; i < s - 1; i++) {
-                var subkey = keys[i];
-
-                subprops = listHelper.getItemByKey(subprops, "name", subkey);
-                if (subprops === null) {
+        var pathLevels = propertyPath.split("/");
+        if (pathLevels.length > 1) {
+            var subPath, attributeSpec;
+            for (var i = 0, s = pathLevels.length; i < s - 1; i++) {
+                subPath = pathLevels[i];
+                attributeSpec = listHelper.getItemByKey(attributeSpecs,
+                                                        "name", subPath);
+                if (attributeSpec === null) {
                     return null;
                 }
-                switch(subprops.type) {
+                switch(attributeSpec.type) {
                 case "object":
-                    subprops = subprops.objectItem;
+                    attributeSpecs = attributeSpec.objectItem;
                     break;
                 case "array":
-                    subprops = subprops.arrayItem;
+                    attributeSpecs = attributeSpec.arrayItem;
                     break;
                 }
             }
-            props = subprops;
-            propertyPath = keys[keys.length - 1];
+            propertyPath = pathLevels[pathLevels.length - 1];
         }
 
-        return listHelper.getItemByKey(props, "name", propertyPath);
+        return listHelper.getItemByKey(attributeSpecs, "name", propertyPath);
     }
     
     /**
@@ -66,8 +65,8 @@ jQuery.sap.declare("oui5lib.mapping");
      * @param {string} requestName The name of the request.
      * @returns {object} The definition of the request from the mapping.
      */
-    function getRequestDefinition(entityName, requestName) {
-        return getEntityDefinition(entityName).request[requestName];
+    function getRequestConfig(entityName, requestName) {
+        return getMapping(entityName).request[requestName];
     }
 
     var _mappings = {};
@@ -79,7 +78,7 @@ jQuery.sap.declare("oui5lib.mapping");
      * @param {string} entityName The name of the entity.
      * @returns {object} The mapping object.
      */
-    function getEntityDefinition(entityName) {
+    function getMapping(entityName) {
         if (typeof _mappings[entityName] === "undefined") {
             loadMapping(entityName);
         }
@@ -106,107 +105,111 @@ jQuery.sap.declare("oui5lib.mapping");
      * Called after the mapping file was loaded.
      * @memberof oui5lib.mapping
      * @inner 
-     * @param {object} data The data being returned by the request.
-     * @param {objects} props The properties linked to the request.
+     * @param {object} mappingData The response JSON parsed into an object.
+     * @param {object} requestProps The properties passed along with the request.
      */
-    function mappingLoaded(data, props) {
-        if (typeof data === "object") {
-            if (data.entity !== undefined) {
-                procPropertyArray(data.entity, true);
+    function mappingLoaded(mappingData, requestProps) {
+        var entityName = requestProps.entity;
+        
+        if (typeof mappingData === "object") {
+            if (mappingData.entity !== undefined &&
+                mappingData.entity instanceof Array) {
+                procArrayOfSpecifications(mappingData.entity, true);
             }
-            if (data.request !== undefined) {
-                var requestDefaults = data.request.defaults;
-                for (var requestName in data.request) {
+            if (mappingData.request !== undefined) {
+                var requestDefaults = mappingData.request.defaults;
+                for (var requestName in mappingData.request) {
                     if (requestName === "defaults") {
                         continue;
                     }
-                    var requestDef = data.request[requestName];
+                    var requestConfig = mappingData.request[requestName];
                     if (requestDefaults !== undefined) {
-                        setRequestDefaults(requestDef, requestDefaults);
+                        setRequestDefaults(requestConfig, requestDefaults);
                     }
-                    if (requestDef.params !== undefined) {
-                        procPropertyArray(requestDef.params);
+                    if (requestConfig.parameters !== undefined &&
+                        requestConfig.parameters instanceof Array) {
+                        procArrayOfSpecifications(requestConfig.parameters);
                     }
                 }
             }
-            _mappings[props.entity] = data;
+            _mappings[entityName] = mappingData;
         }
     }
 
-    function setRequestDefaults(requestDef, requestDefaults) {
-        var defaultKeys = ["protocol", "host"];
-        defaultKeys.forEach(function(key) {
-            if (requestDef[key] === undefined) {
-                if (requestDefaults[key] !== undefined) {
-                    requestDef[key] = requestDefaults[key];
-                }
-            }
-        });
-        if (typeof requestDef.method === "string" &&
-            ["GET", "POST"].indexOf(requestDef.method) > -1) {
+    function procArrayOfSpecifications(specs, isEntityAttr) {
+        if (specs === undefined) {
             return;
         }
-        requestDef.method = "GET";
-    }
-    
-    function procPropertyArray(propertyDefs, isEntityProp) {
-        if (propertyDefs === undefined) {
-            return;
-        }
-        if (typeof isEntityProp !== "boolean") {
-            isEntityProp = false;
+        if (typeof isEntityAttr !== "boolean") {
+            isEntityAttr = false;
         }
 
-        propertyDefs.forEach(function(propertyDef) {
-            setPropertyDefaults(propertyDef);
-            if (isEntityProp) {
-                setEntityPropertyDefaults(propertyDef);
+        specs.forEach(function(spec) {
+            setDefaultProperties(spec);
+            if (isEntityAttr) {
+                setEntityAttributeDefaults(spec);
             }
-            switch(propertyDef.type) {
+            switch(spec.type) {
             case "array":
-                procPropertyArray(propertyDef.arrayItem);
+                procArrayOfSpecifications(spec.arrayItem);
                 break;
             case "object":
-                procPropertyArray(propertyDef.objectItem);
+                procArrayOfSpecifications(spec.objectItem);
                 break;
             }
         });
     }
 
-    function setPropertyDefaults(propertyDef) {
-        if (typeof propertyDef.type === "undefined") {
-            propertyDef.type = "string";
+    function setDefaultProperties(spec) {
+        if (typeof spec.type === "undefined") {
+            spec.type = "string";
         }
-        if (typeof propertyDef.required !== "boolean") {
-            propertyDef.required = false;
+        if (typeof spec.required !== "boolean") {
+            spec.required = false;
         }
     }
 
-    function setEntityPropertyDefaults(propertyDef) {
+    function setEntityAttributeDefaults(attributeSpec) {
         var tests = [];
-        if (typeof propertyDef.validate !== "undefined" &&
-            propertyDef.validate instanceof Array) {
-           tests = propertyDef.validate;
+        if (typeof attributeSpec.validate !== "undefined" &&
+            attributeSpec.validate instanceof Array) {
+           tests = attributeSpec.validate;
         }
-        if (propertyDef.required) {
+        if (attributeSpec.required) {
             tests.push("required");
         }
         if (tests.length > 0) {
-            propertyDef.validate = tests;
+            attributeSpec.validate = tests;
         }
         
-        if (typeof propertyDef.i18n === "undefined") {
-            propertyDef.i18n = {};
+        if (typeof attributeSpec.i18n === "undefined") {
+            attributeSpec.i18n = {};
         }
-        if (typeof propertyDef.ui5 === "undefined") {
-            propertyDef.ui5 = {};
+        if (typeof attributeSpec.ui5 === "undefined") {
+            attributeSpec.ui5 = {};
         }
     }
     
+    function setRequestDefaults(requestConfig, requestDefaults) {
+        var defaultKeys = ["protocol", "host"];
+        defaultKeys.forEach(function(key) {
+            if (requestConfig[key] === undefined) {
+                if (requestDefaults[key] !== undefined) {
+                    requestConfig[key] = requestDefaults[key];
+                }
+            }
+        });
+        if (typeof requestConfig.method === "string" &&
+            ["GET", "POST"].indexOf(requestConfig.method) > -1) {
+            return;
+        }
+        requestConfig.method = "GET";
+    }
+
     var mapping = oui5lib.namespace("mapping");
     mapping.getPrimaryKey = getPrimaryKey;
-    mapping.getPropertyDefinitions = getPropertyDefinitions;
-    mapping.getPropertyDefinition = getPropertyDefinition;
-    mapping.getRequestDefinition = getRequestDefinition;
+    mapping.getEntityAttributeSpecs = getEntityAttributeSpecs;
+    mapping.getEntityAttributeSpec = getEntityAttributeSpec;
+    mapping.getRequestConfiguration = getRequestConfig;
 }());
 

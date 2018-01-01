@@ -1,10 +1,8 @@
 describe("mapping", function() {
     beforeAll(function() {
-//        this.xhr = sinon.useFakeXMLHttpRequest();
     });
 
     afterAll(function() {
-//        this.xhr.restore();
     });
 
     it("should return primary key", function() {
@@ -12,23 +10,24 @@ describe("mapping", function() {
         expect(primaryKey).toEqual("id");
     });
 
-    it("should return first level property definition", function() {
-        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity",
-                                                         "id");
-        expect(prop.name).toEqual("id");
-        expect(prop.type).toEqual("int");
+    it("should return first level attribute specification", function() {
+        var propConf = oui5lib.mapping.getEntityAttributeSpec("exampleEntity",
+                                                              "id");
+        expect(propConf.name).toEqual("id");
+        expect(propConf.type).toEqual("int");
     });
 
-    it("should return second level property definition", function() {
-        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity",
-                                                         "subkeys/a");
-        expect(prop.name).toEqual("a");
-        expect(prop.type).toEqual("string");
+    it("should return second level object attribute specification", function() {
+        var propConf = oui5lib.mapping.getEntityAttributeSpec("exampleEntity",
+                                                              "subkeys/a");
+        expect(propConf.name).toEqual("a");
+        expect(propConf.type).toEqual("string");
     });
 
-    it("should return array property definition", function() {
-        var prop = oui5lib.mapping.getPropertyDefinition("exampleEntity", "items/quantity");
-        expect(prop.name).toEqual("quantity");
-        expect(prop.type).toEqual("int");
+    it("should return array attribute specification", function() {
+        var propConf = oui5lib.mapping.getEntityAttributeSpec("exampleEntity",
+                                                              "items/quantity");
+        expect(propConf.name).toEqual("quantity");
+        expect(propConf.type).toEqual("int");
     });
 });

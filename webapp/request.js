@@ -13,17 +13,17 @@ jQuery.sap.declare("oui5lib.request");
      * @param {string} url The URL of the json to load.
      * @param {function} resolve The function to call if the request
      * is successfully completed. 
-     * @param {object} props Properties to be passed with the request.
+     * @param {object} requestProps Properties to be passed with the request.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      * @param {string} httpVerb GET or POST.
      * @param {string} encodedParams The url-encoded parameters string.
      */
-    function loadJson(url, resolve, props, isAsync, httpVerb, encodedParams) {
-        if (typeof isAsync !== "boolean") {
-            isAsync = true;
-        }
+    function loadJson(url, resolve, requestProps, isAsync, httpVerb, encodedParams) {
         if (typeof httpVerb === "undefined") {
             httpVerb = "GET";
+        }
+        if (typeof isAsync !== "boolean") {
+            isAsync = true;
         }
         if (typeof encodedParams !== "undefined" && httpVerb === "GET") {
             var protocolRegex = /^https?.*/;
@@ -36,7 +36,7 @@ jQuery.sap.declare("oui5lib.request");
         xhr.overrideMimeType("application/json");
         xhr.open(httpVerb, url, isAsync);
         
-        addHandlers(xhr, resolve, props, isAsync);        
+        addHandlers(xhr, resolve, requestProps, isAsync);        
 
         if (httpVerb === "POST") {
             xhr.send(encodedParams);
@@ -89,7 +89,7 @@ jQuery.sap.declare("oui5lib.request");
                                }, isAsync, httpVerb, encodedParams);
     }
     
-    function addHandlers(xhr, resolve, props, isAsync) {
+    function addHandlers(xhr, resolve, requestProps, isAsync) {
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
@@ -100,25 +100,25 @@ jQuery.sap.declare("oui5lib.request");
                         throw new Error("JSON is invalid");
                     }
                     if (typeof resolve === "function") {
-                        resolve(data, props);
+                        resolve(data, requestProps);
                     }
                 } else {
                     oui5lib.event.publishRequestFailureEvent("status",
-                                                             xhr, props);
+                                                             xhr, requestProps);
                 }
             }
         };
         
         xhr.onerror = function() {
             oui5lib.event.publishRequestFailureEvent("error",
-                                                     xhr, props);
+                                                     xhr, requestProps);
         };
 
         if (isAsync) {
             xhr.timeout = 500;
             xhr.ontimeout = function() {
                 oui5lib.event.publishRequestFailureEvent("timeout",
-                                                         xhr, props);
+                                                         xhr, requestProps);
             };
         }
         return xhr;
