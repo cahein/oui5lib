@@ -6,7 +6,7 @@ describe("Domain Objects", function() {
         oum.do.addresses.resetData();
     });
     it ("should load orders into the orders collection object", function() {
-        loader.loadOrders("20171001");
+        loader.queryOrders({ "startDate": oum.fixture.startDate });
 
         var data = oum.do.orders.getData();
         expect(data instanceof Array).toBe(true);
@@ -14,7 +14,7 @@ describe("Domain Objects", function() {
     });
     it ("should load an order into the orders collection object", function() {
         oum.do.orders.resetData();
-        loader.loadOrder(8);
+        loader.loadOrder(oum.fixture.orderId);
 
         var data = oum.do.orders.getData();
         expect(data instanceof Array).toBe(true);

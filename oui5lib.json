@@ -1,8 +1,9 @@
 {
+    "environment": "testing",
     "availableLanguages": [ "en", "de" ],
     "defaultLanguage": "en",
     "logLevel": "ERROR",
-    "mappingDir": "webapp/test/mapping",
+    "mappingDirectory": "webapp/test/mapping",
     "validation": {
         "dateRegex": "^\\d{4}-\\d{2}-\\d{2}$",
         "timeRegex": "^\\d{2}:\\d{2}:\\d{2}$",

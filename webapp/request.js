@@ -1,6 +1,6 @@
-jQuery.sap.require("oui5lib.logger");
-jQuery.sap.require("oui5lib.formatter");
-jQuery.sap.require("oui5lib.event");
+jQuery.sap.require("oui5lib.logger",
+                   "oui5lib.formatter",
+                   "oui5lib.event");
 
 jQuery.sap.declare("oui5lib.request");
 
@@ -11,19 +11,20 @@ jQuery.sap.declare("oui5lib.request");
      * Send XMLHttpRequest expecting JSON.
      * @memberof oui5lib.request
      * @param {string} url The URL of the json to load.
-     * @param {function} resolve The function to call if the request
+     * @param {function} handleSuccess The function to call if the request
      * is successfully completed. 
      * @param {object} requestProps Properties to be passed with the request.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      * @param {string} httpVerb GET or POST.
      * @param {string} encodedParams The url-encoded parameters string.
      */
-    function loadJson(url, resolve, requestProps, isAsync, httpVerb, encodedParams) {
-        if (typeof httpVerb === "undefined") {
-            httpVerb = "GET";
-        }
+    function fetchJson(url, handleSuccess, requestProps, isAsync,
+                       httpVerb, encodedParams) {
         if (typeof isAsync !== "boolean") {
             isAsync = true;
+        }
+        if (typeof httpVerb === "undefined") {
+            httpVerb = "GET";
         }
         if (typeof encodedParams !== "undefined" && httpVerb === "GET") {
             var protocolRegex = /^https?.*/;
@@ -36,7 +37,7 @@ jQuery.sap.declare("oui5lib.request");
         xhr.overrideMimeType("application/json");
         xhr.open(httpVerb, url, isAsync);
         
-        addHandlers(xhr, resolve, requestProps, isAsync);        
+        addHandlers(xhr, handleSuccess, requestProps, isAsync);        
 
         if (httpVerb === "POST") {
             xhr.send(encodedParams);
@@ -51,19 +52,19 @@ jQuery.sap.declare("oui5lib.request");
      * @memberof oui5lib.request
      * @param {string} entityName The name of the entity.
      * @param {string} requestName The name of the request.
-     * @param {object} params The data provided for the request.
-     * @param {function} resolve The function to call if the request
+     * @param {object} data The data provided for the request.
+     * @param {function} handleSuccess The function to call if the request
      * is successfully completed.
      * @param {boolean} isAsync Load asynchronously? Defaults to 'true'.
      */
-    function sendMappingRequest(entityName, requestName, params,
-                                resolve, isAsync) {
+    function sendMappingRequest(entityName, requestName,
+                                data, handleSuccess, isAsync) {
         if (typeof oui5lib.mapping !== "object") {
             throw new Error("oui5lib.mapping namespace not loaded");
         }
         
-        if (params === undefined || params === null) {
-            params = {};
+        if (data === undefined || data === null) {
+            data = {};
         }
         if (typeof isAsync !== "boolean") {
             if (oui5lib.configuration.getEnvironment() === "testing") {
@@ -73,34 +74,34 @@ jQuery.sap.declare("oui5lib.request");
             }
         }
         
-        var requestDef = oui5lib.mapping.getRequestDefinition(entityName,
-                                                              requestName);
+        var requestConfig = oui5lib.mapping.getRequestConfiguration(entityName,
+                                                                    requestName);
         
-        var requestParams = procParameters(params, requestDef);
+        var requestParams = procParameters(data, requestConfig);
         var encodedParams = getEncodedParams(requestParams);
         oui5lib.logger.info("request parameter string: " + encodedParams);
 
-        var httpVerb = requestDef.method;
-        var url = procUrl(requestDef);
+        var httpVerb = requestConfig.method;
+        var url = procUrl(requestConfig);
         oui5lib.logger.info("request url: " + url);
 
-        loadJson(url, resolve, { "entity": entityName,
-                                 "request": requestName
-                               }, isAsync, httpVerb, encodedParams);
+        fetchJson(url, handleSuccess, { "entity": entityName,
+                                        "request": requestName
+                                      }, isAsync, httpVerb, encodedParams);
     }
     
-    function addHandlers(xhr, resolve, requestProps, isAsync) {
+    function addHandlers(xhr, handleSuccess, requestProps, isAsync) {
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
-                    var data = null;
+                    var responseData = null;
                     try {
-                        data = JSON.parse(xhr.responseText);
+                        responseData = JSON.parse(xhr.responseText);
                     } catch(e) {
                         throw new Error("JSON is invalid");
                     }
-                    if (typeof resolve === "function") {
-                        resolve(data, requestProps);
+                    if (typeof handleSuccess === "function") {
+                        handleSuccess(responseData, requestProps);
                     }
                 } else {
                     oui5lib.event.publishRequestFailureEvent("status",
@@ -128,11 +129,11 @@ jQuery.sap.declare("oui5lib.request");
      * Process the URL. Depends upon the environment. For the production environment the URL is generated from the mapping.
      * @memberof oui5lib.request
      * @inner 
-     * @param {object} requestDefinition
+     * @param {object} requestConfig
      * @returns {string} The request url.
      */
-    function procUrl(requestDefinition) {
-        var pathname = requestDefinition.pathname;
+    function procUrl(requestConfig) {
+        var pathname = requestConfig.pathname;
 
         switch (oui5lib.configuration.getEnvironment()) {
         case "development":
@@ -151,8 +152,8 @@ jQuery.sap.declare("oui5lib.request");
             }
             break;
         }
-        var protocol = requestDefinition.protocol;
-        var host = requestDefinition.host;
+        var protocol = requestConfig.protocol;
+        var host = requestConfig.host;
         var requestUrl = protocol + "://" + host + "/" + pathname;
         return requestUrl;
     }
@@ -162,31 +163,31 @@ jQuery.sap.declare("oui5lib.request");
      * @memberof oui5lib.request
      * @inner 
      * @param {object} params
-     * @param {object} requestDefinition
+     * @param {object} requestConfig
      */
-    function procParameters(params, requestDefinition) {
-        var paramsDefinition = requestDefinition.params;
-        if (paramsDefinition === undefined || paramsDefinition.length === 0) {
+    function procParameters(data, requestConfig) {
+        var paramsConfig = requestConfig.parameters;
+        if (paramsConfig === undefined || paramsConfig.length === 0) {
             return {};
         }
+        
         var requestParams = {};
-
         var paramName, paramValue;
-        paramsDefinition.forEach(function(paramDef) {
-            paramName = paramDef.name;
+        paramsConfig.forEach(function(paramConf) {
+            paramName = paramConf.name;
             paramValue = null;
-            if (params[paramName] === undefined) {
-                if (typeof paramDef.default === "string") {
-                    paramValue = paramDef.default;
+            if (data[paramName] === undefined) {
+                if (typeof paramConf.default === "string") {
+                    paramValue = paramConf.default;
                 }
             } else {
-                paramValue = params[paramName];
-                if (paramDef.type !== "string") {
-                    paramValue = convertToString(paramValue, paramDef);
+                paramValue = data[paramName];
+                if (paramConf.type !== "string") {
+                    paramValue = convertToString(paramValue, paramConf);
                 }
             }
 
-            if (paramDef.required && paramValue === null) {
+            if (paramConf.required && paramValue === null) {
                throw new Error("required parameter missing: " + paramName);
             }
             if (paramValue !== null) {
@@ -201,23 +202,23 @@ jQuery.sap.declare("oui5lib.request");
      * @memberof oui5lib.request
      * @inner 
      * @param {boolean|number|Date|Array} value
-     * @param {object} paramDefinition
+     * @param {object} paramConfig
      */
-    function convertToString(value, paramDefinition) {
-        var type = paramDefinition.type;
+    function convertToString(value, paramConf) {
+        var type = paramConf.type;
         switch (type) {
         case "Date":
             if (value instanceof Date &&
-                typeof paramDefinition.dateFormat === "string") {
+                typeof paramConf.dateFormat === "string") {
                 value = oui5lib.formatter.getDateString(value,
-                                                        paramDefinition.dateFormat);
+                                                        paramConf.dateFormat);
             }
             break;
         case "Time":
             if (value instanceof Date &&
-                typeof paramDefinition.timeFormat === "string") {
+                typeof paramConf.timeFormat === "string") {
                 value = oui5lib.formatter.getTimeString(value,
-                                                        paramDefinition.timeFormat);
+                                                        paramConf.timeFormat);
             }
             break;
         case "Array":
@@ -258,6 +259,6 @@ jQuery.sap.declare("oui5lib.request");
     }
 
     var request = oui5lib.namespace("request");
-    request.loadJson = loadJson;
+    request.fetchJson = fetchJson;
     request.sendMappingRequest = sendMappingRequest;
 }());

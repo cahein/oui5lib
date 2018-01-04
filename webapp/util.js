@@ -1,5 +1,5 @@
-jQuery.sap.require("oui5lib.configuration");
-jQuery.sap.require("oui5lib.validation");
+jQuery.sap.require("oui5lib.configuration",
+                   "oui5lib.validation");
 
 jQuery.sap.declare("oui5lib.util");
 

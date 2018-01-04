@@ -162,7 +162,7 @@ sap.ui.define([
             if (controlDef.ui5.rows) {
                 textArea.setRows(controlDef.ui5.rows);
             }
-           return textArea;
+            return textArea;
         },
 
         attachChange: function(inputBase, tests, controller) {
@@ -214,7 +214,7 @@ sap.ui.define([
             this.addToForm(form, label, checkBox);
             return checkBox;
         },
-        getCheckBox : function(form, entityName, propertyName, addLabel) {
+        getCheckBox : function(entityName, propertyName) {
             var controlDef = this.getControlDef(entityName, propertyName);
             if (controlDef === null) {
                 return null;
@@ -548,14 +548,14 @@ sap.ui.define([
 
         
         getControlDef: function(entityName, propertyName) {
-           var controlDef = null;
-           try {
-              controlDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                 propertyName);
-           } catch(e) {
-              this.error(e.message);
-           }
-           return controlDef;
+            var controlDef = null;
+            try {
+                controlDef = oui5lib.mapping.getPropertyDefinition(entityName,
+                                                                   propertyName);
+            } catch(e) {
+                this.error(e.message);
+            }
+            return controlDef;
         },
         getControlId: function(entityName, propertyName) {
             return this.getView().createId(entityName + "_" + propertyName);

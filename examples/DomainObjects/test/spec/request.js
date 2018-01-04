@@ -23,7 +23,7 @@ describe("Request object", function() {
       try {
          oui5lib.request.sendMappingRequest(
             "order", "getOrders",
-            { "startDate": null },
+            { "status": oum.fixture.status },
             function() {});
       } catch (e) {
          expect(e.name).toEqual("Error");

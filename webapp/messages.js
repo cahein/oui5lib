@@ -1,5 +1,5 @@
-jQuery.sap.require("oui5lib.logger");
-jQuery.sap.require("oui5lib.util");
+jQuery.sap.require("oui5lib.logger",
+                   "oui5lib.util");
 
 jQuery.sap.declare("oui5lib.messages");
 
@@ -51,7 +51,7 @@ jQuery.sap.declare("oui5lib.messages");
     
     /**
      * Opens a MessageBox to require the user to confirm unsaved changes.
-     * @memberof oui5lib.ui
+     * @memberof oui5lib.messages
      * @param {function} handleClose The function to call upon user action.
      */
     function confirmUnsavedChanges(handleClose) {
@@ -67,7 +67,7 @@ jQuery.sap.declare("oui5lib.messages");
 
     /**
      * Opens a MessageBox to require the user to confirm deleting an entity.
-     * @memberof oui5lib.ui
+     * @memberof oui5lib.messages
      * @param {string} msg The message to show.
      * @param {function} handleClose  The function to call upon user action.
      */

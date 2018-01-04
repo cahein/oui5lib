@@ -35,8 +35,7 @@ jQuery.sap.declare("oui5lib.listBase");
         }
         
         function removeListener(listeners, listener, context) {
-            for (var i = 0, s = listeners.length;
-                 i < s; i++) {
+            for (var i = 0, s = listeners.length; i < s; i++) {
                 var func = listeners[i][0];
                 var ctx = listeners[i][1];
                 if (func === listener && ctx === context) {

@@ -12,7 +12,6 @@ oui5lib.namespace = function(string) {
     }
     return object;
 };
-oui5lib.isTest = true;
 
 var xhr = new XMLHttpRequest();
 xhr.open("GET", "oui5lib.json", false);

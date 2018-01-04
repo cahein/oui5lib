@@ -354,7 +354,7 @@ jQuery.sap.declare("oui5lib.validation");
         return regex.test(value);
     }
 
-/**
+    /**
      * Tests if value contains any letters.
      * @memberof oui5lib.validation
      * @param value The value to be tested.

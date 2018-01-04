@@ -1,7 +1,7 @@
-jQuery.sap.require("oui5lib.lib.listHelper");
-jQuery.sap.require("oui5lib.configuration");
-jQuery.sap.require("oui5lib.request");
-jQuery.sap.require("oui5lib.logger");
+jQuery.sap.require("oui5lib.lib.listHelper",
+                   "oui5lib.configuration",
+                   "oui5lib.request",
+                   "oui5lib.logger");
 
 jQuery.sap.declare("oui5lib.mapping");
 
@@ -83,7 +83,7 @@ jQuery.sap.declare("oui5lib.mapping");
             loadMapping(entityName);
         }
         if(typeof _mappings[entityName] === "undefined") {
-           throw new Error("couldn't load mapping for entity " + entityName);
+            throw new Error("couldn't load mapping for entity " + entityName);
         }
         return _mappings[entityName];
     }
@@ -97,8 +97,8 @@ jQuery.sap.declare("oui5lib.mapping");
     function loadMapping(entityName) {
         var dir = oui5lib.configuration.getMappingDir();
         var url = dir + "/" + entityName + ".json";
-        oui5lib.logger.info("load mapping: " + url);
-        oui5lib.request.loadJson(url, mappingLoaded, { entity: entityName }, false);
+        oui5lib.logger.error("load mapping: " + url);
+        oui5lib.request.fetchJson(url, mappingLoaded, { entity: entityName }, false);
     }
     
     /**
@@ -173,7 +173,7 @@ jQuery.sap.declare("oui5lib.mapping");
         var tests = [];
         if (typeof attributeSpec.validate !== "undefined" &&
             attributeSpec.validate instanceof Array) {
-           tests = attributeSpec.validate;
+            tests = attributeSpec.validate;
         }
         if (attributeSpec.required) {
             tests.push("required");

@@ -1,29 +1,17 @@
 /** @namespace oum.do.loader */
 (function() {
-    function loadOrder(orderId) {
+    function queryOrders(query) {
         oui5lib.request.sendMappingRequest(
-            "order", "getOrder",
-            { "id": orderId },
+            "order", "getOrders",
+            query,
             handleSuccessfulResponse
         );
     }
 
-    function loadOrders(startDate, endDate, status, reset) {
-        if (typeof reset === "boolean" && reset) {
-            oui5lib.logger.info("resetting orders");
-            oum.do.orders.resetData();
-        }
-        
-        var queryParams = { "startDate": startDate };
-        if (typeof endDate === "string") {
-            queryParams.endDate = endDate;
-        }
-        if (typeof status === "string") {
-            queryParams.status = status;
-        }
+    function loadOrder(orderId) {
         oui5lib.request.sendMappingRequest(
-            "order", "getOrders",
-            queryParams,
+            "order", "getOrder",
+            { "id": orderId },
             handleSuccessfulResponse
         );
     }
@@ -91,7 +79,7 @@
     
     
     var loader = oum.namespace("do.loader");
-    loader.loadOrders = loadOrders;
+    loader.queryOrders = queryOrders;
     loader.loadOrder = loadOrder;
     loader.loadAddresses = loadAddresses;
     loader.loadAddress = loadAddress;

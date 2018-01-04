@@ -7,8 +7,8 @@
         
         orders.forEach(function(order) {
             var orderDateString = order.orderDate;
-            var propDef = oui5lib.mapping.getPropertyDefinition("order",
-                                                                "orderDate");
+            var propDef = oui5lib.mapping.getEntityAttributeSpec("order",
+                                                                 "orderDate");
             if (typeof propDef.dateFormat === "string") {
                 order.orderDate = new Date(orderDateString);
             } else {

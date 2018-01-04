@@ -11,5 +11,5 @@
     "tmp": "build/tmp",
     "dist": "dist",
     "examples": "examples",
-    "ui5resources": "resources"
+    "ui5resources": "webapp/resources"
 }

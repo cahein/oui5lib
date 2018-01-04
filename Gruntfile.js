@@ -103,21 +103,21 @@ module.exports = function (grunt) {
             oui5lib: {
                 src: [
                     "<%= dirs.webroot %>/init-preload.js",
+                    "<%= dirs.lib %>/listHelper.js",
                     "<%= dirs.webroot %>/configuration.js",
                     "<%= dirs.webroot %>/logger.js",
                     "<%= dirs.webroot %>/validation.js",
                     "<%= dirs.webroot %>/formatter.js",
                     "<%= dirs.webroot %>/util.js",
-                    "<%= dirs.webroot %>/request.js",
                     "<%= dirs.webroot %>/event.js",
                     "<%= dirs.webroot %>/messages.js",
                     "<%= dirs.webroot %>/ui.js",
-                    "<%= dirs.lib %>/**/*.js",
+                    "<%= dirs.webroot %>/request.js",
                     "<%= dirs.webroot %>/mapping.js",
                     "<%= dirs.webroot %>/listBase.js",
                     "<%= dirs.webroot %>/itemBase.js",
                     "<%= dirs.fragment %>/**/*.js",
-                    "<%= dirs.controller %>/**/*.js",
+                    "<%= dirs.controller %>/**/*.js"
                 ],
                 dest: "<%= dirs.dist %>/oui5lib.concat.js"
             }

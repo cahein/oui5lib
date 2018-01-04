@@ -8,11 +8,11 @@ jQuery.sap.declare("oui5lib.currentuser");
 
     /** @namespace oui5lib.currentuser */
     var user = oui5lib.namespace("currentuser"),
-    _name = null,
-    _userId = null,
-    _token = null,
-    _userRoles = [],
-    _permissionsMap = null;
+        _name = null,
+        _userId = null,
+        _token = null,
+        _userRoles = [],
+        _permissionsMap = null;
 
 
     /**
@@ -92,9 +92,9 @@ jQuery.sap.declare("oui5lib.currentuser");
             requestUserProfile(userProfileUrl);
         }
         
-        oui5lib.request.loadJson("permissions.json",
-                                 permissionsMapRequestSucceeded,
-                                 {}, false);
+        oui5lib.request.fetchJson("permissions.json",
+                                  permissionsMapRequestSucceeded,
+                                  {}, false);
     }
 
     /**

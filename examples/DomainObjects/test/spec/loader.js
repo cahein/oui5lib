@@ -9,49 +9,57 @@ describe("Loader object", function() {
     });
     
     it ("should call the function to request orders data by startDate", function() {
-        loader.loadOrders(oum.fixture.startDate);
+        var query = { "startDate": oum.fixture.startDate };
+        loader.queryOrders(query);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
         expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("order", "getOrders",
-                                  { "startDate": oum.fixture.startDate },
+                                  query,
                                   loader.handleSuccessfulResponse);
     });
 
     it ("should call the function to request orders by startDate and endDate", function() {
-        loader.loadOrders(oum.fixture.startDate,
-                          oum.fixture.endDate);
+        var query = { "startDate": oum.fixture.startDate,
+                      "endDate": oum.fixture.endDate };
+        loader.queryOrders(query);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
         expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("order", "getOrders",
-                                  { "startDate": oum.fixture.startDate,
-                                    "endDate": oum.fixture.endDate },
+                                  query,
                                   loader.handleSuccessfulResponse);
     });
     
     it ("should call the function to request orders by startDate and status", function() {
-        loader.loadOrders(oum.fixture.startDate,
-                          null,
-                          oum.fixture.status);
+        var query = { "startDate": oum.fixture.startDate,
+                      "status": oum.fixture.status };
+        loader.queryOrders(query);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
         expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("order", "getOrders",
-                                  { "startDate": oum.fixture.startDate,
-                                    "status": oum.fixture.status },
+                                  query,
                                   loader.handleSuccessfulResponse);
     });
     
     it ("should call the function to request orders even if the required parameter startDate is omitted", function() {
-        loader.loadOrders(null);
+        var query = { "status": oum.fixture.status };
+        loader.queryOrders(query);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
         expect(oui5lib.request.sendMappingRequest)
             .toHaveBeenCalledWith("order", "getOrders",
-                                  { "startDate": null },
+                                  query,
                                   loader.handleSuccessfulResponse);
     });
 
+    it ("should call the function to request an order by the order id", function() {
+        oum.do.loader.loadOrder(oum.fixture.orderId);
+        expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
+        expect(oui5lib.request.sendMappingRequest)
+            .toHaveBeenCalledWith("order", "getOrder",
+                                  {"id": oum.fixture.orderId },
+                                  loader.handleSuccessfulResponse);
+    });
+    
     it ("should request products data by an array of product ids", function() {
-        oui5lib.request.sendMappingRequest.calls.reset();
-        
         var ids = ["0871132532", "0853455341", "080613125"];
         oum.do.loader.loadProducts(ids);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
@@ -62,8 +70,6 @@ describe("Loader object", function() {
     });
 
     it ("should request addresses data by an array of address ids", function() {
-        oui5lib.request.sendMappingRequest.calls.reset();
-
         var ids = [1, 2];
         oum.do.loader.loadAddresses(ids);
         expect(oui5lib.request.sendMappingRequest.calls.count()).toEqual(1);
