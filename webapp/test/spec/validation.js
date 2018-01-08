@@ -41,13 +41,6 @@ describe("validation", function() {
         expect(oui5lib.validation.isValidTime("2:10:00")).toBe(false);
     });
 
-    it("should test if value is null or empty", function() {
-        expect(oui5lib.validation.isBlank(null)).toBe(true);
-        expect(oui5lib.validation.isBlank()).toBe(true);
-        expect(oui5lib.validation.isBlank("  ")).toBe(true);
-        expect(oui5lib.validation.isBlank("  a")).toBe(false);
-    });
-
     it("should test the length of a string", function() {
         expect(oui5lib.validation.verifyLength("abcde", 4)).toBe(false);
         expect(oui5lib.validation.verifyLength("abcde", 5)).toBe(true);
