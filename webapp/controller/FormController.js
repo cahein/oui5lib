@@ -1,7 +1,3 @@
-jQuery.sap.require("oui5lib.mapping");
-jQuery.sap.require("oui5lib.validation");
-jQuery.sap.require("oui5lib.ui");
-
 sap.ui.define([
     "oui5lib/controller/BaseController"
 ], function(oController) {
@@ -550,8 +546,8 @@ sap.ui.define([
         getControlDef: function(entityName, propertyName) {
             var controlDef = null;
             try {
-                controlDef = oui5lib.mapping.getPropertyDefinition(entityName,
-                                                                   propertyName);
+                controlDef = oui5lib.mapping.getEntityAttributeSpec(entityName,
+                                                                    propertyName);
             } catch(e) {
                 this.error(e.message);
             }

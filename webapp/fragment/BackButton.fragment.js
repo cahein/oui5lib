@@ -25,8 +25,5 @@ sap.ui.jsfragment("oui5lib.fragment.BackButton", {
             }
         });
         return btn;
-    },
-
-    routeBack: function() {
     }
 });

@@ -17,13 +17,3 @@ sap.ui.jsfragment("oui5lib.fragment.HomeButton", {
         return btn;
     }
 });
-
-
-
-
-
-
-
-
-
-

@@ -1,7 +1,6 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller",
-    "oui5lib/logger"
-], function (Controller, logger) {
+    "sap/ui/core/mvc/Controller"
+], function (Controller) {
     "use strict";
 
     /**
@@ -58,19 +57,19 @@ sap.ui.define([
 
         
         debug: function (msg) {
-            logger.debug(this.addControllerName(msg));
+            oui5lib.logger.debug(this.addControllerName(msg));
         },
         
         info: function (msg) {
-            logger.info(this.addControllerName(msg));
+            oui5lib.logger.info(this.addControllerName(msg));
         },
 
         warn: function (msg) {
-            logger.warn(this.addControllerName(msg));
+            oui5lib.logger.warn(this.addControllerName(msg));
         },
 
         error: function (msg) {
-            logger.error(this.addControllerName(msg));
+            oui5lib.logger.error(this.addControllerName(msg));
         },
 
         addControllerName: function(msg) {
