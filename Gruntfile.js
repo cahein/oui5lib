@@ -106,18 +106,17 @@ module.exports = function (grunt) {
                     "<%= dirs.lib %>/listHelper.js",
                     "<%= dirs.webroot %>/configuration.js",
                     "<%= dirs.webroot %>/logger.js",
-                    "<%= dirs.webroot %>/validation.js",
                     "<%= dirs.webroot %>/formatter.js",
                     "<%= dirs.webroot %>/util.js",
-                    "<%= dirs.webroot %>/event.js",
                     "<%= dirs.webroot %>/messages.js",
-                    "<%= dirs.webroot %>/ui.js",
+                    "<%= dirs.webroot %>/event.js",
                     "<%= dirs.webroot %>/request.js",
+                    "<%= dirs.webroot %>/currentuser.js",
                     "<%= dirs.webroot %>/mapping.js",
+                    "<%= dirs.webroot %>/validation.js",
+                    "<%= dirs.webroot %>/ui.js",
                     "<%= dirs.webroot %>/listBase.js",
-                    "<%= dirs.webroot %>/itemBase.js",
-                    "<%= dirs.fragment %>/**/*.js",
-                    "<%= dirs.controller %>/**/*.js"
+                    "<%= dirs.webroot %>/itemBase.js"
                 ],
                 dest: "<%= dirs.dist %>/oui5lib.concat.js"
             }
@@ -137,30 +136,22 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: "<%= dirs.webroot %>",
                         src: [
-                            "init.js",
+                            "init-preload.js",
+                            "lib/listHelper.js",
                             "configuration.js",
                             "logger.js",
                             "util.js",
+                            "event.js",
                             "request.js",
                             "mapping.js",
-                            "lib/listHelper.js",
                             "listBase.js",
-                            "itemBase.js",
-                            "event.js"
+                            "itemBase.js"
                         ],
                         dest: "<%= dirs.examples %>/DomainObjects/oui5lib/"
                     },
                     {
-                        expand: true,
-                        cwd: "<%= dirs.webroot %>",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.webroot %>/lib",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/lib/"
+                        src: "<%= dirs.dist %>/oui5lib.min.js",
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib.js"
                     },
                     {
                         expand: true,
@@ -187,16 +178,8 @@ module.exports = function (grunt) {
                         dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/view/"
                     },
                     {
-                        expand: true,
-                        cwd: "<%= dirs.webroot %>",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/FormPage/oui5lib/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.webroot %>/lib",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/FormPage/oui5lib/lib/"
+                        src: "<%= dirs.dist %>/oui5lib.min.js",
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib.js"
                     },
                     {
                         expand: true,
@@ -222,43 +205,6 @@ module.exports = function (grunt) {
                         src: "**",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib/view/"
                     },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.webroot %>",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.webroot %>/lib",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/lib/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.i18n %>",
-                        src: "*.properties",
-                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/i18n/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.controller %>",
-                        src: "*.js",
-                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/controller/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.fragment %>",
-                        src: "**",
-                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/fragment/"
-                    },
-                    {
-                        expand: true,
-                        cwd: "<%= dirs.view %>",
-                        src: "**",
-                        dest: "<%= dirs.examples %>/OrderApp/oui5lib/view/"
-                    }
-
                 ]
             }
         }
@@ -276,7 +222,9 @@ module.exports = function (grunt) {
     grunt.registerTask("lint", ["eslint"]);
     grunt.registerTask("test", ["jasmine"]);
     grunt.registerTask("gendoc", ["clean:doc", "jsdoc"]);
-    grunt.registerTask("prepare-examples", ["clean:examples", "copy:oui5lib"]);
+    grunt.registerTask("prepare-examples", ["clean:examples",
+                                            "generate-oui5lib-dist",
+                                            "copy:oui5lib"]);
     grunt.registerTask("generate-oui5lib-dist", ["concat:oui5lib", "uglify:oui5lib"]);
 
 };

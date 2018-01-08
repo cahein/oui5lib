@@ -1,4 +1,4 @@
-jQuery.sap.require("oui5lib.init");
+jQuery.sap.require("oui5lib");
 jQuery.sap.require("oum.lib.configuration");
 
 sap.ui.define([
