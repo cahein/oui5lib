@@ -49,7 +49,7 @@ sap.ui.define([
             var model = form.getModel("exampleEntity");
             var exampleData = model.getData();
             
-            var props = oui5lib.mapping.getPropertyDefinitions("exampleEntity");
+            var props = oui5lib.mapping.getEntityAttributeSpecs("exampleEntity");
             var errors = oui5lib.validation.validateData(exampleData, props);
             if (errors.length > 0) {
                 // there are errors
