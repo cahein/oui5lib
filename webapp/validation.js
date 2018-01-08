@@ -1,9 +1,5 @@
-jQuery.sap.require("oui5lib.configuration");
-
-jQuery.sap.declare("oui5lib.validation");
-
 /** @namespace oui5lib.validation */
-(function() {
+(function(configuration, util) {
     var msgs;    
 
     /**
@@ -50,7 +46,7 @@ jQuery.sap.declare("oui5lib.validation");
             // required
             if (propDef.required) {
                 if (propValue === null ||
-                    (typeof propValue === "string" && isBlank(propValue))) {
+                    (typeof propValue === "string" && util.isBlank(propValue))) {
                     msgs.push("missing:" + propName);
                     continue;
                 }
@@ -161,7 +157,7 @@ jQuery.sap.declare("oui5lib.validation");
      */
     function isValid(value, tests) {
         if (tests.indexOf("required") > -1) {
-            if ((typeof value === "string") && isBlank(value)) {
+            if ((typeof value === "string") && util.isBlank(value)) {
                 return false;
             }
         }
@@ -219,21 +215,21 @@ jQuery.sap.declare("oui5lib.validation");
                     }
                     break;
                 case "numbersOnly":
-                    if (!isBlank(value)) {
+                    if (!util.isBlank(value)) {
                         if (!numbersOnly(value)) {
                             valid = false;
                         }
                     }
                     break;
                 case "noNumbers":
-                    if (!isBlank(value)) {
+                    if (!util.isBlank(value)) {
                         if (!noNumbers(value)) {
                             valid = false;
                         }
                     }
                     break;
                 case "containsLetters":
-                    if (!(isBlank(value))) {
+                    if (!(util.isBlank(value))) {
                         if (!hasLetters(value)) {
                             valid = false;
                         }
@@ -241,7 +237,7 @@ jQuery.sap.declare("oui5lib.validation");
                     break;
                 case "email":
                 case "phone":
-                    if (!(isBlank(value))) {
+                    if (!(util.isBlank(value))) {
                         if (!custom(test, value)) {
                             valid = false;
                         }
@@ -264,10 +260,10 @@ jQuery.sap.declare("oui5lib.validation");
 
         switch(fnme) {
         case "email":
-            regex = oui5lib.configuration.getEmailRegex();
+            regex = configuration.getEmailRegex();
             break;
         case "phone":
-            regex = oui5lib.configuration.getPhoneRegex();
+            regex = configuration.getPhoneRegex();
             break;
         }
         return regex.test(value);
@@ -406,26 +402,6 @@ jQuery.sap.declare("oui5lib.validation");
         }
         return true;
     }
-
-    /**
-     * Tests if value is null or empty.
-     * @memberof oui5lib.validation
-     * @param value The value to be tested.
-     * @returns {boolean}
-     */
-    function isBlank(value) {
-        if (typeof value === "undefined" || value === null) {
-            return true;
-        }
-        for (var i = 0; i < value.length; i++) {
-            var c = value.charAt(i);
-            if (c != " " && c != "\n" && c != "\t") {
-                return false;
-            }
-        }
-        return true;
-    }
-
     
     /**
      * Tests if value is a valid date. Default pattern: YYYY-MM-DD
@@ -436,7 +412,7 @@ jQuery.sap.declare("oui5lib.validation");
      */
     function isValidDateString(value, regex) {
         if (!(regex instanceof RegExp)) {
-            regex = oui5lib.configuration.getDateRegex();
+            regex = configuration.getDateRegex();
         }
         return regex.test(value);
     }
@@ -450,7 +426,7 @@ jQuery.sap.declare("oui5lib.validation");
      */
     function isValidTimeString(value, regex) {
         if (!(regex instanceof RegExp)) {
-            regex = oui5lib.configuration.getTimeRegex();
+            regex = configuration.getTimeRegex();
         }
         return regex.test(value);
     }
@@ -461,7 +437,6 @@ jQuery.sap.declare("oui5lib.validation");
     validation.isValid = isValid;
     validation.isValidDate = isValidDateString;
     validation.isValidTime = isValidTimeString;
-    validation.isBlank = isBlank;
 
     // only for testing
     validation.numbersOnly = numbersOnly;
@@ -473,5 +448,4 @@ jQuery.sap.declare("oui5lib.validation");
     validation.max = max;
     validation.custom = custom;
 
-}());
-
+}(oui5lib.configuration, oui5lib.util));

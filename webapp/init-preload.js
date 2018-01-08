@@ -15,7 +15,7 @@ var xhr = new XMLHttpRequest();
 xhr.open("GET", "oui5lib.json", false);
 xhr.onload = function() {
     if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
+        if (xhr.status === 200 || xhr.status === 0) {
             try {
                 var configData = JSON.parse(xhr.responseText);
                 oui5lib.config = configData;

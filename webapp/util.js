@@ -1,17 +1,18 @@
-jQuery.sap.require("oui5lib.configuration",
-                   "oui5lib.validation");
-
-jQuery.sap.declare("oui5lib.util");
-
 /** @namespace oui5lib.util */
-(function () {
-
+(function (configuration) {
+    function isUI5Loaded() {
+        if (typeof sap === "object" && typeof sap.ui === "object") {
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Get the Router for the configured Component {@link oui5lib.configuration.getComponent}.
      * @memberof oui5lib.util
      */
     function getComponentRouter() {
-        var component = oui5lib.configuration.getComponent();
+        var component = configuration.getComponent();
         if (component !== null) {
             return component.getRouter();
         }
@@ -23,7 +24,7 @@ jQuery.sap.declare("oui5lib.util");
      * @memberof oui5lib.util
      */
     function getComponentEventBus() {
-        var component = oui5lib.configuration.getComponent();
+        var component = configuration.getComponent();
         if (component !== null) {
             return component.getEventBus();
         }
@@ -37,7 +38,7 @@ jQuery.sap.declare("oui5lib.util");
      * @returns {string} The value of the property.
      */
     function getI18nText(path) {
-        var component = oui5lib.configuration.getComponent();
+        var component = configuration.getComponent();
         var i18nModel = component.getModel("i18n");
         return i18nModel.getProperty(path);
     }
@@ -92,6 +93,7 @@ jQuery.sap.declare("oui5lib.util");
         return filters;
     }
 
+
     /**
      * Use if an object needs to be immutable.
      * @memberof oui5lib.util
@@ -125,12 +127,40 @@ jQuery.sap.declare("oui5lib.util");
         }
         return arguments[0];
     }
+
+    /**
+     * Tests if value is null or empty.
+     * @memberof oui5lib.util
+     * @param value The value to be tested.
+     * @returns {boolean}
+     */
+    function isBlank(value) {
+        if (typeof value === "undefined" || value === null) {
+            return true;
+        }
+        if (typeof value === "object") {
+            throw new TypeError("The given value is not a string");
+        }
+        if (typeof value === "string") {
+            for (var i = 0; i < value.length; i++) {
+                var c = value.charAt(i);
+                if (c != " " && c != "\n" && c != "\t") {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     var util = oui5lib.namespace("util");
+    util.isUI5Loaded = isUI5Loaded;
     util.getComponentRouter = getComponentRouter;
     util.getComponentEventBus = getComponentEventBus;
     util.getI18nText = getI18nText;
     util.getJsonModelForData = getJsonModelForData;
     util.getFilterArray = getFilterArray;
+
+    util.isBlank = isBlank;
     util.deepFreeze = deepFreeze;
     util.extend = extend;
-}());
+}(oui5lib.configuration));

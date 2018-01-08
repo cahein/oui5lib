@@ -1,12 +1,5 @@
-jQuery.sap.require("oui5lib.logger",
-                   "oui5lib.formatter",
-                   "oui5lib.event");
-
-jQuery.sap.declare("oui5lib.request");
-
 /** @namespace oui5lib.request */
-(function () {
-
+(function (logger, event, formatter) {
     /**
      * Send XMLHttpRequest expecting JSON.
      * @memberof oui5lib.request
@@ -79,11 +72,11 @@ jQuery.sap.declare("oui5lib.request");
         
         var requestParams = procParameters(data, requestConfig);
         var encodedParams = getEncodedParams(requestParams);
-        oui5lib.logger.info("request parameter string: " + encodedParams);
+        logger.info("request parameter string: " + encodedParams);
 
         var httpVerb = requestConfig.method;
         var url = procUrl(requestConfig);
-        oui5lib.logger.info("request url: " + url);
+        logger.info("request url: " + url);
 
         fetchJson(url, handleSuccess, { "entity": entityName,
                                         "request": requestName
@@ -104,22 +97,22 @@ jQuery.sap.declare("oui5lib.request");
                         handleSuccess(responseData, requestProps);
                     }
                 } else {
-                    oui5lib.event.publishRequestFailureEvent("status",
-                                                             xhr, requestProps);
+                    event.publishRequestFailureEvent("status",
+                                                     xhr, requestProps);
                 }
             }
         };
         
         xhr.onerror = function() {
-            oui5lib.event.publishRequestFailureEvent("error",
-                                                     xhr, requestProps);
+            event.publishRequestFailureEvent("error",
+                                             xhr, requestProps);
         };
 
         if (isAsync) {
             xhr.timeout = 500;
             xhr.ontimeout = function() {
-                oui5lib.event.publishRequestFailureEvent("timeout",
-                                                         xhr, requestProps);
+                event.publishRequestFailureEvent("timeout",
+                                                 xhr, requestProps);
             };
         }
         return xhr;
@@ -210,15 +203,15 @@ jQuery.sap.declare("oui5lib.request");
         case "Date":
             if (value instanceof Date &&
                 typeof paramConf.dateFormat === "string") {
-                value = oui5lib.formatter.getDateString(value,
-                                                        paramConf.dateFormat);
+                value = formatter.getDateString(value,
+                                                paramConf.dateFormat);
             }
             break;
         case "Time":
             if (value instanceof Date &&
                 typeof paramConf.timeFormat === "string") {
-                value = oui5lib.formatter.getTimeString(value,
-                                                        paramConf.timeFormat);
+                value = formatter.getTimeString(value,
+                                                paramConf.timeFormat);
             }
             break;
         case "Array":
@@ -261,4 +254,4 @@ jQuery.sap.declare("oui5lib.request");
     var request = oui5lib.namespace("request");
     request.fetchJson = fetchJson;
     request.sendMappingRequest = sendMappingRequest;
-}());
+}(oui5lib.logger, oui5lib.event,  oui5lib.formatter));

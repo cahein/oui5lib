@@ -28,18 +28,19 @@ xhr.onload = function() {
 xhr.send();
 
 jQuery.sap.require("oui5lib.configuration");
+
+jQuery.sap.require("oui5lib.lib.listHelper");
 jQuery.sap.require("oui5lib.logger");
-jQuery.sap.require("oui5lib.validation");
 jQuery.sap.require("oui5lib.formatter");
 jQuery.sap.require("oui5lib.util");
 jQuery.sap.require("oui5lib.event");
 jQuery.sap.require("oui5lib.request");
+jQuery.sap.require("oui5lib.currentuser");
+jQuery.sap.require("oui5lib.mapping");
 
-if (typeof sap !== "undefined" &&
-    typeof sap.ui !== "undefined") {
+jQuery.sap.require("oui5lib.validation");
+jQuery.sap.require("oui5lib.messages");
+jQuery.sap.require("oui5lib.ui");
 
-    var eventBus = sap.ui.getCore().getEventBus();
-    eventBus.subscribe("xhr", "status", oui5lib.event.onRequestFailure);
-    eventBus.subscribe("xhr", "error", oui5lib.event.onRequestFailure);
-    eventBus.subscribe("xhr", "timeout", oui5lib.event.onRequestFailure);
-}
+jQuery.sap.require("oui5lib.itemBase");
+jQuery.sap.require("oui5lib.listBase");

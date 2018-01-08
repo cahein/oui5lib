@@ -1,7 +1,5 @@
 jQuery.sap.require("sap.ui.core.format.DateFormat");
 
-jQuery.sap.declare("oui5lib.formatter");
-
 /** @namespace oui5lib.formatter */
 (function() {
     var dateFormat = "YYYY-MM-dd";

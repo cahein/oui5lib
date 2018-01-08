@@ -1,5 +1,3 @@
-jQuery.sap.declare("oui5lib.configuration");
-
 /** @namespace oui5lib.configuration */
 (function() {
     /**

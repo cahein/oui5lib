@@ -1,14 +1,5 @@
-jQuery.sap.require("oui5lib.lib.listHelper",
-                   "oui5lib.configuration",
-                   "oui5lib.request",
-                   "oui5lib.logger");
-
-jQuery.sap.declare("oui5lib.mapping");
-
 /** @namespace oui5lib.mapping */
-(function () {
-    var listHelper = oui5lib.lib.listHelper;
-
+(function (configuration, logger, listHelper, request) {
     /**
      * Get the primary key of the entity.
      * @memberof oui5lib.mapping
@@ -95,10 +86,10 @@ jQuery.sap.declare("oui5lib.mapping");
      * @param {string} entityName The name of the entity.
      */
     function loadMapping(entityName) {
-        var dir = oui5lib.configuration.getMappingDir();
+        var dir = configuration.getMappingDir();
         var url = dir + "/" + entityName + ".json";
-        oui5lib.logger.error("load mapping: " + url);
-        oui5lib.request.fetchJson(url, mappingLoaded, { entity: entityName }, false);
+        logger.info("load mapping: " + url);
+        request.fetchJson(url, mappingLoaded, { entity: entityName }, false);
     }
     
     /**
@@ -211,5 +202,7 @@ jQuery.sap.declare("oui5lib.mapping");
     mapping.getEntityAttributeSpecs = getEntityAttributeSpecs;
     mapping.getEntityAttributeSpec = getEntityAttributeSpec;
     mapping.getRequestConfiguration = getRequestConfig;
-}());
-
+}(oui5lib.configuration,
+  oui5lib.logger,
+  oui5lib.lib.listHelper,
+  oui5lib.request));

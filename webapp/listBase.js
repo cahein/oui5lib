@@ -1,8 +1,4 @@
-jQuery.sap.require("oui5lib.lib.listHelper");
-
-jQuery.sap.declare("oui5lib.listBase");
-
-(function() {
+(function(listHelper) {
     function getBaseObject(primaryKey) {
         if (primaryKey === undefined ||
             typeof primaryKey !== "string") {
@@ -265,4 +261,4 @@ jQuery.sap.declare("oui5lib.listBase");
     
     var listBase = oui5lib.namespace("listBase");
     listBase.getObject = getBaseObject;
-}());
+}(oui5lib.lib.listHelper));

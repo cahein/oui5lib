@@ -1,11 +1,5 @@
-jQuery.sap.require("oui5lib.util",
-                   "oui5lib.messages",
-                   "oui5lib.logger");
-
-jQuery.sap.declare("oui5lib.ui");
-
 /** @namespace oui5lib.ui */
-(function() {
+(function(logger, util, messages) {
     /**
      * Handles validation errors. Use with FormController.
      * @memberof oui5lib.ui
@@ -21,7 +15,7 @@ jQuery.sap.declare("oui5lib.ui");
         var msgs = [];
         for (var i = 0, s = errors.length; i < s; i++) {
             var error = errors[i].split(":");
-            oui5lib.logger.debug( "error: " + error[0] + " : " + error[1]);
+            logger.debug( "error: " + error[0] + " : " + error[1]);
             var fnme = error[1];
             var control = view.byId(modelName + "_" + fnme);
             setControlValueState(control, false);
@@ -40,11 +34,11 @@ jQuery.sap.declare("oui5lib.ui");
      * @param {array} msgs Error messages to be shown in the box.
      */
     function showValidationErrors(msgs) {
-        var msgText = oui5lib.util.getI18nText("validation.fix-errors");
+        var msgText = util.getI18nText("validation.fix-errors");
         for (var i = 0, s = msgs.length; i < s; i++) {
             msgText += msgs[i] + "\n";
         }
-        oui5lib.messages.showErrorMessage(msgText);
+        messages.showErrorMessage(msgText);
     }
 
     /**
@@ -76,9 +70,9 @@ jQuery.sap.declare("oui5lib.ui");
         var vlue = comboBox.getValue();
         var selectedItem = comboBox.getSelectedItem();
         if (selectedItem === null) {
-            if (!oui5lib.validation.isBlank(vlue)) {
+            if (!util.isBlank(vlue)) {
                 comboBox.setValueState("Warning");
-                var valueStateText = oui5lib.util.getI18nText("common.combobox.noItemSelected");
+                var valueStateText = util.getI18nText("common.combobox.noItemSelected");
                 comboBox.setValueStateText(valueStateText);
                 return;
             }
@@ -129,4 +123,4 @@ jQuery.sap.declare("oui5lib.ui");
 
     ui.checkComboBox = checkComboBox;
     ui.checkDatePicker = checkDatePicker;
-}());
+}(oui5lib.logger, oui5lib.util, oui5lib.messages));

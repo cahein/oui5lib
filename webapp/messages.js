@@ -1,10 +1,5 @@
-jQuery.sap.require("oui5lib.logger",
-                   "oui5lib.util");
-
-jQuery.sap.declare("oui5lib.messages");
-
 /** @namespace oui5lib.messages */
-(function () {
+(function (logger, util) {
     /**
      * Show notification message briefly without blocking the application.
      * @memberof oui5lib.messages
@@ -30,7 +25,7 @@ jQuery.sap.declare("oui5lib.messages");
         if (typeof handleClose !== "function") {
             handleClose = handleMessageBoxClosed;
         }
-        var title = oui5lib.util.getI18nText("messagebox.error.title");
+        var title = util.getI18nText("messagebox.error.title");
 
         jQuery.sap.require("sap.m.MessageBox");
         sap.m.MessageBox.error(msg, {
@@ -46,7 +41,7 @@ jQuery.sap.declare("oui5lib.messages");
      * @param {string} sResult
      */
     function handleMessageBoxClosed(sResult) {
-        oui5lib.logger.info("ErrorMessage closed: " + sResult);
+        logger.info("ErrorMessage closed: " + sResult);
     }
     
     /**
@@ -59,7 +54,7 @@ jQuery.sap.declare("oui5lib.messages");
             throw TypeError("need a function to handle the onClose event");
         }
         jQuery.sap.require("sap.m.MessageBox");
-        sap.m.MessageBox.confirm(oui5lib.util.getI18nText("unsavedChanges.text"), {
+        sap.m.MessageBox.confirm(util.getI18nText("unsavedChanges.text"), {
             initialFocus: "CANCEL",
             onClose: handleClose
         });
@@ -78,7 +73,7 @@ jQuery.sap.declare("oui5lib.messages");
         jQuery.sap.require("sap.m.MessageBox");
         sap.m.MessageBox.show(msg, {
             icon: "WARNING",
-            title: oui5lib.util.getI18nText("confirmDelete.title"),
+            title: util.getI18nText("confirmDelete.title"),
             actions: [ "DELETE", "CANCEL" ],
             initialFocus: "CANCEL",
             onClose: handleClose
@@ -90,4 +85,4 @@ jQuery.sap.declare("oui5lib.messages");
     messages.showErrorMessage = showErrorMessageBox;
     messages.confirmUnsavedChanges = confirmUnsavedChanges;
     messages.confirmDelete = confirmDelete;
-}());
+}(oui5lib.logger, oui5lib.util));

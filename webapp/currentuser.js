@@ -1,9 +1,4 @@
-jQuery.sap.require("oui5lib.configuration");
-jQuery.sap.require("oui5lib.request");
-
-jQuery.sap.declare("oui5lib.currentuser");
-
-(function () {
+(function (configuration, request) {
     "use strict";
 
     /** @namespace oui5lib.currentuser */
@@ -87,23 +82,23 @@ jQuery.sap.declare("oui5lib.currentuser");
      * Initialize the current user object.
      */
     function init() {
-        var userProfileUrl = oui5lib.configuration.getUserProfileUrl();
+        var userProfileUrl = configuration.getUserProfileUrl();
         if (userProfileUrl !== null) {
             requestUserProfile(userProfileUrl);
         }
         
-        oui5lib.request.fetchJson("permissions.json",
-                                  permissionsMapRequestSucceeded,
-                                  {}, false);
+        request.fetchJson("permissions.json",
+                          permissionsMapRequestSucceeded,
+                          {}, false);
     }
 
     /**
      * Requests user authorization and profile.
      */
     function requestUserProfile(userProfileUrl) {
-        oui5lib.request.loadJson(userProfileUrl,
-                                 userProfileRequestSucceeded,
-                                 {}, false);
+        request.loadJson(userProfileUrl,
+                         userProfileRequestSucceeded,
+                         {}, false);
     }
 
     function userProfileRequestSucceeded(userProfile) {
@@ -129,4 +124,5 @@ jQuery.sap.declare("oui5lib.currentuser");
 
     user.hasRole = hasRole;
     user.hasPermissionForView = hasPermissionForView;
-}());
+}(oui5lib.configuration, oui5lib.request));
+

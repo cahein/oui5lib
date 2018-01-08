@@ -1,5 +1,3 @@
-jQuery.sap.require("oui5lib.configuration");
-
 sap.ui.jsfragment("oui5lib.fragment.LanguageSwitcher", {
     createContent: function () {
         var languageSelect = new sap.m.Select({

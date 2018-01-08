@@ -1,10 +1,6 @@
-jQuery.sap.require("oui5lib.configuration");
-
-jQuery.sap.declare("oui5lib.logger");
-
 /*eslint no-console: "off"*/
 /*eslint no-fallthrough: "off"*/
-(function () {
+(function (configuration) {
     if (!window.console) {
         logger.debug = function(){};
         logger.info = function(){};
@@ -13,7 +9,7 @@ jQuery.sap.declare("oui5lib.logger");
         return;
     }
 
-    var logLevel =  oui5lib.configuration.getLogLevel();
+    var logLevel =  configuration.getLogLevel();
    
     var logPrefix = "oui5lib - ";
 
@@ -47,4 +43,4 @@ jQuery.sap.declare("oui5lib.logger");
     logger.info = info;
     logger.warn = warn;
     logger.error = error;
-}());
+}(oui5lib.configuration));

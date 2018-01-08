@@ -1,15 +1,11 @@
-jQuery.sap.require("oui5lib.logger");
-
-jQuery.sap.declare("oui5lib.event");
-
 /** @namespace oui5lib.event */
-(function () {
+(function (logger, util) {
     /**
      * Handler called when request failed.
      * @memberof oui5lib.event
      */
     function handleRequestFailure(channel, eventId, requestInfo) {
-        oui5lib.logger.error(eventId + " " + requestInfo.xhrObj);
+        logger.error(eventId + " " + requestInfo.xhrObj);
     }
 
     /**
@@ -31,9 +27,8 @@ jQuery.sap.declare("oui5lib.event");
     }
 
     function publishEvent(channelId, eventId, eventData) {
-        if (typeof sap === "undefined" ||
-            typeof sap.ui === "undefined") {
-            oui5lib.logger.warn("Couldn't publish event: no UI5 loaded");
+        if (!util.isUI5Loaded()) {
+            logger.warn("Couldn't publish event: no UI5 loaded");
             return;
         }
         var eventBus = sap.ui.getCore().getEventBus();
@@ -45,4 +40,4 @@ jQuery.sap.declare("oui5lib.event");
     
     event.publishRequestFailureEvent = publishRequestFailureEvent;
     event.publishReadyEvent = publishReadyEvent;
-}());
+}(oui5lib.logger, oui5lib.util));

@@ -1,5 +1,3 @@
-jQuery.sap.declare("oui5lib.itemBase");
-
 /** @namespace oui5lib.itemBase */
 (function () {
     function updateModel() {
@@ -20,7 +18,7 @@ jQuery.sap.declare("oui5lib.itemBase");
      */
     function getModel() {
         if (this._model === undefined) {
-            if (typeof sap === "undefined") {
+            if (typeof sap === "undefined" || typeof sap.ui === "undefined") {
                 return null;
             }
             this._model = new sap.ui.model.json.JSONModel();
