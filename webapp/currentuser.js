@@ -117,10 +117,15 @@
         _permissionsMap = permissionsMap;
     }
 
+    function getToken() {
+        return _token;
+    }
+
     user.init = init;
 
     user.getName = getName;
     user.getUserId = getUserId;
+    user.getToken = getToken;
 
     user.hasRole = hasRole;
     user.hasPermissionForView = hasPermissionForView;

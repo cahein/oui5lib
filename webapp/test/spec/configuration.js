@@ -1,4 +1,4 @@
-describe("configuration", function() {
+describe("Namespace oui5lib.configuration", function() {
     beforeAll(function() {
     });
     

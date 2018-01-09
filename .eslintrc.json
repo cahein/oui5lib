@@ -20,7 +20,12 @@
         "quotes": [ "error", "double" ],
         "semi": [ "error", "always" ],
         "indent": [
-            "warn", 4, { "FunctionDeclaration": { "parameters": "first" }}
+            "warn", 4, {
+                "FunctionDeclaration": { "parameters": "first" },
+                "FunctionExpression": { "parameters": "first" },
+                "CallExpression": { "arguments": "first" },
+                "ObjectExpression": "first"
+            }
         ]
     },
     "globals": {

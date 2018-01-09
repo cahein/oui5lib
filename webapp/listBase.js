@@ -4,9 +4,7 @@
             typeof primaryKey !== "string") {
             throw Error("cannot create listBase object without primary key");
         }
-        
-        var listHelper = oui5lib.lib.listHelper;
-        
+
         var _primaryKey = primaryKey;
         var _model = null;
         var _data = [];

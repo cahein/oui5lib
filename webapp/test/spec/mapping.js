@@ -1,4 +1,4 @@
-describe("mapping", function() {
+describe("Namespace oui5lib.mapping", function() {
     beforeAll(function() {
     });
 

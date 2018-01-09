@@ -202,7 +202,4 @@
     mapping.getEntityAttributeSpecs = getEntityAttributeSpecs;
     mapping.getEntityAttributeSpec = getEntityAttributeSpec;
     mapping.getRequestConfiguration = getRequestConfig;
-}(oui5lib.configuration,
-  oui5lib.logger,
-  oui5lib.lib.listHelper,
-  oui5lib.request));
+}(oui5lib.configuration, oui5lib.logger, oui5lib.lib.listHelper, oui5lib.request));

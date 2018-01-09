@@ -47,15 +47,16 @@ module.exports = function (grunt) {
         jasmine: {
             src: [
                 "<%= dirs.spec %>/helpers/setup.js",
+                "<%= dirs.spec %>/helpers/fixtures.js",
                 "<%= dirs.lib %>/listHelper.js",
                 "<%= dirs.webroot %>/configuration.js",
                 "<%= dirs.webroot %>/logger.js",
                 "<%= dirs.webroot %>/formatter.js",
-                "<%= dirs.webroot %>/validation.js",
                 "<%= dirs.webroot %>/util.js",
                 "<%= dirs.webroot %>/event.js",
                 "<%= dirs.webroot %>/request.js",
                 "<%= dirs.webroot %>/mapping.js",
+                "<%= dirs.webroot %>/validation.js",
                 "<%= dirs.webroot %>/listBase.js",
                 "<%= dirs.webroot %>/itemBase.js"
             ],
@@ -128,7 +129,6 @@ module.exports = function (grunt) {
                 dest: "<%= dirs.dist %>/oui5lib.min.js"
             }
         },
-        
         copy: {
             oui5lib: {
                 files: [
@@ -225,6 +225,6 @@ module.exports = function (grunt) {
     grunt.registerTask("prepare-examples", ["clean:examples",
                                             "generate-oui5lib-dist",
                                             "copy:oui5lib"]);
-    grunt.registerTask("generate-oui5lib-dist", ["concat:oui5lib", "uglify:oui5lib"]);
-
+    grunt.registerTask("generate-oui5lib-dist", ["concat:oui5lib",
+                                                 "uglify:oui5lib"]);
 };

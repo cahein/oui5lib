@@ -181,7 +181,7 @@
             }
 
             if (paramConf.required && paramValue === null) {
-               throw new Error("required parameter missing: " + paramName);
+                throw new Error("required parameter missing: " + paramName);
             }
             if (paramValue !== null) {
                 requestParams[paramName] = paramValue;
