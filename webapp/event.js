@@ -31,11 +31,11 @@
             logger.warn("Couldn't publish event: no UI5 loaded");
             return;
         }
-        var eventBus = sap.ui.getCore().getEventBus();
+        let eventBus = sap.ui.getCore().getEventBus();
         eventBus.publish(channelId, eventId, eventData);
     }
     
-    var event = oui5lib.namespace("event");
+    let event = oui5lib.namespace("event");
     event.onRequestFailure = handleRequestFailure;
     
     event.publishRequestFailureEvent = publishRequestFailureEvent;

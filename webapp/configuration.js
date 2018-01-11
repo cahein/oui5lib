@@ -4,7 +4,7 @@
      * Get the componentName from the configuration.
      */
     function getComponentName() {
-        var config = getConfigData();
+        let config = getConfigData();
         return config.componentName;
     }
     
@@ -14,7 +14,7 @@
      * @returns The Component by the configured name. Returns undefined if such a Components does not exist. Returns null if the componentName has not been specified.
      */
     function getComponent() {
-        var componentName = getComponentName();
+        let componentName = getComponentName();
         if (typeof componentName === "string") {
             return sap.ui.getCore().getComponent(componentName);
         }
@@ -27,7 +27,7 @@
      * @returns {Array} The available languages. Returns undefined if not set.
      */
     function getAvailableLanguages() {
-        var config = getConfigData();
+        let config = getConfigData();
         return config.availableLanguages;
     }
 
@@ -37,7 +37,7 @@
      * @returns {string} The logLevel. Returns WARN if not set.
      */
     function getLogLevel() {
-        var config = getConfigData();
+        let config = getConfigData();
         if (config === null || typeof config.logLevel === "undefined") {
             return "WARN";
         }
@@ -50,7 +50,7 @@
      * @returns {string} The default language. Returns undefined if not set.
      */
     function getDefaultLanguage() {
-        var config = getConfigData();
+        let config = getConfigData();
         return config.defaultLanguage;
     }
 
@@ -60,7 +60,7 @@
      * @returns {string} The current language. Returns the defaultLanguage if not set.
      */
     function getCurrentLanguage() {
-        var config = getConfigData();
+        let config = getConfigData();
         if (typeof config.currentLanguage === "undefined") {
             return config.defaultLanguage;
         }
@@ -73,14 +73,14 @@
      * @param {string} sLanguage 
      */
     function setCurrentLanguage(sLanguage) {
-        var config = getConfigData();
+        let config = getConfigData();
 
-        var availableLanguages = config.availableLanguages;
+        let availableLanguages = config.availableLanguages;
         if (availableLanguages.indexOf(sLanguage) === -1) {
             sLanguage = config.defaultLanguage;
         }
 
-        var oConfiguration = sap.ui.getCore().getConfiguration();
+        let oConfiguration = sap.ui.getCore().getConfiguration();
         oConfiguration.setLanguage(sLanguage);
         config.currentLanguage = sLanguage;
 
@@ -94,7 +94,7 @@
      */
     function setLanguageModel(sLanguage) {
         // set i18n model
-        var i18nModel = new sap.ui.model.resource.ResourceModel({
+        let i18nModel = new sap.ui.model.resource.ResourceModel({
             bundleUrl: "oui5lib/i18n/i18n.properties",
             bundleLocale: sLanguage
         });
@@ -102,7 +102,7 @@
             bundleUrl: "i18n/i18n.properties",
             bundleLocale: sLanguage
         });
-        var component = getComponent();
+        let component = getComponent();
         if (typeof component.setModel === "function") {
             component.setModel(i18nModel, "i18n");
         }
@@ -114,12 +114,12 @@
      * @returns {string} The mapping folder. Returns undefined if not set.
      */
     function getMappingDir() {
-        var config = getConfigData();
+        let config = getConfigData();
         return config.mappingDirectory;
     }
 
     function getEnvironment() {
-        var config = getConfigData();
+        let config = getConfigData();
         if (config.environment === undefined) {
             return "production";
         }
@@ -127,7 +127,7 @@
     }
 
     function getUserProfileUrl() {
-        var userProfileUrl = getConfigData("userProfileUrl");
+        let userProfileUrl = getConfigData("userProfileUrl");
         if (userProfileUrl === "undefined") {
             return null;
         }
@@ -141,7 +141,7 @@
      * @returns {RegExp}
      */
     function getValidationRegex(type) {
-        var config = getConfigData();
+        let config = getConfigData();
         if (typeof config.validation === "undefined") {
             return null;
         }
@@ -152,45 +152,45 @@
         return null;
     }
 
-    var dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    var timeRegex = /^\d{2}:\d{2}:\d{2}$/;
-    var phoneRegex = /^0{2}[1-9][\d]*$/;
-    var emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    const _dateRegex = /^\d{4}-\d{2}-\d{2}$/,
+          _timeRegex = /^\d{2}:\d{2}:\d{2}$/,
+          _phoneRegex = /^0{2}[1-9][\d]*$/,
+          _emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 
     function getDateRegex() {
-        var customRegex = getValidationRegex("date");
+        let customRegex = getValidationRegex("date");
         if (customRegex !== null &&
             customRegex instanceof RegExp) {
             return customRegex;
         }
-        return dateRegex;
+        return _dateRegex;
     }
 
     function getTimeRegex() {
-        var customRegex = getValidationRegex("time");
+        let customRegex = getValidationRegex("time");
         if (customRegex !== null &&
             customRegex instanceof RegExp) {
             return customRegex;
         }
-        return timeRegex;
+        return _timeRegex;
     }
 
     function getPhoneRegex() {
-        var customRegex = getValidationRegex("phone");
+        let customRegex = getValidationRegex("phone");
         if (customRegex !== null &&
             customRegex instanceof RegExp) {
             return customRegex;
         }
-        return phoneRegex;
+        return _phoneRegex;
     }
 
     function getEmailRegex() {
-        var customRegex = getValidationRegex("email");
+        let customRegex = getValidationRegex("email");
         if (customRegex !== null &&
             customRegex instanceof RegExp) {
             return customRegex;
         }
-        return emailRegex;
+        return _emailRegex;
     }
 
     /**
@@ -205,7 +205,7 @@
         return oui5lib.config;
     }
     
-    var configuration = oui5lib.namespace("configuration");
+    let configuration = oui5lib.namespace("configuration");
     configuration.getAvailableLanguages = getAvailableLanguages;
     configuration.getDefaultLanguage = getDefaultLanguage;
     configuration.getCurrentLanguage = getCurrentLanguage;

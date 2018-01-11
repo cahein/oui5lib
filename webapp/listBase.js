@@ -5,15 +5,13 @@
             throw Error("cannot create listBase object without primary key");
         }
 
-        var _primaryKey = primaryKey;
-        var _model = null;
-        var _data = [];
-
-        var _itemsLoaded = {};
-        
-        var _procFunction = null;
-        var _dataChangedEventListeners = [];
-        var _itemDataChangedEventListeners = [];
+        let _primaryKey = primaryKey,
+            _model = null,
+            _data = [],
+            _itemsLoaded = {},
+            _procFunction = null,
+            _dataChangedEventListeners = [],
+            _itemDataChangedEventListeners = [];
         
         function isItemLoaded(id) {
             if (typeof _itemsLoaded[id] === "undefined") {
@@ -29,9 +27,9 @@
         }
         
         function removeListener(listeners, listener, context) {
-            for (var i = 0, s = listeners.length; i < s; i++) {
-                var func = listeners[i][0];
-                var ctx = listeners[i][1];
+            for (let i = 0, s = listeners.length; i < s; i++) {
+                let func = listeners[i][0];
+                let ctx = listeners[i][1];
                 if (func === listener && ctx === context) {
                     listeners.splice(i, 1);
                 }
@@ -44,7 +42,7 @@
          * @mixin
          * @example oui5lib.listBase.getObject(primaryKey);
          */
-        var ListBase = {
+        let ListBase = {
             /**
              * Register a function to be called to process incoming data through both the setData and addData function. The item data will be passed as only parameter to the function.
              * @param func The function. 
@@ -97,7 +95,7 @@
                 if (typeof reset === "boolean" && reset) {
                     this.resetData();
                 }
-                var entries;
+                let entries;
                 if (data instanceof Array) {
                     entries = data;
                 } else if (data instanceof Object) {
@@ -112,11 +110,11 @@
                         _procFunction(entries);
                     }
 
-                    var id;
+                    let id;
                     entries.forEach(function(item) {
                         id = item[_primaryKey];
                         
-                        var alreadyLoaded = isItemLoaded(id);
+                        let alreadyLoaded = isItemLoaded(id);
                         if (alreadyLoaded) {
                             listHelper.updateItemByKey(_data,
                                                        _primaryKey,
@@ -257,6 +255,6 @@
         return ListBase;
     }
     
-    var listBase = oui5lib.namespace("listBase");
+    let listBase = oui5lib.namespace("listBase");
     listBase.getObject = getBaseObject;
 }(oui5lib.lib.listHelper));

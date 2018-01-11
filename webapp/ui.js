@@ -12,12 +12,12 @@
         if (typeof openMessageBox !== "boolean") {
             openMessageBox = false;
         }
-        var msgs = [];
-        for (var i = 0, s = errors.length; i < s; i++) {
-            var error = errors[i].split(":");
+        let msgs = [];
+        for (let i = 0, s = errors.length; i < s; i++) {
+            let error = errors[i].split(":");
             logger.debug( "error: " + error[0] + " : " + error[1]);
-            var fnme = error[1];
-            var control = view.byId(modelName + "_" + fnme);
+            let fnme = error[1];
+            let control = view.byId(modelName + "_" + fnme);
             setControlValueState(control, false);
 
             msgs.push("Invalid: " + error[0] + " " + error[1]);                
@@ -34,8 +34,8 @@
      * @param {array} msgs Error messages to be shown in the box.
      */
     function showValidationErrors(msgs) {
-        var msgText = util.getI18nText("validation.fix-errors");
-        for (var i = 0, s = msgs.length; i < s; i++) {
+        let msgText = util.getI18nText("validation.fix-errors");
+        for (let i = 0, s = msgs.length; i < s; i++) {
             msgText += msgs[i] + "\n";
         }
         messages.showErrorMessage(msgText);
@@ -67,12 +67,12 @@
      * @param {sap.m.ComboBox} comboBox The ComboBox to check.
      */
     function checkComboBox(comboBox) {
-        var vlue = comboBox.getValue();
-        var selectedItem = comboBox.getSelectedItem();
+        let vlue = comboBox.getValue();
+        let selectedItem = comboBox.getSelectedItem();
         if (selectedItem === null) {
             if (!util.isBlank(vlue)) {
                 comboBox.setValueState("Warning");
-                var valueStateText = util.getI18nText("common.combobox.noItemSelected");
+                let valueStateText = util.getI18nText("common.combobox.noItemSelected");
                 comboBox.setValueStateText(valueStateText);
                 return;
             }
@@ -87,12 +87,12 @@
      * @param {sap.m.DatePicker} datePicker The DatePicker to check.
      */
     function checkDatePicker(datePicker) {
-        var value = datePicker.getValue();
+        let value = datePicker.getValue();
         if (value === null) {
             return false;
         }
-        var dateValue = datePicker.getDateValue();
-        var oDate = new Date(value);
+        let dateValue = datePicker.getDateValue();
+        let oDate = new Date(value);
         if (oDate == "Invalid Date" ||
             !(oDate.getFullYear() === dateValue.getFullYear() &&
               oDate.getMonth() === dateValue.getMonth() &&
@@ -115,7 +115,7 @@
         comboBox.removeAllItems();
     }
     
-    var ui = oui5lib.namespace("ui");
+    let ui = oui5lib.namespace("ui");
     ui.handleValidationErrors = handleValidationErrors;
     ui.setControlValueState = setControlValueState;
 

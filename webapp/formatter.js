@@ -2,9 +2,9 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
 
 /** @namespace oui5lib.formatter */
 (function() {
-    var dateFormat = "YYYY-MM-dd";
-    var timeFormat = "HH:mm:ss";
-    var dateTimeFormat = "YYYY-MM-dd HH:mm:ss";
+    const _dateFormat = "YYYY-MM-dd",
+          _timeFormat = "HH:mm:ss",
+          _dateTimeFormat = "YYYY-MM-dd HH:mm:ss";
     
 
     /**
@@ -48,7 +48,7 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     function getDateString(date, outFormat) {
         if (date instanceof Date) {
             if (typeof outFormat === "undefined") {
-                outFormat = dateFormat;
+                outFormat = _dateFormat;
             }
             return formatDate(date, outFormat);
         }
@@ -64,7 +64,7 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     function getTimeString(date, outFormat) {
         if (date instanceof Date) {
             if (typeof outFormat === "undefined") {
-                outFormat = timeFormat;
+                outFormat = _timeFormat;
             }
             return formatDate(date, outFormat);
         }
@@ -99,7 +99,7 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
             throw new Error("Function needs a date pattern to convert to");
         }
         if (typeof inFormat !== "string") {
-            inFormat = dateFormat;
+            inFormat = _dateFormat;
         }
         var inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: inFormat
@@ -124,10 +124,10 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
      */
     function procDateFromDateAndTimePickers(date, time) {
         if (date instanceof Date && time instanceof Date) {
-            var dateStr = this.formatDate(date, dateFormat) + " "
-                + this.formatDate(time, timeFormat);
+            var dateStr = this.formatDate(date, _dateFormat) + " "
+                + this.formatDate(time, _timeFormat);
             var inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
-                pattern: dateTimeFormat
+                pattern: _dateTimeFormat
             });
             return inDateFormat.parse(dateStr, false, true);
         }
@@ -213,7 +213,7 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
         return atob(content);
     }
 
-    var formatter = oui5lib.namespace("formatter");
+    let formatter = oui5lib.namespace("formatter");
     formatter.base64Encode = base64Encode;
     formatter.base64Decode = base64Decode;
     formatter.getDateFromString = getDateFromString;

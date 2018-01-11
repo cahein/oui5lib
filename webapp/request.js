@@ -20,15 +20,19 @@
             httpVerb = "GET";
         }
         if (typeof encodedParams !== "undefined" && httpVerb === "GET") {
-            var protocolRegex = /^https?.*/;
+            let protocolRegex = /^https?.*/;
             if (protocolRegex.test(url)) {
                 url += "?" + encodedParams;
             }
         }
 
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.overrideMimeType("application/json");
-        xhr.open(httpVerb, url, isAsync);
+        try {
+            xhr.open(httpVerb, url, isAsync);
+        } catch(e) {
+            logger.error(e.message);
+        }
         
         addHandlers(xhr, handleSuccess, requestProps, isAsync);        
 
@@ -67,15 +71,15 @@
             }
         }
         
-        var requestConfig = oui5lib.mapping.getRequestConfiguration(entityName,
+        let requestConfig = oui5lib.mapping.getRequestConfiguration(entityName,
                                                                     requestName);
         
-        var requestParams = procParameters(data, requestConfig);
-        var encodedParams = getEncodedParams(requestParams);
+        let requestParams = procParameters(data, requestConfig);
+        let encodedParams = getEncodedParams(requestParams);
         logger.info("request parameter string: " + encodedParams);
 
-        var httpVerb = requestConfig.method;
-        var url = procUrl(requestConfig);
+        let httpVerb = requestConfig.method;
+        let url = procUrl(requestConfig);
         logger.info("request url: " + url);
 
         fetchJson(url, handleSuccess, { "entity": entityName,
@@ -87,7 +91,7 @@
         xhr.onload = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200 || xhr.status === 0) {
-                    var responseData = null;
+                    let responseData = null;
                     try {
                         responseData = JSON.parse(xhr.responseText);
                     } catch(e) {
@@ -126,7 +130,7 @@
      * @returns {string} The request url.
      */
     function procUrl(requestConfig) {
-        var pathname = requestConfig.pathname;
+        let pathname = requestConfig.pathname;
 
         switch (oui5lib.configuration.getEnvironment()) {
         case "development":
@@ -145,9 +149,9 @@
             }
             break;
         }
-        var protocol = requestConfig.protocol;
-        var host = requestConfig.host;
-        var requestUrl = protocol + "://" + host + "/" + pathname;
+        let protocol = requestConfig.protocol;
+        let host = requestConfig.host;
+        let requestUrl = protocol + "://" + host + "/" + pathname;
         return requestUrl;
     }
     
@@ -159,13 +163,13 @@
      * @param {object} requestConfig
      */
     function procParameters(data, requestConfig) {
-        var paramsConfig = requestConfig.parameters;
+        let paramsConfig = requestConfig.parameters;
         if (paramsConfig === undefined || paramsConfig.length === 0) {
             return {};
         }
         
-        var requestParams = {};
-        var paramName, paramValue;
+        let requestParams = {};
+        let paramName, paramValue;
         paramsConfig.forEach(function(paramConf) {
             paramName = paramConf.name;
             paramValue = null;
@@ -198,7 +202,7 @@
      * @param {object} paramConfig
      */
     function convertToString(value, paramConf) {
-        var type = paramConf.type;
+        let type = paramConf.type;
         switch (type) {
         case "Date":
             if (value instanceof Date &&
@@ -239,8 +243,8 @@
     }
 
     function getEncodedParams(params) {
-        var encodedString = "";
-        for (var prop in params) {
+        let encodedString = "";
+        for (let prop in params) {
             if (params.hasOwnProperty(prop)) {
                 if (encodedString.length > 0) {
                     encodedString += "&";
@@ -251,7 +255,7 @@
         return encodedString;
     }
 
-    var request = oui5lib.namespace("request");
+    let request = oui5lib.namespace("request");
     request.fetchJson = fetchJson;
     request.sendMappingRequest = sendMappingRequest;
 }(oui5lib.logger, oui5lib.event,  oui5lib.formatter));

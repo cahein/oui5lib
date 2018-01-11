@@ -1,6 +1,7 @@
 /*eslint no-console: "off"*/
 /*eslint no-fallthrough: "off"*/
 (function (configuration) {
+    let logger = oui5lib.namespace("logger");
     if (!window.console) {
         logger.debug = function(){};
         logger.info = function(){};
@@ -9,9 +10,9 @@
         return;
     }
 
-    var logLevel =  configuration.getLogLevel();
+    const logLevel =  configuration.getLogLevel();
    
-    var logPrefix = "oui5lib - ";
+    const logPrefix = "oui5lib - ";
 
     switch (logLevel) {
     case "ERROR":
@@ -38,7 +39,6 @@
         console.error(logPrefix + "ERROR " + msg);
     }
     
-    var logger = oui5lib.namespace("logger");
     logger.debug = debug;
     logger.info = info;
     logger.warn = warn;

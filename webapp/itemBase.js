@@ -2,7 +2,7 @@
 (function () {
     function updateModel() {
         if (this._model !== undefined) {
-            var data = this.getData();
+            let data = this.getData();
             if (data !== null) {
                 this._model.setData(data);
             }
@@ -52,16 +52,16 @@
      * @return The parameter value
      */
     function getProperty(key) {
-        var item = this.getData();
+        let item = this.getData();
         if (item === null) {
             return null;
         }
 
-        var keys = key.split("/");
+        let keys = key.split("/");
         if (keys.length > 1) {
-            var subitem = item;
-            for (var i = 0, s = keys.length; i < s; i++) {
-                var subkey = keys[i];
+            let subitem = item;
+            for (let i = 0, s = keys.length; i < s; i++) {
+                let subkey = keys[i];
                 if (typeof subitem[subkey] === "undefined") {
                     return null;
                 }
@@ -81,16 +81,16 @@
      * @return {boolean} True if successful, false if key undefined.
      */
     function setProperty(key, vlue) {
-        var item = this.getData();
+        let item = this.getData();
         if (item === null) {
             return false;
         }
         
-        var keys = key.split("/");
+        let keys = key.split("/");
         if (keys.length > 1) {
-            var subitem = item;
-            for (var i = 0, s = keys.length; i < s - 1; i++) {
-                var subkey = keys[i];
+            let subitem = item;
+            for (let i = 0, s = keys.length; i < s - 1; i++) {
+                let subkey = keys[i];
                 if (typeof subitem[subkey] === "undefined") {
                     return false;
                 }
@@ -140,7 +140,7 @@
         this._isLoading = isLoading;
     }
 
-    var itemBase = oui5lib.namespace("itemBase");
+    let itemBase = oui5lib.namespace("itemBase");
     itemBase._data = null;
     itemBase._new = false;
     itemBase._modified = false;

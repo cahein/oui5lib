@@ -1,6 +1,6 @@
 /** @namespace oui5lib.validation */
 (function(configuration, util) {
-    var msgs;    
+    let msgs;    
 
     /**
      * Validate data against entity definition provided by the mapping.
@@ -9,7 +9,7 @@
      * @param {object} propertyDefinitions The definition of properties from the mapping.
      * @returns {array} The list of error messages. May be empty.
      */
-    function validateData(data, propertyDefinitions, newValidation) {
+    function validateData(data, attributeSpecs, newValidation) {
         if (typeof newValidation !== "boolean") {
             newValidation = true;
         }
@@ -17,60 +17,60 @@
             msgs = [];
         }
         
-        for (var i = 0, s = propertyDefinitions.length; i < s; i++) {
-            var propDef = propertyDefinitions[i];
-            var propName = propDef.name;
+        for (let i = 0, s = attributeSpecs.length; i < s; i++) {
+            let attributeSpec = attributeSpecs[i];
+            let attributeName = attributeSpec.name;
 
-            switch (propDef.type) {
+            switch (attributeSpec.type) {
             case "array":
-                handleArray(data[propName], propDef, msgs);
+                handleArray(data[attributeName], attributeSpec, msgs);
                 continue;
             case "object":
-                if (typeof data[propName] === "object") {
-                    validateData(data[propName], propDef.objectItem, false);
+                if (typeof data[attributeName] === "object") {
+                    validateData(data[attributeName], attributeSpec.objectItem, false);
                 } else {
-                    if (propDef.required) {
-                        msgs.push("missing:" + propName);
+                    if (attributeSpec.required) {
+                        msgs.push("missing:" + attributeName);
                     }
                 }
                 continue;
             }
             
-            var propValue = null;
-            if (typeof data[propName] !== "undefined") {
-                propValue = data[propName];
-            } else if (typeof propDef.default !== "undefined") {
-                propValue = propDef.default;
+            let attributeValue = null;
+            if (typeof data[attributeName] !== "undefined") {
+                attributeValue = data[attributeName];
+            } else if (typeof attributeSpec.default !== "undefined") {
+                attributeValue = attributeSpec.default;
             }
 
             // required
-            if (propDef.required) {
-                if (propValue === null ||
-                    (typeof propValue === "string" && util.isBlank(propValue))) {
-                    msgs.push("missing:" + propName);
+            if (attributeSpec.required) {
+                if (attributeValue === null ||
+                    (typeof attributeValue === "string" && util.isBlank(attributeValue))) {
+                    msgs.push("missing:" + attributeName);
                     continue;
                 }
             }
             // wrong type
-            if (propDef.required || propValue !== null) {
-                if (hasWrongType(propDef.type, propValue)) {
-                    msgs.push("wrongType:" + propName);
+            if (attributeSpec.required || attributeValue !== null) {
+                if (hasWrongType(attributeSpec.type, attributeValue)) {
+                    msgs.push("wrongType:" + attributeName);
                     continue;
                 }
             }
             // run validation tests
-            if (propDef.validate !== undefined &&
-                propDef.validate instanceof Array) {
-                if (!isValid(propValue, propDef.validate)) {
-                    msgs.push("invalid:" + propName);
+            if (attributeSpec.validate !== undefined &&
+                attributeSpec.validate instanceof Array) {
+                if (!isValid(attributeValue, attributeSpec.validate)) {
+                    msgs.push("invalid:" + attributeName);
                     continue;
                 }
             }
             // allowedValues
-            if (typeof propDef.allowedValues !== "undefined") {
-                var allowedValues = propDef.allowedValues;
-                if (!isValueAllowed(allowedValues, propValue)) {
-                    msgs.push("notAllowed:" + propName);
+            if (typeof attributeSpec.allowedValues !== "undefined") {
+                let allowedValues = attributeSpec.allowedValues;
+                if (!isValueAllowed(allowedValues, attributeValue)) {
+                    msgs.push("notAllowed:" + attributeName);
                     continue;
                 }
             }
@@ -121,28 +121,28 @@
         return false;
     }
 
-    function handleArray(data, propDef, msgs) {
+    function handleArray(data, attributeSpec, msgs) {
         if (data instanceof Array && data.length > 0) {
-            if (typeof propDef.arrayItem !== "undefined") {
-                var arrayDefs = propDef.arrayItem;
+            if (typeof attributeSpec.arrayItem !== "undefined") {
+                let arrayDefs = attributeSpec.arrayItem;
                 // an array of objects
                 data.forEach(function(item) {
                     validateData(item, arrayDefs, false);
                 });
             } else {
                 // an array of strings
-                if (typeof propDef.allowedValues !== "undefined") {
-                    var allowedValues = propDef.allowedValues;
+                if (typeof attributeSpec.allowedValues !== "undefined") {
+                    let allowedValues = attributeSpec.allowedValues;
                     data.forEach(function(value) {
                         if (!isValueAllowed(allowedValues, value)) {
-                            msgs.push("notAllowed:" + propDef.name + ":" + value);
+                            msgs.push("notAllowed:" + attributeSpec.name + ":" + value);
                         }
                     });
                 }
             }
         } else {
-            if (propDef.required) {
-                msgs.push("missing:" + propDef.name);
+            if (attributeSpec.required) {
+                msgs.push("missing:" + attributeSpec.name);
             }
         }
     }
@@ -162,11 +162,11 @@
             }
         }
 
-        var valid = true;
+        let valid = true;
         if (tests instanceof Array && tests.length > 0) {
             tests.forEach(function(test) {
-                var match = test.match(/([a-zA-Z]+)_(\d+)/);
-                var number = null;
+                let match = test.match(/([a-zA-Z]+)_(\d+)/);
+                let number = null;
                 if (match !== null && match.length === 3) {
                     test = match[1];
                     number = parseInt(match[2]);
@@ -256,7 +256,7 @@
      * @returns {boolean}
      */
     function custom(fnme, value) {
-        var regex;
+        let regex;
 
         switch(fnme) {
         case "email":
@@ -269,14 +269,14 @@
         return regex.test(value);
     }
     function isFuture(value) {
-        var now = new Date();
+        let now = new Date();
         if (now.getTime() < value.getTime()) {
             return true;
         }
         return false;
     }
     function isPast(value) {
-        var now = new Date();
+        let now = new Date();
         if (now.getTime() > value.getTime()) {
             return true;
         }
@@ -335,7 +335,7 @@
      * @returns {boolean}
      */
     function numbersOnly(value) {
-        var regex = /^[\d]+$/;
+        let regex = /^[\d]+$/;
         return regex.test(value);
     }
 
@@ -346,7 +346,7 @@
      * @returns {boolean}
      */
     function noNumbers(value) {
-        var regex = /^[^\d]+$/;
+        let regex = /^[^\d]+$/;
         return regex.test(value);
     }
 
@@ -357,7 +357,7 @@
      * @returns {boolean}
      */
     function hasLetters(value) {
-        var regex = /[A-Za-z]+/;
+        let regex = /[A-Za-z]+/;
         return regex.test(value);
     }
 
@@ -432,7 +432,7 @@
     }
 
     
-    var validation = oui5lib.namespace("validation");
+    let validation = oui5lib.namespace("validation");
     validation.validateData = validateData;
     validation.isValid = isValid;
     validation.isValidDate = isValidDateString;

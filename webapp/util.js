@@ -12,7 +12,7 @@
      * @memberof oui5lib.util
      */
     function getComponentRouter() {
-        var component = configuration.getComponent();
+        let component = configuration.getComponent();
         if (component !== null) {
             return component.getRouter();
         }
@@ -24,7 +24,7 @@
      * @memberof oui5lib.util
      */
     function getComponentEventBus() {
-        var component = configuration.getComponent();
+        let component = configuration.getComponent();
         if (component !== null) {
             return component.getEventBus();
         }
@@ -38,8 +38,8 @@
      * @returns {string} The value of the property.
      */
     function getI18nText(path) {
-        var component = configuration.getComponent();
-        var i18nModel = component.getModel("i18n");
+        let component = configuration.getComponent();
+        let i18nModel = component.getModel("i18n");
         return i18nModel.getProperty(path);
     }
     
@@ -50,7 +50,7 @@
      * @returns {sap.ui.model.json.JSONModel} The JSONModel.
      */
     function getJsonModelForData(data) {
-        var model = new sap.ui.model.json.JSONModel();
+        let model = new sap.ui.model.json.JSONModel();
         if (data.length > 100) {
             model.setSizeLimit(data.length);
         }
@@ -66,20 +66,20 @@
      * @param {string} operator The sap.ui.model.FilterOperator.
      */
     function getFilterArray(search, fields, operator) {
-        var filters = [];
-        if (oui5lib.validation.isBlank(search)) {
+        let filters = [];
+        if (isBlank(search)) {
             return filters;
         }
         if (typeof operator === "undefined") {
             operator = "Contains";
         }
-        var allowedOperators = [ "Contains", "EndsWith", "EQ", "NE", "StartsWith" ];
+        const allowedOperators = [ "Contains", "EndsWith", "EQ", "NE", "StartsWith" ];
         if (allowedOperators.indexOf(operator) === -1) {
             return filters;
         }
-        var subFilters = [];
-        for (var i = 0, s = fields.length; i < s; i++) {
-            var field = fields[i];
+        let subFilters = [];
+        for (let i = 0, s = fields.length; i < s; i++) {
+            let field = fields[i];
             subFilters.push(
                 new sap.ui.model.Filter(field, operator, search)
             );
@@ -100,7 +100,7 @@
      * @param {object} o The object to be frozen.
      */
     function deepFreeze(o) {
-        var prop, propKey;
+        let prop, propKey;
         Object.freeze(o);
         for (propKey in o) {
             prop = o[propKey];
@@ -113,8 +113,8 @@
     }
 
     function extend(){
-        for (var i = 1; i < arguments.length; i++) {
-            for (var key in arguments[i]) {
+        for (let i = 1; i < arguments.length; i++) {
+            for (let key in arguments[i]) {
                 if(arguments[i].hasOwnProperty(key)) { 
                     if (typeof arguments[0][key] === "object"
                         && typeof arguments[i][key] === "object") {
@@ -142,8 +142,8 @@
             throw new TypeError("The given value is not a string");
         }
         if (typeof value === "string") {
-            for (var i = 0; i < value.length; i++) {
-                var c = value.charAt(i);
+            for (let i = 0; i < value.length; i++) {
+                let c = value.charAt(i);
                 if (c != " " && c != "\n" && c != "\t") {
                     return false;
                 }
@@ -152,7 +152,7 @@
         return true;
     }
 
-    var util = oui5lib.namespace("util");
+    let util = oui5lib.namespace("util");
     util.isUI5Loaded = isUI5Loaded;
     util.getComponentRouter = getComponentRouter;
     util.getComponentEventBus = getComponentEventBus;

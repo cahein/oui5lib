@@ -22,12 +22,12 @@
      * @returns {object} The specification from the mapping.
      */
     function getEntityAttributeSpec(entityName, propertyPath) {
-        var attributeSpecs = getEntityAttributeSpecs(entityName);
+        let attributeSpecs = getEntityAttributeSpecs(entityName);
 
-        var pathLevels = propertyPath.split("/");
+        let pathLevels = propertyPath.split("/");
         if (pathLevels.length > 1) {
-            var subPath, attributeSpec;
-            for (var i = 0, s = pathLevels.length; i < s - 1; i++) {
+            let subPath, attributeSpec;
+            for (let i = 0, s = pathLevels.length; i < s - 1; i++) {
                 subPath = pathLevels[i];
                 attributeSpec = listHelper.getItemByKey(attributeSpecs,
                                                         "name", subPath);
@@ -60,7 +60,7 @@
         return getMapping(entityName).request[requestName];
     }
 
-    var _mappings = {};
+    let _mappings = {};
 
     /**
      * Get the mapping for the given entity. Will try to load the mapping if necessary.
@@ -86,8 +86,8 @@
      * @param {string} entityName The name of the entity.
      */
     function loadMapping(entityName) {
-        var dir = configuration.getMappingDir();
-        var url = dir + "/" + entityName + ".json";
+        let dir = configuration.getMappingDir();
+        let url = dir + "/" + entityName + ".json";
         logger.info("load mapping: " + url);
         request.fetchJson(url, mappingLoaded, { entity: entityName }, false);
     }
@@ -100,7 +100,7 @@
      * @param {object} requestProps The properties passed along with the request.
      */
     function mappingLoaded(mappingData, requestProps) {
-        var entityName = requestProps.entity;
+        let entityName = requestProps.entity;
         
         if (typeof mappingData === "object") {
             if (mappingData.entity !== undefined &&
@@ -108,12 +108,12 @@
                 procArrayOfSpecifications(mappingData.entity, true);
             }
             if (mappingData.request !== undefined) {
-                var requestDefaults = mappingData.request.defaults;
-                for (var requestName in mappingData.request) {
+                let requestDefaults = mappingData.request.defaults;
+                for (let requestName in mappingData.request) {
                     if (requestName === "defaults") {
                         continue;
                     }
-                    var requestConfig = mappingData.request[requestName];
+                    let requestConfig = mappingData.request[requestName];
                     if (requestDefaults !== undefined) {
                         setRequestDefaults(requestConfig, requestDefaults);
                     }
@@ -161,7 +161,7 @@
     }
 
     function setEntityAttributeDefaults(attributeSpec) {
-        var tests = [];
+        let tests = [];
         if (typeof attributeSpec.validate !== "undefined" &&
             attributeSpec.validate instanceof Array) {
             tests = attributeSpec.validate;
@@ -182,7 +182,7 @@
     }
     
     function setRequestDefaults(requestConfig, requestDefaults) {
-        var defaultKeys = ["protocol", "host"];
+        let defaultKeys = ["protocol", "host"];
         defaultKeys.forEach(function(key) {
             if (requestConfig[key] === undefined) {
                 if (requestDefaults[key] !== undefined) {
@@ -197,9 +197,12 @@
         requestConfig.method = "GET";
     }
 
-    var mapping = oui5lib.namespace("mapping");
+    let mapping = oui5lib.namespace("mapping");
     mapping.getPrimaryKey = getPrimaryKey;
     mapping.getEntityAttributeSpecs = getEntityAttributeSpecs;
     mapping.getEntityAttributeSpec = getEntityAttributeSpec;
     mapping.getRequestConfiguration = getRequestConfig;
-}(oui5lib.configuration, oui5lib.logger, oui5lib.lib.listHelper, oui5lib.request));
+}(oui5lib.configuration,
+  oui5lib.logger,
+  oui5lib.lib.listHelper,
+  oui5lib.request));

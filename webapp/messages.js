@@ -25,7 +25,7 @@
         if (typeof handleClose !== "function") {
             handleClose = handleMessageBoxClosed;
         }
-        var title = util.getI18nText("messagebox.error.title");
+        let title = util.getI18nText("messagebox.error.title");
 
         jQuery.sap.require("sap.m.MessageBox");
         sap.m.MessageBox.error(msg, {
@@ -80,7 +80,7 @@
         });
     }
 
-    var messages = oui5lib.namespace("messages");
+    let messages = oui5lib.namespace("messages");
     messages.showNotification = showMessageToast;
     messages.showErrorMessage = showErrorMessageBox;
     messages.confirmUnsavedChanges = confirmUnsavedChanges;

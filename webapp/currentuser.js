@@ -2,7 +2,7 @@
     "use strict";
 
     /** @namespace oui5lib.currentuser */
-    var user = oui5lib.namespace("currentuser"),
+    let user = oui5lib.namespace("currentuser"),
         _name = null,
         _userId = null,
         _token = null,
@@ -35,7 +35,7 @@
             return false;
         }
         if (typeof _permissionsMap.views[viewName] !== "undefined") {
-            var viewRoles = _permissionsMap.views[viewName].roles;
+            let viewRoles = _permissionsMap.views[viewName].roles;
             return hasPermissions(viewRoles);
         }
         return true;
@@ -54,7 +54,7 @@
             return false;
         }
 
-        var authorized = false,
+        let authorized = false,
             i, s;
 
         for (i = 0, s = authorizedRoles.length; i < s; i++) {
@@ -82,7 +82,7 @@
      * Initialize the current user object.
      */
     function init() {
-        var userProfileUrl = configuration.getUserProfileUrl();
+        let userProfileUrl = configuration.getUserProfileUrl();
         if (userProfileUrl !== null) {
             requestUserProfile(userProfileUrl);
         }
