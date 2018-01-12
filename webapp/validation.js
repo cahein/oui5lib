@@ -36,12 +36,7 @@
                 continue;
             }
             
-            let attributeValue = null;
-            if (typeof data[attributeName] !== "undefined") {
-                attributeValue = data[attributeName];
-            } else if (typeof attributeSpec.default !== "undefined") {
-                attributeValue = attributeSpec.default;
-            }
+            let attributeValue = getAttributeValue(data, attributeSpec);
 
             // required
             if (attributeSpec.required) {
@@ -78,6 +73,17 @@
         return msgs;
     }
 
+    function getAttributeValue(data, attributeSpec) {
+        let attributeName = attributeSpec.name;
+        let attributeValue = null;
+        if (typeof data[attributeName] !== "undefined") {
+            attributeValue = data[attributeName];
+        } else if (typeof attributeSpec.default !== "undefined") {
+            attributeValue = attributeSpec.default;
+        }
+        return attributeValue;
+    }
+
     function isValueAllowed(allowedValues, value) {
         if (allowedValues.indexOf(value) === -1) {
             return false;
@@ -88,6 +94,8 @@
     function hasWrongType(type, value) {
         switch(type) {
         case "string":
+        case "email":
+        case "phone":
             if (typeof value !== "string") {
                 return true;
             }
@@ -113,9 +121,6 @@
             if (!(value instanceof Date)) {
                 return true;
             }
-            break;
-        case "email":
-        case "phone":
             break;
         }
         return false;
