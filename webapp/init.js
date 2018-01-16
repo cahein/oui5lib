@@ -27,20 +27,17 @@ xhr.onload = function() {
 };
 xhr.send();
 
-jQuery.sap.require("oui5lib.configuration");
-
-jQuery.sap.require("oui5lib.lib.listHelper");
-jQuery.sap.require("oui5lib.logger");
-jQuery.sap.require("oui5lib.formatter");
-jQuery.sap.require("oui5lib.util");
-jQuery.sap.require("oui5lib.event");
-jQuery.sap.require("oui5lib.request");
-jQuery.sap.require("oui5lib.currentuser");
-jQuery.sap.require("oui5lib.mapping");
-
-jQuery.sap.require("oui5lib.validation");
-jQuery.sap.require("oui5lib.messages");
-jQuery.sap.require("oui5lib.ui");
-
-jQuery.sap.require("oui5lib.itemBase");
-jQuery.sap.require("oui5lib.listBase");
+jQuery.sap.require("oui5lib.configuration",
+                   "oui5lib.lib.listHelper",
+                   "oui5lib.logger",
+                   "oui5lib.formatter",
+                   "oui5lib.util",
+                   "oui5lib.event",
+                   "oui5lib.request",
+                   "oui5lib.currentuser",
+                   "oui5lib.mapping",
+                   "oui5lib.validation",
+                   "oui5lib.messages",
+                   "oui5lib.ui",
+                   "oui5lib.itemBase",
+                   "oui5lib.listBase");

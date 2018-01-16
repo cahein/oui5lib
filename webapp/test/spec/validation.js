@@ -73,7 +73,63 @@ describe("Namespace oui5lib.validation", function() {
             expect(oui5lib.validation.max("b10", 8)).toBe(false);
         });
     }),
-    it("should validate an object depending on the parameter definitions of the mapping", function() {
+
+    it("should validate a fictive user object", function() {
+        let paramDefs = [
+            {
+                "name": "name",
+                "required": true,
+                "type": "string",
+                "validate": [ "containsLetters" ]
+            },{
+                "name": "email",
+                "required": false,
+                "type": "email",
+                "validate": [ "email" ]
+            },{
+                "name": "emailValidated",
+                "required": true,
+                "default": false,
+                "type": "boolean"
+            },{
+                "name": "role",
+                "required": true,
+                "type": "string",
+                "allowedValues": [ "developer", "user", "administrator" ]
+            }
+        ];
+        let userData = {};
+        let msgs = oui5lib.validation.validateData(userData, paramDefs);
+        expect(msgs.length).toEqual(2);
+        expect(msgs[0]).toEqual("missing:name");
+        expect(msgs[1]).toEqual("missing:role");
+        
+        userData = {
+            name: "123",
+            email: "anyhost.name",
+            emailValidated: "false",
+            role: "guest"
+        };
+
+        msgs = oui5lib.validation.validateData(userData, paramDefs);
+        expect(msgs.length).toEqual(4);
+        expect(msgs[0]).toEqual("invalid:name");
+        expect(msgs[1]).toEqual("invalid:email");
+        expect(msgs[2]).toEqual("wrongType:emailValidated");
+        expect(msgs[3]).toEqual("notAllowed:role");
+
+        userData = {
+            name: "Carst Heinrigs",
+            email: "oui5lib@cahein.de",
+            role: "developer"
+        };
+
+        msgs = oui5lib.validation.validateData(userData, paramDefs);
+        expect(msgs.length).toEqual(0);
+
+    });
+
+    it("should validate an object depending on the entity attribute specifications of the mapping", function() {
         var paramDefs = oui5lib.fixtures.paramDefs;
         var userData = {
             "persNr": "12345",

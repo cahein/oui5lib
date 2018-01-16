@@ -7,11 +7,21 @@
      * @returns {string} The primaryKey property from the mapping.
      */
     function getPrimaryKey(entityName) {
-        return getMapping(entityName).primaryKey;
+        try {
+            return getMapping(entityName).primaryKey;
+        } catch(e) {
+            logger.error(e.message);
+        }
+        return undefined;
     }
 
     function getEntityAttributeSpecs(entityName) {
-        return getMapping(entityName).entity;
+        try {
+            return getMapping(entityName).entity;
+        } catch(e) {
+            logger.error(e.message);
+        }
+        return undefined;
     }
     
     /**
