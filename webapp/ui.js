@@ -93,10 +93,13 @@
         }
         let dateValue = datePicker.getDateValue();
         let oDate = new Date(value);
-        if (oDate == "Invalid Date" ||
-            !(oDate.getFullYear() === dateValue.getFullYear() &&
-              oDate.getMonth() === dateValue.getMonth() &&
-              oDate.getDate() === dateValue.getDate())) {
+        if (oDate == "Invalid Date") {
+            datePicker.setValueStateText(util.getI18nText("date.invalid"));
+            datePicker.setValueState("Error");
+            return false;
+        } else if (!(oDate.getFullYear() === dateValue.getFullYear() &&
+                     oDate.getMonth() === dateValue.getMonth() &&
+                     oDate.getDate() === dateValue.getDate())) {
             datePicker.setValueState("Warning");
             return false;
         } else {

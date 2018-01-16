@@ -19,7 +19,7 @@
             },
             "i18n": {
                 "label": "exampleEntity.firstName",
-                "valueText": "exampleEntity.firstName.valueText"
+                "invalid": "exampleEntity.firstName.invalid"
             }
         },
         {
@@ -34,7 +34,7 @@
             },
             "i18n": {
                 "label": "exampleEntity.lastName",
-                "valueText": "exampleEntity.lastName.valueText"
+                "invalid": "exampleEntity.lastName.invalid"
             }
         },
         {
@@ -138,7 +138,9 @@
                 "itemsModel": "items", 
                 "itemKey": "key", 
                 "itemText": "text",
-                "sortBy" : "text"
+                "sortBy" : "text",
+                "sortOrder": "DESC",
+                "onlyItems": true
             },
             "i18n" : {
                 "label" : "exampleEntity.comboItem",

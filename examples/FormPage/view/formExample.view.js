@@ -17,7 +17,8 @@ sap.ui.jsview("oum.view.formExample", {
         });
         
         oController.addInput(formContainer, "exampleEntity", "first_name");
-        oController.addInputToLastFormElement(formContainer, "exampleEntity", "last_name");
+        let input = oController.getInput("exampleEntity", "last_name");
+        oController.addToLastFormElement(formContainer, input);
         
         oController.addInput(formContainer, "exampleEntity", "number");
         oController.addInput(formContainer, "exampleEntity", "integer");
@@ -50,7 +51,7 @@ sap.ui.jsview("oum.view.formExample", {
                     sap.ui.jsfragment("oui5lib.fragment.HomeButton", oController)
                 ]
             }),
-	    content: [ messages, exampleForm ]
+            content: [ messages, exampleForm ]
         });
     }
 });
