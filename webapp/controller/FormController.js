@@ -88,8 +88,8 @@ sap.ui.define([
             let input = new sap.m.Input(controlId, {
                 value: "{" + entityName + ">/" + propertyName + "}"
             });
-            this.attachChange(input, attributeSpec.validate, this);
-            this.setValueStateText(input, attributeSpec, propertyName);
+            this.attachChange(input, attributeSpec.validate);
+            this.setValueStateText(attributeSpec, input);
             this.setCommons(attributeSpec, input);
 
             if (typeof attributeSpec.ui5.type === "string") {
@@ -125,8 +125,8 @@ sap.ui.define([
                 value: "{" + entityName + ">/" + propertyName + "}",
                 mask: attributeSpec.ui5.mask
             });
-            this.attachChange(input, attributeSpec.validate, this);
-            this.setValueStateText(input, attributeSpec, propertyName);
+            this.attachChange(input, attributeSpec.validate);
+            this.setValueStateText(attributeSpec, input);
             this.setCommons(attributeSpec, input);
             return input;
         },
@@ -153,8 +153,8 @@ sap.ui.define([
             let textArea = new sap.m.TextArea(controlId, {
                 value: "{" + entityName + ">/" + propertyName + "}"
             });
-            this.attachChange(textArea, attributeSpec.validate, this);
-            this.setValueStateText(textArea, attributeSpec, propertyName);
+            this.attachChange(textArea, attributeSpec.validate);
+            this.setValueStateText(attributeSpec, textArea);
             this.setCommons(attributeSpec, textArea);
             
             if (typeof attributeSpec.ui5.growing === "boolean") {
@@ -170,11 +170,19 @@ sap.ui.define([
             }
             return textArea;
         },
-
-        attachChange: function(inputBase, tests, controller) {
+        
+        /**
+         * Attach function to the InputBase change event.
+         * @memberof oui5lib.controller.FormController
+         * @public
+         * @param {sap.m.InputBase} inputBase Some Element extending the InputBase.
+         * @param {Array} constraints An array of strings used for validation. See {@link oui5lib.validation.isValid}
+         */
+        attachChange: function(inputBase, constraints) {
+            let controller = this;
             inputBase.attachChange(function() {
                 controller.setRecordChanged();
-                if (oui5lib.validation.isValid(inputBase.getValue(), tests)) {
+                if (oui5lib.validation.isValid(inputBase.getValue(), constraints)) {
                     oui5lib.ui.setControlValueState(inputBase, true);
                 } else {
                     oui5lib.ui.setControlValueState(inputBase, false);
@@ -256,7 +264,7 @@ sap.ui.define([
             this.addToForm(form, label, comboBox);
             return comboBox;
         },
-        getComboBox : function(entityName, propertyName) {
+        getComboBox: function(entityName, propertyName) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                propertyName);
             if (attributeSpec === null) {
@@ -278,7 +286,7 @@ sap.ui.define([
                     }
                 }
             });
-            this.setValueStateText(comboBox, attributeSpec, propertyName);
+            this.setValueStateText(attributeSpec, comboBox);
             this.setCommons(attributeSpec, comboBox);
 
             this.bindItemTemplate(attributeSpec, comboBox);
@@ -297,7 +305,7 @@ sap.ui.define([
             this.addToForm(form, label, comboBox);
             return comboBox;
         },
-        getMultiComboBox : function(entityName, propertyName) {
+        getMultiComboBox: function(entityName, propertyName) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                propertyName);
             if (attributeSpec === null) {
@@ -312,7 +320,7 @@ sap.ui.define([
                     controller.setRecordChanged();
                 }
             });
-            this.setValueStateText(multiComboBox, attributeSpec, propertyName);
+            this.setValueStateText(attributeSpec, multiComboBox);
             this.setCommons(attributeSpec, multiComboBox);
 
             this.bindItemTemplate(attributeSpec, multiComboBox);
@@ -331,7 +339,7 @@ sap.ui.define([
             this.addToForm(form, label, select);
             return select;
         },
-        getSelect : function(entityName, propertyName) {
+        getSelect: function(entityName, propertyName) {
             const attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                  propertyName);
             if (attributeSpec === null) {
@@ -348,7 +356,7 @@ sap.ui.define([
                     select.setValueState("None");
                 }
             });
-            this.setValueStateText(select, attributeSpec, propertyName);
+            this.setValueStateText(attributeSpec, select);
             this.setCommons(attributeSpec, select);
 
             this.bindItemTemplate(attributeSpec, select);
@@ -443,7 +451,7 @@ sap.ui.define([
                     controller.setRecordChanged();
                 }
             });
-            this.setValueStateText(dateTimePicker, attributeSpec, propertyName);
+            this.setValueStateText(attributeSpec, dateTimePicker);
             this.setCommons(attributeSpec, dateTimePicker);
             return dateTimePicker;
         },
@@ -487,7 +495,7 @@ sap.ui.define([
                     }
                 }
             });
-            this.setValueStateText(datePicker, attributeSpec, propertyName);
+            this.setValueStateText(attributeSpec, datePicker);
             this.setCommons(attributeSpec, datePicker);
 
             if (typeof attributeSpec.ui5.future === "boolean") {
@@ -502,8 +510,8 @@ sap.ui.define([
             return datePicker;
         },
 
-        addTimePicker: function(form, entityName, propertyName, onChange, addLabel) {
-            let timePicker = this.getTimePicker(entityName, propertyName, onChange);
+        addTimePicker: function(form, entityName, propertyName, addLabel) {
+            let timePicker = this.getTimePicker(entityName, propertyName);
             if (timePicker === null) {
                 return null;
             }
@@ -513,7 +521,7 @@ sap.ui.define([
             this.addToForm(form, label, timePicker);
             return timePicker;
         },
-        getTimePicker : function(entityName, propertyName, onChange) {
+        getTimePicker : function(entityName, propertyName) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                propertyName);
             if (attributeSpec === null) {
@@ -537,15 +545,9 @@ sap.ui.define([
                 change: function(oEvent) {
                     controller.setRecordChanged();
                     timePicker.setValueState("None");
-
-                    if (typeof onChange === "object") {
-                        let c = onChange.controller;
-                        let f = onChange.function;
-                        f(oEvent, c);
-                    }
                 }
             });
-            this.setValueStateText(timePicker, attributeSpec, propertyName);
+            this.setValueStateText(attributeSpec, timePicker);
             this.setCommons(attributeSpec, timePicker);
             return timePicker;
         },
@@ -596,16 +598,12 @@ sap.ui.define([
                 }
             }
         },
-        setValueStateText: function(control, attributeSpec, propertyName) {
-            let errorTextKey = "";
+        setValueStateText: function(attributeSpec, control) {
             if (typeof attributeSpec.i18n.invalid === "string") {
-                errorTextKey = attributeSpec.i18n.invalid;
-            } else {
-                errorTextKey = "validation." + propertyName + ".invalid";
+                control.setValueStateText(
+                    oui5lib.util.getI18nText(attributeSpec.i18n.invalid)
+                );
             }
-            control.setValueStateText(
-                oui5lib.util.getI18nText(errorTextKey)
-            );
         },
         getLabel: function(addLabel, attributeSpec, labelFor) {
             if (typeof addLabel !== "boolean" || addLabel) {
