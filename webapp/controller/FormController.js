@@ -196,7 +196,7 @@ sap.ui.define([
             this.addToForm(form, label, oSwitch);
             return oSwitch;
         },
-        getSwitch : function(entityName, propertyName) {
+        getSwitch: function(entityName, propertyName) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                propertyName);
             if (attributeSpec === null) {
@@ -210,6 +210,7 @@ sap.ui.define([
                     controller.setRecordChanged();
                 }
             });
+            this.setCommons(attributeSpec, oSwitch);
             return oSwitch;
         },
 
@@ -224,7 +225,7 @@ sap.ui.define([
             this.addToForm(form, label, checkBox);
             return checkBox;
         },
-        getCheckBox : function(entityName, propertyName) {
+        getCheckBox: function(entityName, propertyName) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                propertyName);
             if (attributeSpec === null) {
@@ -449,7 +450,7 @@ sap.ui.define([
             this.addToForm(form, label, datePicker);
             return datePicker;
         },
-        getDatePicker : function(entityName, propertyName) {
+        getDatePicker: function(entityName, propertyName) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                propertyName);
             if (attributeSpec === null) {
@@ -471,12 +472,17 @@ sap.ui.define([
             this.setDateFormats(attributeSpec, datePicker, "date");
 
             if (typeof attributeSpec.ui5.future === "boolean") {
-                if (!attributeSpec.ui5.future) {
-                    let maxDate = new Date();
-                    maxDate.setHours(23);
-                    maxDate.setMinutes(59);
-                    maxDate.setSeconds(59);
-                    datePicker.setMaxDate(maxDate);
+                let currentDate = new Date();
+                if (attributeSpec.ui5.future) {
+                    currentDate.setHours(0);
+                    currentDate.setMinutes(0);
+                    currentDate.setSeconds(0);
+                    datePicker.setMinDate(currentDate);
+                } else {
+                    currentDate.setHours(23);
+                    currentDate.setMinutes(59);
+                    currentDate.setSeconds(59);
+                    datePicker.setMaxDate(currentDate);
                 }
             }
             return datePicker;
@@ -493,7 +499,7 @@ sap.ui.define([
             this.addToForm(form, label, timePicker);
             return timePicker;
         },
-        getTimePicker : function(entityName, propertyName) {
+        getTimePicker: function(entityName, propertyName) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
                                                                propertyName);
             if (attributeSpec === null) {
