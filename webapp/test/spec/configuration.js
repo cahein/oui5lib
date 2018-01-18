@@ -5,10 +5,22 @@ describe("Namespace oui5lib.configuration", function() {
     afterAll(function() {
     });
 
-    it("should return array of available languages", function() {
-        var availableLanguages = oui5lib.configuration.getAvailableLanguages();
-        expect(availableLanguages instanceof Array).toBe(true);
-        expect(availableLanguages.length).toEqual(2);
+    describe("Language handling", function() {
+        it("should return array of available languages", function() {
+            var availableLanguages = oui5lib.configuration.getAvailableLanguages();
+            expect(availableLanguages instanceof Array).toBe(true);
+            expect(availableLanguages.length).toEqual(2);
+        });
+    
+        it("should return default language", function() {
+            var defaultLanguage = oui5lib.configuration.getDefaultLanguage();
+            expect(defaultLanguage).toEqual("en");
+        });
+
+        it("should return current language as default language", function() {
+            var currentLanguage = oui5lib.configuration.getCurrentLanguage();
+            expect(currentLanguage).toEqual("en");
+        });
     });
     
     it("should return log level", function() {
@@ -16,17 +28,21 @@ describe("Namespace oui5lib.configuration", function() {
         expect(typeof logLevel).toEqual("string");
         expect(logLevel).toEqual("ERROR");
     });
-    
-    it("should return default language", function() {
-        var defaultLanguage = oui5lib.configuration.getDefaultLanguage();
-        expect(defaultLanguage).toEqual("en");
-    });
+    it("should return date and time formats defined in the configuration", function() {
+        let format = oui5lib.configuration.getDateTimeFormat("dateTimeValue");
+        expect(format).toEqual("YYYY-MM-dd HH:mm:ss");
+        format = oui5lib.configuration.getDateTimeFormat("dateTimeDisplay");
+        expect(format).toEqual("MMM d, y, HH:mm:ss");
 
-    it("should return current language as default language", function() {
-        var currentLanguage = oui5lib.configuration.getCurrentLanguage();
-        expect(currentLanguage).toEqual("en");
+        format = oui5lib.configuration.getDateTimeFormat("dateValue");
+        expect(format).toEqual("YYYY-MM-dd");
+        format = oui5lib.configuration.getDateTimeFormat("dateDisplay");
+        expect(format).toEqual("short");
     });
-
+    it("should return null if an undefined date/time format is asked for", function() {
+        let format = oui5lib.configuration.getDateTimeFormat("datetimeValue");
+        expect(format).toBe(null);
+    });
     it("should return regexes defined in the configuration", function() {
         var dateRegex = oui5lib.configuration.getDateRegex();
         expect(dateRegex instanceof RegExp).toBe(true);

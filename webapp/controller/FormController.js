@@ -3,22 +3,14 @@ sap.ui.define([
 ], function(oController) {
     "use strict";
 
-    let mapping = oui5lib.mapping;
+    const mapping = oui5lib.mapping;
+    const configuration = oui5lib.configuration;
     
     /**
      * Use the FormController if you have a view with a Form. 
      * @mixin oui5lib.controller.FormController
      */
     const FormController = oController.extend("oui5lib.controller.FormController", {
-        defaultDateTimeDisplayFormat: "MMM d, y, HH:mm:ss",
-        defaultDateTimeValueFormat: "yyyy-MM-dd HH:mm:ss",
-        
-        defaultDateDisplayFormat: "short",
-        defaultDateValueFormat: "yyyy-MM-dd",
-
-        defaultTimeDisplayFormat: "HH:mm",
-        defaultTimeValueFormat: "HH:mm",
-
         // default: Text
         _availableInputTypes: ["Email", "Number", "Password", "Tel", "Text", "Url"],
         
@@ -430,12 +422,12 @@ sap.ui.define([
                 return null;
             }
 
-            let dateValueFormat = this.defaultDateValueFormat;
+            let dateValueFormat = configuration.getDateTimeFormat("dateTimeValue");
             if (attributeSpec.ui5.valueFormat) {
                 dateValueFormat = attributeSpec.ui5.displayFormat;
             }
             
-            let dateDisplayFormat = this.defaultDateTimeDisplayFormat;
+            let dateDisplayFormat = configuration.getDateTimeFormat("dateTimeDisplay");
             if (attributeSpec.ui5.displayFormat) {
                 dateDisplayFormat = attributeSpec.ui5.displayFormat;
             }
@@ -474,11 +466,11 @@ sap.ui.define([
                 return null;
             }
 
-            let dateValueFormat = this.defaultDateValueFormat;
+            let dateValueFormat = configuration.getDateTimeFormat("dateValue");
             if (attributeSpec.ui5.valueFormat) {
                 dateValueFormat = attributeSpec.ui5.valueFormat;
             }
-            let dateDisplayFormat = this.defaultDateValueFormat;
+            let dateDisplayFormat = configuration.getDateTimeFormat("dateDisplay");
             if (attributeSpec.ui5.displayFormat) {
                 dateDisplayFormat = attributeSpec.ui5.displayFormat;
             }
@@ -527,11 +519,11 @@ sap.ui.define([
             if (attributeSpec === null) {
                 return null;
             }
-            let timeValueFormat = this.defaultTimeValueFormat;
+            let timeValueFormat = configuration.getDateTimeFormat("timeValue");
             if (attributeSpec.ui5.valueFormat) {
                 timeValueFormat = attributeSpec.ui5.valueFormat;
             }
-            let timeDisplayFormat = this.defaultTimeDisplayFormat;
+            let timeDisplayFormat = configuration.getDateTimeFormat("timeDisplay");
             if (attributeSpec.ui5.displayFormat) {
                 timeDisplayFormat = attributeSpec.ui5.displayFormat;
             }

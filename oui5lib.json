@@ -11,9 +11,9 @@
     },
     "defaultFormats": {
         "dateTimeDisplay": "MMM d, y, HH:mm:ss",
-        "dateTimeValue": "MMM d, y, HH:mm:ss",
+        "dateTimeValue": "YYYY-MM-dd HH:mm:ss",
         "dateDisplay": "short",
-        "dateValue": "yyyy-MM-dd",
+        "dateValue": "YYYY-MM-dd",
         "timeDisplay": "HH:mm",
         "timeValue": "HH:mm"
     }

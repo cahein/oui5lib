@@ -133,7 +133,29 @@
         }
         return userProfileUrl;
     }
-    
+
+    const _defaultDateTimeFormats = {
+        dateTimeDisplay: "MMM d, y, HH:mm:ss",
+        dateTimeValue: "YYYY-MM-dd HH:mm:ss",
+        dateDisplay: "short",
+        dateValue: "YYYY-MM-dd",
+        timeDisplay: "HH:mm",
+        timeValue: "HH:mm:ss"
+    };
+
+    function getDateTimeFormat(type) {
+        if (_defaultDateTimeFormats.hasOwnProperty(type)) {
+            let config = getConfigData();
+            if (typeof config.defaultFormats !== "undefined" &&
+                typeof config.defaultFormats[type] === "string") {
+                return config.defaultFormats[type];
+            }
+
+            return _defaultDateTimeFormats[type];
+        }
+        return null;
+    }
+
     /**
      * Get the regular expression string from the configuration.
      * @memberof oui5lib.configuration
@@ -219,6 +241,7 @@
     configuration.getTimeRegex = getTimeRegex;
     configuration.getPhoneRegex = getPhoneRegex;
     configuration.getEmailRegex = getEmailRegex;
+    configuration.getDateTimeFormat = getDateTimeFormat;
 
     configuration.getComponent = getComponent;
     configuration.getUserProfileUrl = getUserProfileUrl;
