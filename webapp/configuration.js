@@ -134,26 +134,45 @@
         return userProfileUrl;
     }
 
-    const _defaultDateTimeFormats = {
-        dateTimeDisplay: "MMM d, y, HH:mm:ss",
-        dateTimeValue: "YYYY-MM-dd HH:mm:ss",
-        dateDisplay: "short",
-        dateValue: "YYYY-MM-dd",
-        timeDisplay: "HH:mm",
-        timeValue: "HH:mm:ss"
+    const _defaultDateTimePatterns = {
+        dateTime: "YYYY-MM-dd HH:mm:ss",
+        date: "YYYY-MM-dd",
+        time: "HH:mm:ss"
     };
 
-    function getDateTimeFormat(type) {
-        if (_defaultDateTimeFormats.hasOwnProperty(type)) {
+    function getDateTimeValuePattern(type) {
+        if (_defaultDateTimePatterns.hasOwnProperty(type)) {
             let config = getConfigData();
-            if (typeof config.defaultFormats !== "undefined" &&
+            if (typeof config.defaultFormats === "object" &&
                 typeof config.defaultFormats[type] === "string") {
-                return config.defaultFormats[type];
+                return  config.defaultFormats[type];
             }
-
-            return _defaultDateTimeFormats[type];
+            return _defaultDateTimePatterns[type];
         }
-        return null;
+        return undefined;
+    }
+    
+    /**
+     * @param {string} type Possible values: "dateTime", "date", "time".
+     * @param {string} style Possible values: "short", "medium", "long", "full".
+     */
+    function getDateTimeDisplayPattern(type, style) {
+        let oLocale = new sap.ui.core.Locale(getCurrentLanguage());
+        let oLocaleData = new sap.ui.core.LocaleData(oLocale);
+        switch(type) {
+        case "dateTime":
+            let pattern = oLocaleData.getDateTimePattern(style);
+            pattern = pattern.replace(/'/g, "");
+            pattern = pattern.replace("{1}", oLocaleData.getDatePattern(style));
+            pattern = pattern.replace("{0}", oLocaleData.getTimePattern(style));
+            return pattern;
+        case "date":
+            return oLocaleData.getDatePattern(style);
+        case "time":
+            return oLocaleData.getTimePattern(style);
+        default:
+            return undefined;
+        }
     }
 
     /**
@@ -241,7 +260,9 @@
     configuration.getTimeRegex = getTimeRegex;
     configuration.getPhoneRegex = getPhoneRegex;
     configuration.getEmailRegex = getEmailRegex;
-    configuration.getDateTimeFormat = getDateTimeFormat;
+
+    configuration.getDateTimeValuePattern = getDateTimeValuePattern;
+    configuration.getDateTimeDisplayPattern = getDateTimeDisplayPattern;
 
     configuration.getComponent = getComponent;
     configuration.getUserProfileUrl = getUserProfileUrl;

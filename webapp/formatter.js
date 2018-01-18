@@ -6,30 +6,34 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
      * Converts date and time strings into Javascript Date.
      * @memberof oui5lib.formatter
      * @param {string} dateStr Given date value
-     * @param {string} dateFormat Given date format pattern. If undefined, the format from the configuration is used.
+     * @param {string} datePattern The date pattern. If undefined, the date pattern from the configuration is used.
      * @returns {Date}
      */
-    function getDateFromString(dateStr, dateFormat){
-        if (dateFormat === undefined) {
-            dateFormat = configuration.getDateTimeFormat("dateValue");
+    function getDateFromString(dateStr, datePattern){
+        if (datePattern === undefined) {
+            datePattern = configuration.getDateTimeValuePattern("date");
         }
         var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
-            pattern: dateFormat
+            pattern: datePattern
         });
         var date = oDateFormat.parse(dateStr, false, true);
         return date;
     }
 
     /**
-     * Converts date and time strings into Javascript Date.
+     * Converts date and time strings into Date.
      * @memberof oui5lib.formatter
      * @param {string} dateStr Given date value
      * @param {string} timeStr Given time value
+     * @param {string} dateTimePattern The dateTime pattern. If undefined, the dateTime pattern from the configuration is used.
      * @returns {Date}
      */
-    function getDateFromStrings(dateStr, timeStr){
+    function getDateFromStrings(dateStr, timeStr, dateTimePattern){
+        if (dateTimePattern === undefined) {
+            dateTimePattern = configuration.getDateTimeValuePattern("dateTime");
+        }
         var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
-            pattern: configuration.getDateTimeFormat("dateTimeValue")
+            pattern: dateTimePattern
         });
         var date = oDateFormat.parse(dateStr + " " + timeStr, false, true);
         return date;
@@ -37,16 +41,16 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
 
     
     /**
-     * Use to format Date to a string.
+     * Use to format a Date to a date string.
      * @memberof oui5lib.formatter
-     * @param {Date} date The Javascript Date to be formatted.
-     * @param {string} outFormat The output format. If undefined, the format from the configuration is used.
+     * @param {Date} date The Date to be formatted.
+     * @param {string} outFormat The output pattern. If undefined, the medium style date pattern from the locale is used.
      * @returns {string} The formatted date. Returns null if the given date is not a Date object.
      */
     function getDateString(date, outFormat) {
         if (date instanceof Date) {
             if (typeof outFormat === "undefined") {
-                outFormat = configuration.getDateTimeFormat("dateValue");
+                outFormat = configuration.getDateTimeDisplayPattern("date", "medium");
             }
             return formatDate(date, outFormat);
         }
@@ -54,15 +58,16 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     }
     
     /**
-     * Formats a given Date to an valid time string (default format: HH:mm:ss).
+     * Use to format a Date to a time string.
      * @memberof oui5lib.formatter
-     * @param {Date} date The given date/time object. 
+     * @param {Date} date The Date to be formatted. 
+     * @param {string} outFormat The output pattern. If undefined, the medium style time pattern from the locale is used.
      * @returns {string} Formatted time as a string.
      */ 
     function getTimeString(date, outFormat) {
         if (date instanceof Date) {
             if (typeof outFormat === "undefined") {
-                outFormat = configuration.getDateTimeFormat("timeValue");
+                outFormat = configuration.getDateTimeDisplayPattern("time", "medium");
             }
             return formatDate(date, outFormat);
         }
@@ -70,13 +75,16 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     }
     
     /**
-     * Formats a given Date according to the specified date pattern.
+     * Use to formats a Date according to the specified date pattern.
      * @memberof oui5lib.formatter
-     * @param {Date} date The Javascript Date to be formatted.
-     * @param {string} outFormat The date pattern to format to.
+     * @param {Date} date The Date to be formatted.
+     * @param {string} outFormat The date pattern to format to. If undefined, an Error is thrown.
      * @returns {string} The formatted date or time.
      */
     function formatDate(date, outFormat) {
+        if (outFormat === undefined) {
+            throw new Error("required date pattern is undefined");
+        }
         var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: outFormat
         });
@@ -88,16 +96,16 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
      * Converts a date string with a specified pattern into another pattern.
      * @memberof oui5lib.formatter
      * @param {string} dateStr The date to be converted.
-     * @param {string} outFormat The pattern to convert to.
-     * @param {string} inFormat The pattern of the date to be converted. Default: "YYYY-MM-dd".
+     * @param {string} outFormat The pattern to convert to. If undefined, the medium style date pattern from the locale is used.
+     * @param {string} inFormat The pattern of the date to be converted. If undefined, the default date pattern from the configuration is used".
      * @returns {string} The reformatted date. Returns an empty string if the date cannot be parsed.
      */
     function convertDateString(dateStr, outFormat, inFormat) {
-        if (typeof outFormat === "undefined") {
-            throw new Error("Function needs a date pattern to convert to");
+        if (typeof outFormat !== "string") {
+            outFormat = configuration.getDateTimeValuePattern("medium", "date");
         }
         if (typeof inFormat !== "string") {
-            inFormat = configuration.getDateTimeFormat("dateValue");
+            inFormat = configuration.getDateTimeValuePattern("date");
         }
         var inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: inFormat
@@ -112,25 +120,6 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
             return outDate;
         }
         return "";
-    }
-
-    /**
-     * Process Date from Date objects returned by the DatePicker and TimePicker controls.
-     * @memberof oui5lib.formatter
-     * @param {Date} date
-     * @param {Date} time
-     */
-    function procDateFromDateAndTimePickers(date, time) {
-        if (date instanceof Date && time instanceof Date) {
-            var dateStr = this.formatDate(date, configuration.getDateTimeFormat("dateValue"))
-                + " "
-                + this.formatDate(time, configuration.getDateTimeFormat("timeValue"));
-            var inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
-                pattern: configuration.getDateTimeFormat("dateTimeValue")
-            });
-            return inDateFormat.parse(dateStr, false, true);
-        }
-        return null;
     }
     
     /**
@@ -223,5 +212,4 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     formatter.convertToIndustrialMinutes = convertToIndustrialMinutes;
 
     formatter.convertDateString = convertDateString;
-    formatter.procDateFromDateAndTimePickers = procDateFromDateAndTimePickers;
 }(oui5lib.configuration));

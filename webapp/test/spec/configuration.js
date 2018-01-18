@@ -28,21 +28,20 @@ describe("Namespace oui5lib.configuration", function() {
         expect(typeof logLevel).toEqual("string");
         expect(logLevel).toEqual("ERROR");
     });
-    it("should return date and time formats defined in the configuration", function() {
-        let format = oui5lib.configuration.getDateTimeFormat("dateTimeValue");
-        expect(format).toEqual("YYYY-MM-dd HH:mm:ss");
-        format = oui5lib.configuration.getDateTimeFormat("dateTimeDisplay");
-        expect(format).toEqual("MMM d, y, HH:mm:ss");
 
-        format = oui5lib.configuration.getDateTimeFormat("dateValue");
+    it("should return date and time value pattern defined in the configuration", function() {
+        let format = oui5lib.configuration.getDateTimeValuePattern("dateTime");
+        expect(format).toEqual("YYYY-MM-dd HH:mm:ss");
+        format = oui5lib.configuration.getDateTimeValuePattern("date");
         expect(format).toEqual("YYYY-MM-dd");
-        format = oui5lib.configuration.getDateTimeFormat("dateDisplay");
-        expect(format).toEqual("short");
     });
-    it("should return null if an undefined date/time format is asked for", function() {
-        let format = oui5lib.configuration.getDateTimeFormat("datetimeValue");
-        expect(format).toBe(null);
+    it("should return date and time display pattern from the locale", function() {
+        let format = oui5lib.configuration.getDateTimeDisplayPattern("dateTime", "short");
+        expect(format).toEqual("M/d/yy, h:mm a");
+        format = oui5lib.configuration.getDateTimeDisplayPattern("date", "medium");
+        expect(format).toEqual("MMM d, y");
     });
+
     it("should return regexes defined in the configuration", function() {
         var dateRegex = oui5lib.configuration.getDateRegex();
         expect(dateRegex instanceof RegExp).toBe(true);

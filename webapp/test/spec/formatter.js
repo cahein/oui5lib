@@ -1,4 +1,5 @@
 describe("Namespace oui5lib.formatter", function() {
+
     describe("Format/convert Date and date string", function() {
         it("should get a Date object from a  date string", function() {
             var dateString = "6.8.1945";
@@ -9,7 +10,7 @@ describe("Namespace oui5lib.formatter", function() {
         it("should format a Date to a date string", function() {
             var date = new Date("2015", "10", "25");
             var dateStr = oui5lib.formatter.getDateString(date);
-            expect(dateStr).toEqual("2015-11-25");
+            expect(dateStr).toEqual("Nov 25, 2015");
             dateStr = oui5lib.formatter.getDateString(date, "YYYYMMdd");
             expect(dateStr).toEqual("20151125");
         });
@@ -17,15 +18,15 @@ describe("Namespace oui5lib.formatter", function() {
         it("should format a Date to a time string", function() {
             var date = new Date("2015", "10", "25", "9", "46", "10");
             var timeStr = oui5lib.formatter.getTimeString(date);
-            expect(timeStr).toEqual("09:46:10");
+            expect(timeStr).toEqual("9:46:10 AM");
             timeStr = oui5lib.formatter.getTimeString(date, "HHmmss");
             expect(timeStr).toEqual("094610");
 
-            date = new Date("2015", "10", "25", "11", "8", "2");
+            date = new Date("2015", "10", "25", "13", "8", "2");
             timeStr = oui5lib.formatter.getTimeString(date);
-            expect(timeStr).toEqual("11:08:02");
+            expect(timeStr).toEqual("1:08:02 PM");
             timeStr = oui5lib.formatter.getTimeString(date, "HHmmss");
-            expect(timeStr).toEqual("110802");
+            expect(timeStr).toEqual("130802");
         });
 
         it("should convert date and time strings into a Date object", function() {

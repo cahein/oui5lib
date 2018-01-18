@@ -422,29 +422,19 @@ sap.ui.define([
                 return null;
             }
 
-            let dateValueFormat = configuration.getDateTimeFormat("dateTimeValue");
-            if (attributeSpec.ui5.valueFormat) {
-                dateValueFormat = attributeSpec.ui5.displayFormat;
-            }
-            
-            let dateDisplayFormat = configuration.getDateTimeFormat("dateTimeDisplay");
-            if (attributeSpec.ui5.displayFormat) {
-                dateDisplayFormat = attributeSpec.ui5.displayFormat;
-            }
-
             let controller = this;
             let controlId = this.getControlId(entityName, propertyName);
             let dateTimePicker = new sap.m.DateTimePicker(controlId, {
                 dateValue: "{" + entityName + ">/" + propertyName + "}",
-                valueFormat: dateValueFormat,
-                displayFormat: dateDisplayFormat,
-                change: function(oEvent) {
+                change: function() {
                     dateTimePicker.setValueState("None");
                     controller.setRecordChanged();
                 }
             });
             this.setValueStateText(attributeSpec, dateTimePicker);
             this.setCommons(attributeSpec, dateTimePicker);
+            this.setDateFormats(attributeSpec, dateTimePicker, "dateTime");
+
             return dateTimePicker;
         },
         
@@ -466,22 +456,11 @@ sap.ui.define([
                 return null;
             }
 
-            let dateValueFormat = configuration.getDateTimeFormat("dateValue");
-            if (attributeSpec.ui5.valueFormat) {
-                dateValueFormat = attributeSpec.ui5.valueFormat;
-            }
-            let dateDisplayFormat = configuration.getDateTimeFormat("dateDisplay");
-            if (attributeSpec.ui5.displayFormat) {
-                dateDisplayFormat = attributeSpec.ui5.displayFormat;
-            }
-
             let controller = this;
             let controlId = this.getControlId(entityName, propertyName);
             let datePicker = new sap.m.DatePicker(controlId, {
-                valueFormat: dateValueFormat,
-                displayFormat: dateDisplayFormat,
                 dateValue : "{" + entityName + ">/" + propertyName + "}",
-                change: function(oEvent) {
+                change: function() {
                     if (oui5lib.ui.checkDatePicker(datePicker)) {
                         controller.setRecordChanged();
                     }
@@ -489,13 +468,14 @@ sap.ui.define([
             });
             this.setValueStateText(attributeSpec, datePicker);
             this.setCommons(attributeSpec, datePicker);
+            this.setDateFormats(attributeSpec, datePicker, "date");
 
             if (typeof attributeSpec.ui5.future === "boolean") {
                 if (!attributeSpec.ui5.future) {
-                    // TODO
-                    let dateString = oui5lib.formatter.formatDate(
-                        new Date(), "yyyy-MM-dd") + " 23:59:59";
-                    let maxDate = new Date(dateString);
+                    let maxDate = new Date();
+                    maxDate.setHours(23);
+                    maxDate.setMinutes(59);
+                    maxDate.setSeconds(59);
                     datePicker.setMaxDate(maxDate);
                 }
             }
@@ -519,31 +499,34 @@ sap.ui.define([
             if (attributeSpec === null) {
                 return null;
             }
-            let timeValueFormat = configuration.getDateTimeFormat("timeValue");
-            if (attributeSpec.ui5.valueFormat) {
-                timeValueFormat = attributeSpec.ui5.valueFormat;
-            }
-            let timeDisplayFormat = configuration.getDateTimeFormat("timeDisplay");
-            if (attributeSpec.ui5.displayFormat) {
-                timeDisplayFormat = attributeSpec.ui5.displayFormat;
-            }
 
             let controller = this;
             let controlId = this.getControlId(entityName, propertyName);
             let timePicker = new sap.m.TimePicker(controlId, {
-                valueFormat: timeValueFormat,
-                displayFormat: timeDisplayFormat,
                 dateValue: "{" + entityName + ">/" + propertyName + "}",
-                change: function(oEvent) {
+                change: function() {
                     controller.setRecordChanged();
                     timePicker.setValueState("None");
                 }
             });
             this.setValueStateText(attributeSpec, timePicker);
             this.setCommons(attributeSpec, timePicker);
+            this.setDateFormats(attributeSpec, timePicker, "time");
+            
             return timePicker;
         },
 
+        setDateFormats: function(attributeSpec, control, type) {
+            let valuePattern = oui5lib.configuration.getDateTimeValuePattern(type);
+            if (attributeSpec.ui5.valueFormat) {
+                valuePattern = attributeSpec.ui5.valueFormat;
+            }
+            control.setValueFormat(valuePattern);
+            
+            if (attributeSpec.ui5.displayFormat) {
+                control.setDisplayFormat(attributeSpec.ui5.displayFormat);
+            }
+        },
 
         
         getControlId: function(entityName, propertyName) {

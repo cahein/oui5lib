@@ -10,11 +10,8 @@
         "phoneRegex": "^0{2}[1-9][\\d]*$"
     },
     "defaultFormats": {
-        "dateTimeDisplay": "MMM d, y, HH:mm:ss",
         "dateTimeValue": "YYYY-MM-dd HH:mm:ss",
-        "dateDisplay": "short",
         "dateValue": "YYYY-MM-dd",
-        "timeDisplay": "HH:mm",
         "timeValue": "HH:mm:ss"
     }
 }

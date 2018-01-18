@@ -87,11 +87,9 @@
      * @param {sap.m.DatePicker} datePicker The DatePicker to check.
      */
     function checkDatePicker(datePicker) {
-        let value = datePicker.getValue();
-        if (value === null) {
-            return false;
-        }
         let dateValue = datePicker.getDateValue();
+
+        let value = datePicker.getValue();
         let oDate = new Date(value);
         if (oDate == "Invalid Date") {
             datePicker.setValueStateText(util.getI18nText("date.invalid"));
@@ -102,9 +100,8 @@
                      oDate.getDate() === dateValue.getDate())) {
             datePicker.setValueState("Warning");
             return false;
-        } else {
-            datePicker.setValueState("None");
         }
+        datePicker.setValueState("None");
         return true;
     }
 
