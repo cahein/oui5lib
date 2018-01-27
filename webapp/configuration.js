@@ -80,11 +80,11 @@
             sLanguage = config.defaultLanguage;
         }
 
+        setLanguageModel(sLanguage);
+
         let oConfiguration = sap.ui.getCore().getConfiguration();
         oConfiguration.setLanguage(sLanguage);
         config.currentLanguage = sLanguage;
-
-        setLanguageModel(sLanguage);
     }
     
     /**
@@ -159,9 +159,9 @@
     function getDateTimeDisplayPattern(type, style) {
         let oLocale = new sap.ui.core.Locale(getCurrentLanguage());
         let oLocaleData = new sap.ui.core.LocaleData(oLocale);
-        switch(type) {
+        switch (type) {
         case "dateTime":
-            let pattern = oLocaleData.getDateTimePattern(style);
+            var pattern = oLocaleData.getDateTimePattern(style);
             pattern = pattern.replace(/'/g, "");
             pattern = pattern.replace("{1}", oLocaleData.getDatePattern(style));
             pattern = pattern.replace("{0}", oLocaleData.getTimePattern(style));

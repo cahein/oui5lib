@@ -104,12 +104,7 @@
                 if (typeof entries === "undefined") {
                     throw new TypeError("listBase.addData requires an Array");
                 }
-
                 if (entries.length > 0) {
-                    if (_procFunction !== null) {
-                        _procFunction(entries);
-                    }
-
                     let id;
                     entries.forEach(function(item) {
                         id = item[_primaryKey];
@@ -135,14 +130,18 @@
                             );
                         }
                     });
+                    if (_procFunction !== null) {
+                        _procFunction(entries);
+                    }
                     updateModel(_data);
-                }
-                if (_dataChangedEventListeners.length > 0) {
-                    _dataChangedEventListeners.forEach(
-                        function(listener) {
-                            listener[0].call(listener[1]);
-                        }
-                    );
+
+                    if (_dataChangedEventListeners.length > 0) {
+                        _dataChangedEventListeners.forEach(
+                            function(listener) {
+                                listener[0].call(listener[1]);
+                            }
+                        );
+                    }
                 }
             },
 

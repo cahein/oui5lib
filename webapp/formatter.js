@@ -14,7 +14,8 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
             datePattern = configuration.getDateTimeValuePattern("date");
         }
         var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
-            pattern: datePattern
+           pattern: datePattern,
+           UTC: true
         });
         var date = oDateFormat.parse(dateStr, false, true);
         return date;
@@ -50,7 +51,19 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     function getDateString(date, outFormat) {
         if (date instanceof Date) {
             if (typeof outFormat === "undefined") {
-                outFormat = configuration.getDateTimeDisplayPattern("date", "medium");
+                outFormat = configuration.getDateTimeDisplayPattern("date",
+                                                                    "medium");
+            }
+            return formatDate(date, outFormat);
+        }
+        return null;
+    }
+   
+    function getDateTimeString(date, outFormat) {
+        if (date instanceof Date) {
+            if (typeof outFormat === "undefined") {
+                outFormat = configuration.getDateTimeDisplayPattern("dateTime",
+                                                                    "medium");
             }
             return formatDate(date, outFormat);
         }
@@ -205,9 +218,10 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     formatter.base64Encode = base64Encode;
     formatter.base64Decode = base64Decode;
     formatter.getDateFromString = getDateFromString;
-    formatter.getDateString = getDateString;
-    formatter.getTimeString = getTimeString;
     formatter.getDateFromStrings = getDateFromStrings;
+    formatter.getDateString = getDateString;
+    formatter.getDateTimeString = getDateTimeString;
+    formatter.getTimeString = getTimeString;
     formatter.convertIndustrialMinutes = convertIndustrialMinutes;
     formatter.convertToIndustrialMinutes = convertToIndustrialMinutes;
 

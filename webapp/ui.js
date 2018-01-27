@@ -72,7 +72,7 @@
         if (selectedItem === null) {
             if (!util.isBlank(vlue)) {
                 comboBox.setValueState("Warning");
-                let valueStateText = util.getI18nText("common.combobox.noItemSelected");
+                let valueStateText = util.getI18nText("combobox.noItemSelected");
                 comboBox.setValueStateText(valueStateText);
                 return;
             }
@@ -94,10 +94,14 @@
         if (oDate == "Invalid Date") {
             datePicker.setValueStateText(util.getI18nText("date.invalid"));
             datePicker.setValueState("Error");
+            datePicker.focus();
             return false;
         } else if (!(oDate.getFullYear() === dateValue.getFullYear() &&
                      oDate.getMonth() === dateValue.getMonth() &&
                      oDate.getDate() === dateValue.getDate())) {
+            datePicker.setValueStateText(
+                util.getI18nText("date.unequal") + " " + dateValue.toString()
+            );
             datePicker.setValueState("Warning");
             return false;
         }

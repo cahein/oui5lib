@@ -4,7 +4,6 @@ sap.ui.define([
     "use strict";
 
     const mapping = oui5lib.mapping;
-    const configuration = oui5lib.configuration;
     
     /**
      * Use the FormController if you have a view with a Form. 
@@ -13,7 +12,6 @@ sap.ui.define([
     const FormController = oController.extend("oui5lib.controller.FormController", {
         // default: Text
         _availableInputTypes: ["Email", "Number", "Password", "Tel", "Text", "Url"],
-        
         _recordChanged: false,
 
         /**
@@ -45,6 +43,7 @@ sap.ui.define([
             return this._recordChanged;
         },
 
+
         handleUnsavedChanges: function(action) {
             oui5lib.logger.info("unsavedChanges: " + action);
         },
@@ -58,30 +57,29 @@ sap.ui.define([
         },
 
 
-        addInput: function(form, entityName, propertyName, addLabel) {
-            const input = this.getInput(entityName, propertyName);
+        addInput: function(form, entityName, propertyPath, addLabel) {
+            const input = this.getInput(entityName, propertyPath);
             if (input === null) {
                 return null;
             }
             const attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                                 propertyName);
+                                                                 propertyPath);
             
             const label = this.getLabel(addLabel, attributeSpec, input);
             this.addToForm(form, label, input);
             return input;
         },
-        getInput: function(entityName, propertyName) {
+        getInput: function(entityName, propertyPath) {
             const attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                                 propertyName);
+                                                                 propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
-            const controlId = this.getControlId(entityName, propertyName);
+            const controlId = this.getControlId(entityName, propertyPath);
             let input = new sap.m.Input(controlId, {
-                value: "{" + entityName + ">/" + propertyName + "}"
+                value: "{" + entityName + ">/" + propertyPath + "}"
             });
             this.attachChange(input, attributeSpec.validate);
-            this.setValueStateText(attributeSpec, input);
             this.setCommons(attributeSpec, input);
 
             if (typeof attributeSpec.ui5.type === "string") {
@@ -93,60 +91,58 @@ sap.ui.define([
             return input;
         },
 
-        addMaskInput: function(form, entityName, propertyName, addLabel) {
-            let input = this.getMaskInput(entityName, propertyName);
+        addMaskInput: function(form, entityName, propertyPath, addLabel) {
+            let input = this.getMaskInput(entityName, propertyPath);
             if (input === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, input);
             this.addToForm(form, label, input);
             return input;
         },
-        getMaskInput : function(entityName, propertyName) {
+        getMaskInput : function(entityName, propertyPath) {
             // TODO add rules
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
             
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let input = new sap.m.MaskInput(controlId, {
-                value: "{" + entityName + ">/" + propertyName + "}",
+                value: "{" + entityName + ">/" + propertyPath + "}",
                 mask: attributeSpec.ui5.mask
             });
             this.attachChange(input, attributeSpec.validate);
-            this.setValueStateText(attributeSpec, input);
             this.setCommons(attributeSpec, input);
             return input;
         },
        
-        addTextArea: function(form, entityName, propertyName, addLabel) {
-            let textArea = this.getTextArea(entityName, propertyName);
+        addTextArea: function(form, entityName, propertyPath, addLabel) {
+            let textArea = this.getTextArea(entityName, propertyPath);
             if (textArea === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, textArea);
             this.addToForm(form, label, textArea);
             return textArea;
         },
-        getTextArea : function(entityName, propertyName) {
+        getTextArea : function(entityName, propertyPath) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
 
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let textArea = new sap.m.TextArea(controlId, {
-                value: "{" + entityName + ">/" + propertyName + "}"
+                value: "{" + entityName + ">/" + propertyPath + "}"
             });
             this.attachChange(textArea, attributeSpec.validate);
-            this.setValueStateText(attributeSpec, textArea);
             this.setCommons(attributeSpec, textArea);
             
             if (typeof attributeSpec.ui5.growing === "boolean") {
@@ -185,27 +181,27 @@ sap.ui.define([
 
 
 
-        addSwitch: function(form, entityName, propertyName, addLabel) {
-            let oSwitch = this.getSwitch(entityName, propertyName);
+        addSwitch: function(form, entityName, propertyPath, addLabel) {
+            let oSwitch = this.getSwitch(entityName, propertyPath);
             if (oSwitch === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, oSwitch);
             this.addToForm(form, label, oSwitch);
             return oSwitch;
         },
-        getSwitch: function(entityName, propertyName) {
+        getSwitch: function(entityName, propertyPath) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
             let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let oSwitch = new sap.m.Switch(controlId, {
-                state: "{" + entityName + ">/" + propertyName + "}",
+                state: "{" + entityName + ">/" + propertyPath + "}",
                 change: function() {
                     controller.setRecordChanged();
                 }
@@ -214,61 +210,68 @@ sap.ui.define([
             return oSwitch;
         },
 
-        addCheckBox: function(form, entityName, propertyName, addLabel) {
-            let checkBox = this.getCheckBox(entityName, propertyName);
+        addCheckBox: function(form, entityName, propertyPath, addLabel) {
+            let checkBox = this.getCheckBox(entityName, propertyPath);
             if (checkBox === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, checkBox);
             this.addToForm(form, label, checkBox);
             return checkBox;
         },
-        getCheckBox: function(entityName, propertyName) {
+        getCheckBox: function(entityName, propertyPath) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
             let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let checkBox = new sap.m.CheckBox(controlId, {
-                selected: "{" + entityName + ">/" + propertyName + "}",
+                selected: "{" + entityName + ">/" + propertyPath + "}",
                 select: function() {
                     controller.setRecordChanged();
                 }
             });
             this.setCommons(attributeSpec, checkBox);
+
+            if (typeof attributeSpec.ui5.text === "string") {
+                checkBox.setText(
+                    oui5lib.util.getI18nText(attributeSpec.ui5.text)
+                );
+            }
+            
             return checkBox;
         },
 
 
 
         
-        addComboBox: function(form, entityName, propertyName, addLabel) {
-            let comboBox = this.getComboBox(entityName, propertyName);
+        addComboBox: function(form, entityName, propertyPath, addLabel) {
+            let comboBox = this.getComboBox(entityName, propertyPath);
             if (comboBox === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, comboBox);
             this.addToForm(form, label, comboBox);
             return comboBox;
         },
-        getComboBox: function(entityName, propertyName) {
+        getComboBox: function(entityName, propertyPath) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
 
             let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let comboBox = new sap.m.ComboBox(controlId, {
-                selectedKey: "{" + entityName + ">/" + propertyName + "}",
-                selectionChange: function(oEvent) {
+                selectedKey: "{" + entityName + ">/" + propertyPath + "}",
+                selectionChange: function() {
                     comboBox.setValueState("None");
                 },
                 change: function() {
@@ -279,7 +282,6 @@ sap.ui.define([
                     }
                 }
             });
-            this.setValueStateText(attributeSpec, comboBox);
             this.setCommons(attributeSpec, comboBox);
 
             this.bindItemTemplate(attributeSpec, comboBox);
@@ -287,33 +289,32 @@ sap.ui.define([
             return comboBox;
         },
 
-        addMultiComboBox: function(form, entityName, propertyName, addLabel) {
-            let comboBox = this.getMultiComboBox(entityName, propertyName);
+        addMultiComboBox: function(form, entityName, propertyPath, addLabel) {
+            let comboBox = this.getMultiComboBox(entityName, propertyPath);
             if (comboBox === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, comboBox);
             this.addToForm(form, label, comboBox);
             return comboBox;
         },
-        getMultiComboBox: function(entityName, propertyName) {
+        getMultiComboBox: function(entityName, propertyPath) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
 
             let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let multiComboBox = new sap.m.MultiComboBox(controlId, {
-                selectedKeys: "{" + entityName + ">/" + propertyName + "}",
-                selectionChange: function(oEvent) {
+                selectedKeys: "{" + entityName + ">/" + propertyPath + "}",
+                selectionChange: function() {
                     controller.setRecordChanged();
                 }
             });
-            this.setValueStateText(attributeSpec, multiComboBox);
             this.setCommons(attributeSpec, multiComboBox);
 
             this.bindItemTemplate(attributeSpec, multiComboBox);
@@ -321,35 +322,34 @@ sap.ui.define([
             return multiComboBox;
         },
 
-        addSelect: function(form, entityName, propertyName, addLabel) {
-            let select = this.getSelect(entityName, propertyName);
+        addSelect: function(form, entityName, propertyPath, addLabel) {
+            let select = this.getSelect(entityName, propertyPath);
             if (select === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, select);
             this.addToForm(form, label, select);
             return select;
         },
-        getSelect: function(entityName, propertyName) {
+        getSelect: function(entityName, propertyPath) {
             const attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                                 propertyName);
+                                                                 propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
 
             let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let select = new sap.m.Select(controlId, {
-                selectedKey : "{" + entityName + ">/" + propertyName + "}",
+                selectedKey : "{" + entityName + ">/" + propertyPath + "}",
                 forceSelection: false,
-                change: function(oEvent) {
+                change: function() {
                     controller.setRecordChanged();
                     select.setValueState("None");
                 }
             });
-            this.setValueStateText(attributeSpec, select);
             this.setCommons(attributeSpec, select);
 
             this.bindItemTemplate(attributeSpec, select);
@@ -367,7 +367,7 @@ sap.ui.define([
         getItemTemplate: function(attributeSpec) {
             const modelName = attributeSpec.ui5.itemsModel;
             const key = attributeSpec.ui5.itemKey;
-            const text = attributeSpec.ui5.itemText;
+            let text = attributeSpec.ui5.itemText;
             
             // language dependent text
             if (text.match(/.*_$/)) {
@@ -405,117 +405,105 @@ sap.ui.define([
             return oSorter;
         },
 
-        addDateTimePicker: function(form, entityName, propertyName, addLabel) {
-            let dateTimePicker = this.getDateTimePicker(entityName, propertyName);
+        addDateTimePicker: function(form, entityName, propertyPath, addLabel) {
+            let dateTimePicker = this.getDateTimePicker(entityName, propertyPath);
             if (dateTimePicker === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             let label = this.getLabel(addLabel, attributeSpec, dateTimePicker);
             this.addToForm(form, label, dateTimePicker);
             return dateTimePicker;
         },
-        getDateTimePicker: function(entityName, propertyName) {
+        getDateTimePicker: function(entityName, propertyPath) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
 
             let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
             let dateTimePicker = new sap.m.DateTimePicker(controlId, {
-                dateValue: "{" + entityName + ">/" + propertyName + "}",
+                dateValue: "{" + entityName + ">/" + propertyPath + "}",
                 change: function() {
-                    dateTimePicker.setValueState("None");
-                    controller.setRecordChanged();
-                }
-            });
-            this.setValueStateText(attributeSpec, dateTimePicker);
-            this.setCommons(attributeSpec, dateTimePicker);
-            this.setDateFormats(attributeSpec, dateTimePicker, "dateTime");
-
-            return dateTimePicker;
-        },
-        
-        addDatePicker: function(form, entityName, propertyName, addLabel) {
-            let datePicker = this.getDatePicker(entityName, propertyName);
-            if (datePicker === null) {
-                return null;
-            }
-            let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
-            let label = this.getLabel(addLabel, attributeSpec, datePicker);
-            this.addToForm(form, label, datePicker);
-            return datePicker;
-        },
-        getDatePicker: function(entityName, propertyName) {
-            let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
-            if (attributeSpec === null) {
-                return null;
-            }
-
-            let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
-            let datePicker = new sap.m.DatePicker(controlId, {
-                dateValue : "{" + entityName + ">/" + propertyName + "}",
-                change: function() {
-                    if (oui5lib.ui.checkDatePicker(datePicker)) {
+                    if (oui5lib.ui.checkDatePicker(dateTimePicker)) {
+                        dateTimePicker.setValueState("None");
                         controller.setRecordChanged();
                     }
                 }
             });
-            this.setValueStateText(attributeSpec, datePicker);
-            this.setCommons(attributeSpec, datePicker);
-            this.setDateFormats(attributeSpec, datePicker, "date");
+            this.setCommons(attributeSpec, dateTimePicker);
+            this.setDateFormats(attributeSpec, dateTimePicker, "dateTime");
+            this.setDateConstraints(attributeSpec, dateTimePicker);
 
-            if (typeof attributeSpec.ui5.future === "boolean") {
-                let currentDate = new Date();
-                if (attributeSpec.ui5.future) {
-                    currentDate.setHours(0);
-                    currentDate.setMinutes(0);
-                    currentDate.setSeconds(0);
-                    datePicker.setMinDate(currentDate);
-                } else {
-                    currentDate.setHours(23);
-                    currentDate.setMinutes(59);
-                    currentDate.setSeconds(59);
-                    datePicker.setMaxDate(currentDate);
-                }
-            }
-            return datePicker;
+            return dateTimePicker;
         },
-
-        addTimePicker: function(form, entityName, propertyName, addLabel) {
-            let timePicker = this.getTimePicker(entityName, propertyName);
-            if (timePicker === null) {
+        
+        addDatePicker: function(form, entityName, propertyPath, addLabel) {
+            let datePicker = this.getDatePicker(entityName, propertyPath);
+            if (datePicker === null) {
                 return null;
             }
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
-            let label = this.getLabel(addLabel, attributeSpec, timePicker);
-            this.addToForm(form, label, timePicker);
-            return timePicker;
+                                                               propertyPath);
+            let label = this.getLabel(addLabel, attributeSpec, datePicker);
+            this.addToForm(form, label, datePicker);
+            return datePicker;
         },
-        getTimePicker: function(entityName, propertyName) {
+        getDatePicker: function(entityName, propertyPath) {
             let attributeSpec = mapping.getEntityAttributeSpec(entityName,
-                                                               propertyName);
+                                                               propertyPath);
             if (attributeSpec === null) {
                 return null;
             }
 
             let controller = this;
-            let controlId = this.getControlId(entityName, propertyName);
+            let controlId = this.getControlId(entityName, propertyPath);
+            let datePicker = new sap.m.DatePicker(controlId, {
+                dateValue : "{" + entityName + ">/" + propertyPath + "}",
+                change: function() {
+                    if (oui5lib.ui.checkDatePicker(datePicker)) {
+                        datePicker.setValueState("None");
+                        controller.setRecordChanged();
+                    }
+                }
+            });
+            this.setCommons(attributeSpec, datePicker);
+            this.setDateFormats(attributeSpec, datePicker, "date");
+            this.setDateConstraints(attributeSpec, datePicker);
+            
+            return datePicker;
+        },
+
+        addTimePicker: function(form, entityName, propertyPath, addLabel) {
+            let timePicker = this.getTimePicker(entityName, propertyPath);
+            if (timePicker === null) {
+                return null;
+            }
+            let attributeSpec = mapping.getEntityAttributeSpec(entityName,
+                                                               propertyPath);
+            let label = this.getLabel(addLabel, attributeSpec, timePicker);
+            this.addToForm(form, label, timePicker);
+            return timePicker;
+        },
+        getTimePicker: function(entityName, propertyPath) {
+            let attributeSpec = mapping.getEntityAttributeSpec(entityName,
+                                                               propertyPath);
+            if (attributeSpec === null) {
+                return null;
+            }
+
+            let controller = this;
+            let controlId = this.getControlId(entityName, propertyPath);
             let timePicker = new sap.m.TimePicker(controlId, {
-                dateValue: "{" + entityName + ">/" + propertyName + "}",
+                dateValue: "{" + entityName + ">/" + propertyPath + "}",
                 change: function() {
                     controller.setRecordChanged();
                     timePicker.setValueState("None");
                 }
             });
-            this.setValueStateText(attributeSpec, timePicker);
             this.setCommons(attributeSpec, timePicker);
             this.setDateFormats(attributeSpec, timePicker, "time");
             
@@ -533,10 +521,29 @@ sap.ui.define([
                 control.setDisplayFormat(attributeSpec.ui5.displayFormat);
             }
         },
-
+        setDateConstraints: function(attributeSpec, control) {
+            if (typeof attributeSpec.ui5.future === "boolean") {
+                let currentDate = new Date();
+                if (attributeSpec.ui5.future) {
+                    if (control instanceof sap.m.DatePicker) {
+                        currentDate.setHours(0);
+                        currentDate.setMinutes(0);
+                        currentDate.setSeconds(0);
+                    }
+                    control.setMinDate(currentDate);
+                } else {
+                    if (control instanceof sap.m.DatePicker) {
+                        currentDate.setHours(23);
+                        currentDate.setMinutes(59);
+                        currentDate.setSeconds(59);
+                    }
+                    control.setMaxDate(currentDate);
+                }
+            }
+        },
         
-        getControlId: function(entityName, propertyName) {
-            return this.getView().createId(entityName + "_" + propertyName);
+        getControlId: function(entityName, propertyPath) {
+            return this.getView().createId(entityName + "_" + propertyPath);
         },
 
         setCommons: function(attributeSpec, element) {
@@ -548,12 +555,20 @@ sap.ui.define([
                     );
                 }
             }
-            // InputBase, CheckBox, Select
+            // InputBase, Select, CheckBox
             if (typeof attributeSpec.ui5.width === "string") {
                 let width = attributeSpec.ui5.width;
                 if (sap.ui.core.CSSSize.isValid(width) &&
                     typeof element.setWidth === "function") {
                     element.setWidth(width);
+                }
+            }
+            // InputBase, Select
+            if (typeof attributeSpec.i18n.invalid === "string") {
+                if (typeof element.setValueStateText === "function") {
+                    element.setValueStateText(
+                        oui5lib.util.getI18nText(attributeSpec.i18n.invalid)
+                    );
                 }
             }
             // ComboBox, MultiComboBox, Select
@@ -579,13 +594,9 @@ sap.ui.define([
                 }
             }
         },
-        setValueStateText: function(attributeSpec, control) {
-            if (typeof attributeSpec.i18n.invalid === "string") {
-                control.setValueStateText(
-                    oui5lib.util.getI18nText(attributeSpec.i18n.invalid)
-                );
-            }
-        },
+
+
+
         getLabel: function(addLabel, attributeSpec, labelFor) {
             if (typeof addLabel !== "boolean" || addLabel) {
                 if (attributeSpec.i18n.label) {

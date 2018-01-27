@@ -72,10 +72,10 @@
     
     var primaryKey = oui5lib.mapping.getPrimaryKey("order");
     var listBase = oui5lib.listBase.getObject(primaryKey);
-    listBase.registerProcFunction(procData);
 
     var orders = oum.namespace("do.orders");
     orders = oui5lib.util.extend(orders, listBase);
+    orders.registerProcFunction(procData);
     
     orders.calculateOrderTotal = calculateOrderTotal;
 

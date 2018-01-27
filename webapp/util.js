@@ -31,6 +31,11 @@
         return null;
     }
     
+    function getI18nModel() {
+        let component = configuration.getComponent();
+        return component.getModel("i18n");
+    }
+   
     /**
      * Get i18n text.
      * @memberof oui5lib.util
@@ -38,8 +43,7 @@
      * @returns {string} The value of the property.
      */
     function getI18nText(path) {
-        let component = configuration.getComponent();
-        let i18nModel = component.getModel("i18n");
+        let i18nModel = getI18nModel();
         return i18nModel.getProperty(path);
     }
     
@@ -156,6 +160,7 @@
     util.isUI5Loaded = isUI5Loaded;
     util.getComponentRouter = getComponentRouter;
     util.getComponentEventBus = getComponentEventBus;
+    util.getI18nModel = getI18nModel;
     util.getI18nText = getI18nText;
     util.getJsonModelForData = getJsonModelForData;
     util.getFilterArray = getFilterArray;
