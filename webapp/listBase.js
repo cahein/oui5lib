@@ -2,7 +2,7 @@
     function getBaseObject(primaryKey) {
         if (primaryKey === undefined ||
             typeof primaryKey !== "string") {
-            throw Error("cannot create listBase object without primary key");
+            throw new Error("cannot create listBase object without primary key");
         }
 
         let _primaryKey = primaryKey,
@@ -27,9 +27,10 @@
         }
         
         function removeListener(listeners, listener, context) {
+            let func, ctx;
             for (let i = 0, s = listeners.length; i < s; i++) {
-                let func = listeners[i][0];
-                let ctx = listeners[i][1];
+                func = listeners[i][0];
+                ctx = listeners[i][1];
                 if (func === listener && ctx === context) {
                     listeners.splice(i, 1);
                 }
@@ -42,7 +43,7 @@
          * @mixin
          * @example oui5lib.listBase.getObject(primaryKey);
          */
-        let ListBase = {
+        const ListBase = {
             /**
              * Register a function to be called to process incoming data through both the setData and addData function. The item data will be passed as only parameter to the function.
              * @param func The function. 

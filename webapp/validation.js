@@ -1,6 +1,6 @@
 /** @namespace oui5lib.validation */
 (function(configuration, util) {
-    let msgs;    
+    let _msgs;    
 
     /**
      * Validate data against entity definition provided by the mapping.
@@ -14,23 +14,22 @@
             newValidation = true;
         }
         if (newValidation) {
-            msgs = [];
+            _msgs = [];
         }
-        
         for (let i = 0, s = attributeSpecs.length; i < s; i++) {
             let attributeSpec = attributeSpecs[i];
             let attributeName = attributeSpec.name;
 
             switch (attributeSpec.type) {
             case "array":
-                handleArray(data[attributeName], attributeSpec, msgs);
+                handleArray(data[attributeName], attributeSpec, _msgs);
                 continue;
             case "object":
                 if (typeof data[attributeName] === "object") {
                     validateData(data[attributeName], attributeSpec.objectItem, false);
                 } else {
                     if (attributeSpec.required) {
-                        msgs.push("missing:" + attributeName);
+                        _msgs.push("missing:" + attributeName);
                     }
                 }
                 continue;
@@ -42,14 +41,14 @@
             if (attributeSpec.required) {
                 if (attributeValue === null ||
                     (typeof attributeValue === "string" && util.isBlank(attributeValue))) {
-                    msgs.push("missing:" + attributeName);
+                    _msgs.push("missing:" + attributeName);
                     continue;
                 }
             }
             // wrong type
             if (attributeSpec.required || attributeValue !== null) {
                 if (hasWrongType(attributeSpec.type, attributeValue)) {
-                    msgs.push("wrongType:" + attributeName);
+                    _msgs.push("wrongType:" + attributeName);
                     continue;
                 }
             }
@@ -57,7 +56,7 @@
             if (attributeSpec.validate !== undefined &&
                 attributeSpec.validate instanceof Array) {
                 if (!isValid(attributeValue, attributeSpec.validate)) {
-                    msgs.push("invalid:" + attributeName);
+                    _msgs.push("invalid:" + attributeName);
                     continue;
                 }
             }
@@ -65,12 +64,12 @@
             if (typeof attributeSpec.allowedValues !== "undefined") {
                 let allowedValues = attributeSpec.allowedValues;
                 if (!isValueAllowed(allowedValues, attributeValue)) {
-                    msgs.push("notAllowed:" + attributeName);
+                    _msgs.push("notAllowed:" + attributeName);
                     continue;
                 }
             }
         }
-        return msgs;
+        return _msgs;
     }
 
     function getAttributeValue(data, attributeSpec) {
@@ -126,7 +125,7 @@
         return false;
     }
 
-    function handleArray(data, attributeSpec, msgs) {
+    function handleArray(data, attributeSpec, _msgs) {
         if (data instanceof Array && data.length > 0) {
             if (typeof attributeSpec.arrayItem !== "undefined") {
                 let arrayDefs = attributeSpec.arrayItem;
@@ -140,14 +139,14 @@
                     let allowedValues = attributeSpec.allowedValues;
                     data.forEach(function(value) {
                         if (!isValueAllowed(allowedValues, value)) {
-                            msgs.push("notAllowed:" + attributeSpec.name + ":" + value);
+                            _msgs.push("notAllowed:" + attributeSpec.name + ":" + value);
                         }
                     });
                 }
             }
         } else {
             if (attributeSpec.required) {
-                msgs.push("missing:" + attributeSpec.name);
+                _msgs.push("missing:" + attributeSpec.name);
             }
         }
     }

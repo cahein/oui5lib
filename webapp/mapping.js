@@ -34,7 +34,7 @@
     function getEntityAttributeSpec(entityName, propertyPath) {
         let attributeSpecs = getEntityAttributeSpecs(entityName);
 
-        let pathLevels = propertyPath.split("/");
+        const pathLevels = propertyPath.split("/");
         if (pathLevels.length > 1) {
             let subPath, attributeSpec;
             for (let i = 0, s = pathLevels.length; i < s - 1; i++) {
@@ -70,7 +70,7 @@
         return getMapping(entityName).request[requestName];
     }
 
-    let _mappings = {};
+    const _mappings = {};
 
     /**
      * Get the mapping for the given entity. Will try to load the mapping if necessary.
@@ -96,8 +96,8 @@
      * @param {string} entityName The name of the entity.
      */
     function loadMapping(entityName) {
-        let dir = configuration.getMappingDir();
-        let url = dir + "/" + entityName + ".json";
+        const dir = configuration.getMappingDir();
+        const url = dir + "/" + entityName + ".json";
         logger.info("load mapping: " + url);
         request.fetchJson(url, mappingLoaded, { entity: entityName }, false);
     }
@@ -110,7 +110,7 @@
      * @param {object} requestProps The properties passed along with the request.
      */
     function mappingLoaded(mappingData, requestProps) {
-        let entityName = requestProps.entity;
+        const entityName = requestProps.entity;
         
         if (typeof mappingData === "object") {
             if (mappingData.entity !== undefined &&
@@ -118,12 +118,12 @@
                 procArrayOfSpecifications(mappingData.entity, true);
             }
             if (mappingData.request !== undefined) {
-                let requestDefaults = mappingData.request.defaults;
+                const requestDefaults = mappingData.request.defaults;
                 for (let requestName in mappingData.request) {
                     if (requestName === "defaults") {
                         continue;
                     }
-                    let requestConfig = mappingData.request[requestName];
+                    const requestConfig = mappingData.request[requestName];
                     if (requestDefaults !== undefined) {
                         setRequestDefaults(requestConfig, requestDefaults);
                     }

@@ -11,15 +11,14 @@
      * @param {string} httpVerb GET or POST.
      * @param {string} encodedParams The url-encoded parameters string.
      */
-    function fetchJson(url, handleSuccess, requestProps, isAsync,
-                       httpVerb, encodedParams) {
+    function fetchJson(url, handleSuccess, requestProps, isAsync, httpVerb, encodedParams) {
         if (typeof isAsync !== "boolean") {
             isAsync = true;
         }
-        if (typeof httpVerb === "undefined") {
+        if (typeof httpVerb !== "string") {
             httpVerb = "GET";
         }
-        if (typeof encodedParams !== "undefined" && httpVerb === "GET") {
+        if (typeof encodedParams === "string" && httpVerb === "GET") {
             let protocolRegex = /^https?.*/;
             if (protocolRegex.test(url)) {
                 url += "?" + encodedParams;
@@ -37,6 +36,7 @@
         addHandlers(xhr, handleSuccess, requestProps, isAsync);        
 
         if (httpVerb === "POST") {
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhr.send(encodedParams);
         } else {
             xhr.send();
@@ -58,10 +58,6 @@
                                 data, handleSuccess, isAsync) {
         if (typeof oui5lib.mapping !== "object") {
             throw new Error("oui5lib.mapping namespace not loaded");
-        }
-        
-        if (data === undefined || data === null) {
-            data = {};
         }
         if (typeof isAsync !== "boolean") {
             if (oui5lib.configuration.getEnvironment() === "testing") {
@@ -130,7 +126,7 @@
      * @returns {string} The request url.
      */
     function procUrl(requestConfig) {
-        let pathname = requestConfig.pathname;
+        const pathname = requestConfig.pathname;
 
         switch (oui5lib.configuration.getEnvironment()) {
         case "development":
@@ -149,9 +145,9 @@
             }
             break;
         }
-        let protocol = requestConfig.protocol;
-        let host = requestConfig.host;
-        let requestUrl = protocol + "://" + host + "/" + pathname;
+        const protocol = requestConfig.protocol;
+        const host = requestConfig.host;
+        const requestUrl = protocol + "://" + host + "/" + pathname;
         return requestUrl;
     }
     
@@ -163,28 +159,30 @@
      * @param {object} requestConfig
      */
     function procParameters(data, requestConfig) {
-        let paramsConfig = requestConfig.parameters;
+        const paramsConfig = requestConfig.parameters;
         if (paramsConfig === undefined || paramsConfig.length === 0) {
             return {};
         }
-        
+        if (data === undefined || data === null) {
+            data = {};
+        }
         let requestParams = {};
         let paramName, paramValue;
-        paramsConfig.forEach(function(paramConf) {
-            paramName = paramConf.name;
+        paramsConfig.forEach(function(paramSpec) {
+            paramName = paramSpec.name;
             paramValue = null;
             if (data[paramName] === undefined) {
-                if (typeof paramConf.default === "string") {
-                    paramValue = paramConf.default;
+                if (typeof paramSpec.default === "string") {
+                    paramValue = paramSpec.default;
                 }
             } else {
                 paramValue = data[paramName];
-                if (paramConf.type !== "string") {
-                    paramValue = convertToString(paramValue, paramConf);
+                if (paramSpec.type !== "string") {
+                    paramValue = convertToString(paramValue, paramSpec);
                 }
             }
 
-            if (paramConf.required && paramValue === null) {
+            if (paramSpec.required && paramValue === null) {
                 throw new Error("required parameter missing: " + paramName);
             }
             if (paramValue !== null) {
@@ -199,23 +197,23 @@
      * @memberof oui5lib.request
      * @inner 
      * @param {boolean|number|Date|Array} value
-     * @param {object} paramConfig
+     * @param {object} paramSpec
      */
-    function convertToString(value, paramConf) {
-        let type = paramConf.type;
+    function convertToString(value, paramSpec) {
+        let type = paramSpec.type;
         switch (type) {
         case "Date":
             if (value instanceof Date &&
-                typeof paramConf.dateFormat === "string") {
+                typeof paramSpec.dateFormat === "string") {
                 value = formatter.getDateString(value,
-                                                paramConf.dateFormat);
+                                                paramSpec.dateFormat);
             }
             break;
         case "Time":
             if (value instanceof Date &&
-                typeof paramConf.timeFormat === "string") {
+                typeof paramSpec.timeFormat === "string") {
                 value = formatter.getTimeString(value,
-                                                paramConf.timeFormat);
+                                                paramSpec.timeFormat);
             }
             break;
         case "Array":
