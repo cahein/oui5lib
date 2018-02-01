@@ -21,7 +21,7 @@
             if (typeof sap === "undefined" || typeof sap.ui === "undefined") {
                 return null;
             }
-            this._model = new sap.ui.model.json.JSONModel();
+            this._model = new sap.ui.model.json.JSONModel(this.getData());
         }
         return this._model;
     }
