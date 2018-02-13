@@ -1,6 +1,7 @@
-<View xmlns="sap.m">
+<mvc:View xmlns="sap.m"
+          xmlns:mvc="sap.ui.core.mvc">
   <MessagePage
       title="{i18n>http.404error}"
       text="{i18n>view.noRoute.text}"
       description="{i18n>view.noRoute.description}"/>
-</View>
+</mvc:View>

@@ -1,6 +1,7 @@
-<View xmlns="sap.m">
+<mvc:View xmlns="sap.m"
+          xmlns:mvc="sap.ui.core.mvc">
   <MessagePage
       title="Not Authorized"
       text="This page is not available."
       description="You do not have the required permissions to access the requested page."/>
-</View>
+</mvc:View>
