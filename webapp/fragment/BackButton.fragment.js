@@ -12,7 +12,8 @@ sap.ui.jsfragment("oui5lib.fragment.BackButton", {
                     } else {
                         if (typeof oController.wasRecordChanged === "function" &&
                             oController.wasRecordChanged()) {
-                            oui5lib.messages.confirmUnsavedChanges(oController.handleUnsavedChanges);
+                            oui5lib.messages.confirmUnsavedChanges(
+                                oController.handleUnsavedChanges.bind(oController), "back");
                         } else {
                             router = oui5lib.util.getComponentRouter();
                             router.navBack();

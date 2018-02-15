@@ -49,14 +49,16 @@
      * @memberof oui5lib.messages
      * @param {function} handleClose The function to call upon user action.
      */
-    function confirmUnsavedChanges(handleClose) {
+    function confirmUnsavedChanges(handleClose, navto) {
         if (typeof handleClose !== "function") {
             throw TypeError("need a function to handle the onClose event");
         }
         jQuery.sap.require("sap.m.MessageBox");
         sap.m.MessageBox.confirm(util.getI18nText("unsavedChanges.text"), {
             initialFocus: "CANCEL",
-            onClose: handleClose
+            onClose: function(action) {
+                handleClose(action, navto);
+            }
         });
     }
 
