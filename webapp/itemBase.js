@@ -140,11 +140,19 @@
         this._isLoading = isLoading;
     }
 
+    function getIsClone() {
+        return this._isClone;
+    }
+    function setIsClone(isClone) {
+        this._isClone = isClone;
+    }
+
     let itemBase = oui5lib.namespace("itemBase");
     itemBase._data = null;
     itemBase._new = false;
     itemBase._modified = false;
     itemBase._isLoading = false;
+    itemBase._isClone = false;
 
     itemBase.getModel = getModel;
 
@@ -156,6 +164,8 @@
 
     itemBase.setLoading = setLoading;
     itemBase.isLoading = isLoading;
+    itemBase.setIsClone = setIsClone;
+    itemBase.getIsClone = getIsClone;
 
     itemBase.setProperty = setProperty;
     itemBase.getProperty = getProperty;

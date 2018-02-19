@@ -155,6 +155,9 @@
         }
         return true;
     }
+    function cloneData(data) {
+        return JSON.parse(JSON.stringify(data));
+    }
 
     let util = oui5lib.namespace("util");
     util.isUI5Loaded = isUI5Loaded;
@@ -168,4 +171,5 @@
     util.isBlank = isBlank;
     util.deepFreeze = deepFreeze;
     util.extend = extend;
+    util.cloneData = cloneData;
 }(oui5lib.configuration));
