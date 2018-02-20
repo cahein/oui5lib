@@ -82,7 +82,7 @@
         });
     }
 
-    let messages = oui5lib.namespace("messages");
+    const messages = oui5lib.namespace("messages");
     messages.showNotification = showMessageToast;
     messages.showErrorMessage = showErrorMessageBox;
     messages.confirmUnsavedChanges = confirmUnsavedChanges;

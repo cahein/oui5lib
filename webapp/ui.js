@@ -119,7 +119,7 @@
         comboBox.removeAllItems();
     }
     
-    let ui = oui5lib.namespace("ui");
+    const ui = oui5lib.namespace("ui");
     ui.handleValidationErrors = handleValidationErrors;
     ui.setControlValueState = setControlValueState;
 

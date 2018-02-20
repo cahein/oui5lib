@@ -436,7 +436,7 @@
     }
 
     
-    let validation = oui5lib.namespace("validation");
+    const validation = oui5lib.namespace("validation");
     validation.validateData = validateData;
     validation.isValid = isValid;
     validation.isValidDate = isValidDateString;

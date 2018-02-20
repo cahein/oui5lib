@@ -246,7 +246,7 @@
         return oui5lib.config;
     }
     
-    let configuration = oui5lib.namespace("configuration");
+    const configuration = oui5lib.namespace("configuration");
     configuration.getAvailableLanguages = getAvailableLanguages;
     configuration.getDefaultLanguage = getDefaultLanguage;
     configuration.getCurrentLanguage = getCurrentLanguage;

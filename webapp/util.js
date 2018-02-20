@@ -159,7 +159,7 @@
         return JSON.parse(JSON.stringify(data));
     }
 
-    let util = oui5lib.namespace("util");
+    const util = oui5lib.namespace("util");
     util.isUI5Loaded = isUI5Loaded;
     util.getComponentRouter = getComponentRouter;
     util.getComponentEventBus = getComponentEventBus;

@@ -207,7 +207,7 @@
         requestConfig.method = "GET";
     }
 
-    let mapping = oui5lib.namespace("mapping");
+    const mapping = oui5lib.namespace("mapping");
     mapping.getPrimaryKey = getPrimaryKey;
     mapping.getEntityAttributeSpecs = getEntityAttributeSpecs;
     mapping.getEntityAttributeSpec = getEntityAttributeSpec;

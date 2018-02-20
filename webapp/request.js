@@ -253,7 +253,7 @@
         return encodedString;
     }
 
-    let request = oui5lib.namespace("request");
+    const request = oui5lib.namespace("request");
     request.fetchJson = fetchJson;
     request.sendMappingRequest = sendMappingRequest;
 }(oui5lib.logger, oui5lib.event,  oui5lib.formatter));

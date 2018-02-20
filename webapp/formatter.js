@@ -214,11 +214,11 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
         return atob(content);
     }
 
-    let formatter = oui5lib.namespace("formatter");
+    const formatter = oui5lib.namespace("formatter");
     formatter.base64Encode = base64Encode;
     formatter.base64Decode = base64Decode;
-    formatter.getDateFromString = getDateFromString;
     formatter.getDateFromStrings = getDateFromStrings;
+    formatter.getDateFromString = getDateFromString;
     formatter.getDateString = getDateString;
     formatter.getDateTimeString = getDateTimeString;
     formatter.getTimeString = getTimeString;
