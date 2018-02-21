@@ -8,8 +8,6 @@
             }
         }
     }
-    
-
 
     /**
      * Get Model from data.
@@ -103,6 +101,7 @@
         
         item[key] = vlue;
         this._modified = true;
+        updateModel();
         return true;
     }
     
