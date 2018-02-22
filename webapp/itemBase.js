@@ -95,16 +95,23 @@
                 subitem = subitem[subkey];
             }
             subitem[keys[keys.length - 1]] = vlue;
-            this._modified = true;
+            this.setModified();
             return true;
         }
         
         item[key] = vlue;
-        this._modified = true;
-        updateModel();
+        this.setModified();
         return true;
     }
     
+    /**
+     * Set the item data modified
+     * @memberof oui5lib.itemBase
+     */
+    function setModified() {
+        this._modified = true;
+    }
+
     /**
      * Were the item data modified?
      * @memberof oui5lib.itemBase
@@ -139,7 +146,7 @@
         this._isLoading = isLoading;
     }
 
-    function getIsClone() {
+    function isClone() {
         return this._isClone;
     }
     function setIsClone(isClone) {
@@ -160,13 +167,13 @@
 
     itemBase.setNew = setNew;
     itemBase.isNew = isNew;
-
+    itemBase.wasModified = wasModified;
+    itemBase.setModified = setModified;
     itemBase.setLoading = setLoading;
     itemBase.isLoading = isLoading;
     itemBase.setIsClone = setIsClone;
-    itemBase.getIsClone = getIsClone;
+    itemBase.isClone = isClone;
 
     itemBase.setProperty = setProperty;
     itemBase.getProperty = getProperty;
-    itemBase.wasModified = wasModified;
 }());

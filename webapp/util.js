@@ -156,7 +156,7 @@
         return true;
     }
     function cloneData(data) {
-        return JSON.parse(JSON.stringify(data));
+        return jQuery.extend(true, {}, data);
     }
 
     const util = oui5lib.namespace("util");

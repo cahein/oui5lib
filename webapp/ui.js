@@ -12,18 +12,15 @@
         if (typeof openMessageBox !== "boolean") {
             openMessageBox = false;
         }
-        let msgs = [];
         for (let i = 0, s = errors.length; i < s; i++) {
             let error = errors[i].split(":");
             logger.debug( "error: " + error[0] + " : " + error[1]);
             let fnme = error[1];
             let control = view.byId(modelName + "_" + fnme);
             setControlValueState(control, false);
-
-            msgs.push("Invalid: " + error[0] + " " + error[1]);                
         }
         if (openMessageBox) {
-            showValidationErrors(msgs);
+            showValidationErrors(errors);
         }
     }
     
@@ -31,10 +28,16 @@
      * Show input validation errors. Will open a MessageBox.
      * @memberof oui5lib.ui
      * @inner 
-     * @param {array} msgs Error messages to be shown in the box.
+     * @param {array} errors Error messages to be shown in the box.
      */
-    function showValidationErrors(msgs) {
-        let msgText = util.getI18nText("validation.fix-errors");
+    function showValidationErrors(errors) {
+        let msgs = [];
+        errors.forEach(function(errorStr) {
+            let error = errorStr.split(":");
+            msgs.push(util.getI18nText("validation." + error[0])
+                      + ": " + error[1]);
+        });
+        let msgText = util.getI18nText("validation.fix-errors") + "\n\n";
         for (let i = 0, s = msgs.length; i < s; i++) {
             msgText += msgs[i] + "\n";
         }
@@ -121,6 +124,7 @@
     
     const ui = oui5lib.namespace("ui");
     ui.handleValidationErrors = handleValidationErrors;
+    ui.showValidationErrors = showValidationErrors;
     ui.setControlValueState = setControlValueState;
 
     ui.clearComboBox = clearComboBox;

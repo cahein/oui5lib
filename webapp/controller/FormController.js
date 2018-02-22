@@ -53,6 +53,8 @@ sap.ui.define([
                 this.submitRecord();
             } else {
                 oui5lib.logger.debug("nothing to save");
+                oui5lib.messages.showNotification(
+                    oui5lib.util.getI18nText("common.nothingToSave"));
             }
         },
 
