@@ -35,7 +35,7 @@
             return false;
         }
         if (typeof _permissionsMap.views[viewName] !== "undefined") {
-            let viewRoles = _permissionsMap.views[viewName].roles;
+            const viewRoles = _permissionsMap.views[viewName].roles;
             return hasPermissions(viewRoles);
         }
         return true;
@@ -82,7 +82,7 @@
      * Initialize the current user object.
      */
     function init() {
-        let userProfileUrl = configuration.getUserProfileUrl();
+        const userProfileUrl = configuration.getUserProfileUrl();
         if (userProfileUrl !== null) {
             requestUserProfile(userProfileUrl);
         }

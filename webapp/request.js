@@ -1,5 +1,9 @@
-/** @namespace oui5lib.request */
 (function (logger, event, formatter) {
+    "use strict";
+    
+    /** @namespace oui5lib.request */
+    const request = oui5lib.namespace("request");
+
     /**
      * Send XMLHttpRequest expecting JSON.
      * @memberof oui5lib.request
@@ -19,13 +23,13 @@
             httpVerb = "GET";
         }
         if (typeof encodedParams === "string" && httpVerb === "GET") {
-            let protocolRegex = /^https?.*/;
+            const protocolRegex = /^https?.*/;
             if (protocolRegex.test(url)) {
                 url += "?" + encodedParams;
             }
         }
 
-        let xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         xhr.overrideMimeType("application/json");
         try {
             xhr.open(httpVerb, url, isAsync);
@@ -67,15 +71,15 @@
             }
         }
         
-        let requestConfig = oui5lib.mapping.getRequestConfiguration(entityName,
-                                                                    requestName);
+        const requestConfig = oui5lib.mapping.getRequestConfiguration(entityName,
+                                                                      requestName);
         
-        let requestParams = procParameters(data, requestConfig);
-        let encodedParams = getEncodedParams(requestParams);
+        const requestParams = procParameters(data, requestConfig);
+        const encodedParams = getEncodedParams(requestParams);
         logger.info("request parameter string: " + encodedParams);
 
-        let httpVerb = requestConfig.method;
-        let url = procUrl(requestConfig);
+        const httpVerb = requestConfig.method;
+        const url = procUrl(requestConfig);
         logger.info("request url: " + url);
 
         fetchJson(url, handleSuccess, { "entity": entityName,
@@ -91,7 +95,7 @@
                     try {
                         responseData = JSON.parse(xhr.responseText);
                     } catch(e) {
-                        throw new Error("JSON is invalid");
+                        throw new Error("JSON is invalid: " + xhr.responseText);
                     }
                     if (typeof handleSuccess === "function") {
                         handleSuccess(responseData, requestProps);
@@ -253,7 +257,6 @@
         return encodedString;
     }
 
-    const request = oui5lib.namespace("request");
     request.fetchJson = fetchJson;
     request.sendMappingRequest = sendMappingRequest;
 }(oui5lib.logger, oui5lib.event,  oui5lib.formatter));

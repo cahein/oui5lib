@@ -1,4 +1,6 @@
 (function(listHelper) {
+    "use strict";
+    
     function getBaseObject(primaryKey) {
         if (primaryKey === undefined ||
             typeof primaryKey !== "string") {

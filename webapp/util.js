@@ -1,5 +1,9 @@
-/** @namespace oui5lib.util */
 (function (configuration) {
+    "use strict";
+    
+    /** @namespace oui5lib.util */
+    const util = oui5lib.namespace("util");
+
     function isUI5Loaded() {
         if (typeof sap === "object" && typeof sap.ui === "object") {
             return true;
@@ -12,7 +16,7 @@
      * @memberof oui5lib.util
      */
     function getComponentRouter() {
-        let component = configuration.getComponent();
+        const component = configuration.getComponent();
         if (component !== null) {
             return component.getRouter();
         }
@@ -24,7 +28,7 @@
      * @memberof oui5lib.util
      */
     function getComponentEventBus() {
-        let component = configuration.getComponent();
+        const component = configuration.getComponent();
         if (component !== null) {
             return component.getEventBus();
         }
@@ -32,7 +36,7 @@
     }
     
     function getI18nModel() {
-        let component = configuration.getComponent();
+        const component = configuration.getComponent();
         return component.getModel("i18n");
     }
    
@@ -43,8 +47,7 @@
      * @returns {string} The value of the property.
      */
     function getI18nText(path) {
-        let i18nModel = getI18nModel();
-        return i18nModel.getProperty(path);
+        return getI18nModel().getProperty(path);
     }
     
     /**
@@ -54,7 +57,7 @@
      * @returns {sap.ui.model.json.JSONModel} The JSONModel.
      */
     function getJsonModelForData(data) {
-        let model = new sap.ui.model.json.JSONModel();
+        const model = new sap.ui.model.json.JSONModel();
         if (data.length > 100) {
             model.setSizeLimit(data.length);
         }
@@ -74,6 +77,10 @@
         if (isBlank(search)) {
             return filters;
         }
+        if (!(fields instanceof Array)) {
+            return filters;
+        }
+        
         if (typeof operator === "undefined") {
             operator = "Contains";
         }
@@ -81,13 +88,12 @@
         if (allowedOperators.indexOf(operator) === -1) {
             return filters;
         }
-        let subFilters = [];
-        for (let i = 0, s = fields.length; i < s; i++) {
-            let field = fields[i];
+        const subFilters = [];
+        fields.forEach(function(field) {
             subFilters.push(
                 new sap.ui.model.Filter(field, operator, search)
             );
-        }
+        });
         if (subFilters.length > 0) {
             filters = new sap.ui.model.Filter({
                 filters: subFilters,
@@ -159,7 +165,6 @@
         return jQuery.extend(true, {}, data);
     }
 
-    const util = oui5lib.namespace("util");
     util.isUI5Loaded = isUI5Loaded;
     util.getComponentRouter = getComponentRouter;
     util.getComponentEventBus = getComponentEventBus;

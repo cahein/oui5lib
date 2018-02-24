@@ -1,7 +1,11 @@
 jQuery.sap.require("sap.ui.core.format.DateFormat");
 
-/** @namespace oui5lib.formatter */
 (function(configuration) {
+    "use strict";
+
+    /** @namespace oui5lib.formatter */
+    const formatter = oui5lib.namespace("formatter");
+
     /**
      * Converts date and time strings into Javascript Date.
      * @memberof oui5lib.formatter
@@ -13,12 +17,11 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
         if (datePattern === undefined) {
             datePattern = configuration.getDateTimeValuePattern("date");
         }
-        var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
-           pattern: datePattern,
-           UTC: true
+        const oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+            pattern: datePattern,
+            UTC: true
         });
-        var date = oDateFormat.parse(dateStr, false, true);
-        return date;
+        return oDateFormat.parse(dateStr, false, true);
     }
 
     /**
@@ -33,11 +36,10 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
         if (dateTimePattern === undefined) {
             dateTimePattern = configuration.getDateTimeValuePattern("dateTime");
         }
-        var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+        const oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: dateTimePattern
         });
-        var date = oDateFormat.parse(dateStr + " " + timeStr, false, true);
-        return date;
+        return oDateFormat.parse(dateStr + " " + timeStr, false, true);
     }
 
     
@@ -98,11 +100,10 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
         if (outFormat === undefined) {
             throw new Error("required date pattern is undefined");
         }
-        var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+        const oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: outFormat
         });
-        var formattedDate = oDateFormat.format(date);
-        return formattedDate;
+        return oDateFormat.format(date);
     }
 
     /**
@@ -120,17 +121,16 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
         if (typeof inFormat !== "string") {
             inFormat = configuration.getDateTimeValuePattern("date");
         }
-        var inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+        const inDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: inFormat
         });
-        var outDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
+        const outDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({
             pattern: outFormat
         });
 
-        var inDate = inDateFormat.parse(dateStr, false, true);
+        const inDate = inDateFormat.parse(dateStr, false, true);
         if (inDate instanceof Date) {
-            var outDate = outDateFormat.format(inDate);
-            return outDate;
+            return outDateFormat.format(inDate);
         }
         return "";
     }
@@ -149,11 +149,11 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
             time = "" + time;
         }
 
-        var timeArray = time.split(".");
+        const timeArray = time.split(".");
 
-        var fullMinutes = timeArray[0];
-        var hours = Math.floor(fullMinutes / 60);          
-        var minutes = fullMinutes % 60;
+        const fullMinutes = timeArray[0];
+        let hours = Math.floor(fullMinutes / 60);          
+        let minutes = fullMinutes % 60;
 
         if (hours <= 9) {
             hours = "0" + hours;
@@ -175,14 +175,14 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
             return null;
         }
         
-        var industrialMinutes = 0;
-        var match = timeString.match(/^(\d+):(\d+):?(\d*)$/);
+        let industrialMinutes = 0;
+        const match = timeString.match(/^(\d+):(\d+):?(\d*)$/);
         if (match === null) {
             return null;
         }
         if (match.length === 4) {
-            var hours = parseInt(match[1]);
-            var minutes = parseInt(match[2]);
+            const hours = parseInt(match[1]);
+            const minutes = parseInt(match[2]);
             industrialMinutes = (hours * 60) + minutes;
         }
         return industrialMinutes;
@@ -214,7 +214,6 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
         return atob(content);
     }
 
-    const formatter = oui5lib.namespace("formatter");
     formatter.base64Encode = base64Encode;
     formatter.base64Decode = base64Decode;
     formatter.getDateFromStrings = getDateFromStrings;

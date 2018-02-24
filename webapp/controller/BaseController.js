@@ -7,7 +7,7 @@ sap.ui.define([
      * Extends the default Controller with some basic functions. 
      * @mixin oui5lib.controller.BaseController
      */
-    var BaseController = Controller.extend("oui5lib.controller.BaseController", {
+    const BaseController = Controller.extend("oui5lib.controller.BaseController", {
         /**
          * Verifies permissions of the current user to the view.
          * @function verifyPermissions
@@ -16,9 +16,9 @@ sap.ui.define([
          * @example In the controller init, use: this.verifyPermissions()
          */
         verifyPermissions : function() {
-            var view = this.getView();
-            var viewName = view.sViewName;
-            var permissions = oui5lib.configuration.getViewPermissions(viewName);
+            const view = this.getView();
+            const viewName = view.sViewName;
+            const permissions = oui5lib.configuration.getViewPermissions(viewName);
             if (typeof permissions !== "undefined") {
                 if (oui5lib.currentuser.hasPermissions(permissions.userRoles)) {
                     return true;
@@ -73,7 +73,7 @@ sap.ui.define([
         },
 
         addControllerName: function(msg) {
-            var metadata = this.getMetadata();
+            const metadata = this.getMetadata();
             return metadata.getName() + " > " + msg;
         }
     });

@@ -1,8 +1,9 @@
 sap.ui.define([
-    "oui5lib/controller/BaseController"
+    "oui5lib/controller/BaseController",
 ], function(oController) {
     "use strict";
 
+    const logger = oui5lib.logger;
     const mapping = oui5lib.mapping;
     
     /**
@@ -20,7 +21,7 @@ sap.ui.define([
          * @public
          */
         setRecordChanged: function() {
-            oui5lib.logger.debug("record changed");
+            logger.debug("record changed");
             this._recordChanged = true;
         },
         
@@ -45,14 +46,14 @@ sap.ui.define([
 
 
         handleUnsavedChanges: function(action) {
-            oui5lib.logger.info("unsavedChanges: " + action);
+            logger.info("unsavedChanges: " + action);
         },
         
         saveRecord: function() {
             if (this.wasRecordChanged()) {
                 this.submitRecord();
             } else {
-                oui5lib.logger.debug("nothing to save");
+                logger.debug("nothing to save");
                 oui5lib.messages.showNotification(
                     oui5lib.util.getI18nText("common.nothingToSave"));
             }

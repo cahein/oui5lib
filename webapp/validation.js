@@ -1,5 +1,9 @@
-/** @namespace oui5lib.validation */
 (function(configuration, util) {
+    "use strict";
+    
+    /** @namespace oui5lib.validation */
+    const validation = oui5lib.namespace("validation");
+
     let _msgs;    
 
     /**
@@ -17,8 +21,8 @@
             _msgs = [];
         }
         for (let i = 0, s = attributeSpecs.length; i < s; i++) {
-            let attributeSpec = attributeSpecs[i];
-            let attributeName = attributeSpec.name;
+            const attributeSpec = attributeSpecs[i];
+            const attributeName = attributeSpec.name;
 
             switch (attributeSpec.type) {
             case "array":
@@ -35,7 +39,7 @@
                 continue;
             }
             
-            let attributeValue = getAttributeValue(data, attributeSpec);
+            const attributeValue = getAttributeValue(data, attributeSpec);
 
             // required
             if (attributeSpec.required) {
@@ -73,7 +77,7 @@
     }
 
     function getAttributeValue(data, attributeSpec) {
-        let attributeName = attributeSpec.name;
+        const attributeName = attributeSpec.name;
         let attributeValue = null;
         if (typeof data[attributeName] !== "undefined") {
             attributeValue = data[attributeName];
@@ -128,7 +132,7 @@
     function handleArray(data, attributeSpec, _msgs) {
         if (data instanceof Array && data.length > 0) {
             if (typeof attributeSpec.arrayItem !== "undefined") {
-                let arrayDefs = attributeSpec.arrayItem;
+                const arrayDefs = attributeSpec.arrayItem;
                 // an array of objects
                 data.forEach(function(item) {
                     validateData(item, arrayDefs, false);
@@ -136,7 +140,7 @@
             } else {
                 // an array of strings
                 if (typeof attributeSpec.allowedValues !== "undefined") {
-                    let allowedValues = attributeSpec.allowedValues;
+                    const allowedValues = attributeSpec.allowedValues;
                     data.forEach(function(value) {
                         if (!isValueAllowed(allowedValues, value)) {
                             _msgs.push("notAllowed:" + attributeSpec.name + ":" + value);
@@ -169,7 +173,7 @@
         let valid = true;
         if (tests instanceof Array && tests.length > 0) {
             tests.forEach(function(test) {
-                let match = test.match(/([a-zA-Z]+)_(\d+)/);
+                const match = test.match(/([a-zA-Z]+)_(\d+)/);
                 let number = null;
                 if (match !== null && match.length === 3) {
                     test = match[1];
@@ -273,14 +277,14 @@
         return regex.test(value);
     }
     function isFuture(value) {
-        let now = new Date();
+        const now = new Date();
         if (now.getTime() < value.getTime()) {
             return true;
         }
         return false;
     }
     function isPast(value) {
-        let now = new Date();
+        const now = new Date();
         if (now.getTime() > value.getTime()) {
             return true;
         }
@@ -339,7 +343,7 @@
      * @returns {boolean}
      */
     function numbersOnly(value) {
-        let regex = /^[\d]+$/;
+        const regex = /^[\d]+$/;
         return regex.test(value);
     }
 
@@ -350,7 +354,7 @@
      * @returns {boolean}
      */
     function noNumbers(value) {
-        let regex = /^[^\d]+$/;
+        const regex = /^[^\d]+$/;
         return regex.test(value);
     }
 
@@ -361,7 +365,7 @@
      * @returns {boolean}
      */
     function hasLetters(value) {
-        let regex = /[A-Za-z]+/;
+        const regex = /[A-Za-z]+/;
         return regex.test(value);
     }
 
@@ -436,7 +440,6 @@
     }
 
     
-    const validation = oui5lib.namespace("validation");
     validation.validateData = validateData;
     validation.isValid = isValid;
     validation.isValidDate = isValidDateString;

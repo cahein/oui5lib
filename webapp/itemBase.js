@@ -1,8 +1,12 @@
-/** @namespace oui5lib.itemBase */
 (function () {
+    "use strict";
+    
+    /** @namespace oui5lib.itemBase */
+    const itemBase = oui5lib.namespace("itemBase");
+
     function updateModel() {
         if (this._model !== undefined) {
-            let data = this.getData();
+            const data = this.getData();
             if (data !== null) {
                 this._model.setData(data);
             }
@@ -50,12 +54,12 @@
      * @return The parameter value
      */
     function getProperty(key) {
-        let item = this.getData();
+        const item = this.getData();
         if (item === null) {
             return null;
         }
 
-        let keys = key.split("/");
+        const keys = key.split("/");
         if (keys.length > 1) {
             let subitem = item;
             for (let i = 0, s = keys.length; i < s; i++) {
@@ -79,12 +83,12 @@
      * @return {boolean} True if successful, false if key undefined.
      */
     function setProperty(key, vlue) {
-        let item = this.getData();
+        const item = this.getData();
         if (item === null) {
             return false;
         }
         
-        let keys = key.split("/");
+        const keys = key.split("/");
         if (keys.length > 1) {
             let subitem = item;
             for (let i = 0, s = keys.length; i < s - 1; i++) {
@@ -153,27 +157,27 @@
         this._isClone = isClone;
     }
 
-    let itemBase = oui5lib.namespace("itemBase");
-    itemBase._data = null;
-    itemBase._new = false;
-    itemBase._modified = false;
-    itemBase._isLoading = false;
-    itemBase._isClone = false;
-
     itemBase.getModel = getModel;
 
+    itemBase._data = null;
     itemBase.setData = setData;
     itemBase.getData = getData;
-
-    itemBase.setNew = setNew;
-    itemBase.isNew = isNew;
-    itemBase.wasModified = wasModified;
-    itemBase.setModified = setModified;
-    itemBase.setLoading = setLoading;
-    itemBase.isLoading = isLoading;
-    itemBase.setIsClone = setIsClone;
-    itemBase.isClone = isClone;
-
     itemBase.setProperty = setProperty;
     itemBase.getProperty = getProperty;
+
+    itemBase._new = false;
+    itemBase.setNew = setNew;
+    itemBase.isNew = isNew;
+
+    itemBase._modified = false;
+    itemBase.wasModified = wasModified;
+    itemBase.setModified = setModified;
+
+    itemBase._isLoading = false;
+    itemBase.setLoading = setLoading;
+    itemBase.isLoading = isLoading;
+
+    itemBase._isClone = false;
+    itemBase.setIsClone = setIsClone;
+    itemBase.isClone = isClone;
 }());

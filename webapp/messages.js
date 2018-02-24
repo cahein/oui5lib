@@ -1,5 +1,9 @@
-/** @namespace oui5lib.messages */
 (function (logger, util) {
+    "use strict";
+    
+    /** @namespace oui5lib.messages */
+    const messages = oui5lib.namespace("messages");
+
     /**
      * Show notification message briefly without blocking the application.
      * @memberof oui5lib.messages
@@ -25,7 +29,7 @@
         if (typeof handleClose !== "function") {
             handleClose = handleMessageBoxClosed;
         }
-        let title = util.getI18nText("messagebox.error.title");
+        const title = util.getI18nText("messagebox.error.title");
 
         jQuery.sap.require("sap.m.MessageBox");
         sap.m.MessageBox.error(msg, {
@@ -82,7 +86,6 @@
         });
     }
 
-    const messages = oui5lib.namespace("messages");
     messages.showNotification = showMessageToast;
     messages.showErrorMessage = showErrorMessageBox;
     messages.confirmUnsavedChanges = confirmUnsavedChanges;

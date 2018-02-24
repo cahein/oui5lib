@@ -1,4 +1,6 @@
 (function() {
+    const listhelper = oui5lib.namespace("lib.listHelper");
+
     /**
      * @param {Array} list The list, from which the entry shall be removed.
      * @param {String} keyName The name of the key field. 
@@ -10,8 +12,8 @@
             return null;
         }
 
-        var removedEntry = null;
-        for (var i = 0, s = list.length; i < s; i++) {
+        let removedEntry = null;
+        for (let i = 0, s = list.length; i < s; i++) {
             if (list[i][keyName] == keyValue) {
                 removedEntry = list.splice(i, 1);
                 break;
@@ -30,8 +32,8 @@
         if (!isAnArray(list)) {
             return null;
         }
-        var item = null;
-        for (var i = 0, s = list.length; i < s; i++) {
+        let item = null;
+        for (let i = 0, s = list.length; i < s; i++) {
             if (list[i][keyName] == keyValue) {
                 item = list[i];
                 break;
@@ -50,8 +52,9 @@
         if (!isAnArray(list)) {
             return false;
         }
-        for (var i = 0, s = list.length; i < s; i++) {
-            var item = list[i];
+        let item;
+        for (let i = 0, s = list.length; i < s; i++) {
+            item = list[i];
             if (item[keyName] == updatedItem[keyName]) {
                 list[i] = updatedItem;
                 return true;
@@ -68,9 +71,10 @@
      * @returns {Array} The array of filtered items.
      */
     function filterBy(list, key, value) {
-        var filtered = [];
-        for (var i = 0, s = list.length; i < s; i++) {
-            var item = list[i];
+        const filtered = [];
+        let item;
+        for (let i = 0, s = list.length; i < s; i++) {
+            item = list[i];
             if (item[key] === value) {
                 filtered.push(item);
             }
@@ -98,7 +102,6 @@
         return (list instanceof Array);
     }
     
-    var listhelper = oui5lib.namespace("lib.listHelper");
     listhelper.removeByKey = removeByKey;
     listhelper.getItemByKey = getItemByKey;
     listhelper.updateItemByKey = updateItemByKey;

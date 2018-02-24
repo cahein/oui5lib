@@ -1,5 +1,7 @@
-/** @namespace oui5lib.event */
 (function (logger, util) {
+    "use strict";
+
+    /** @namespace oui5lib.event */
     const event = oui5lib.namespace("event");
 
     /**

@@ -1,5 +1,9 @@
-/** @namespace oui5lib.ui */
 (function(logger, util, messages) {
+    "use strict";
+    
+    /** @namespace oui5lib.ui */
+    const ui = oui5lib.namespace("ui");
+
     /**
      * Handles validation errors. Use with FormController.
      * @memberof oui5lib.ui
@@ -12,11 +16,12 @@
         if (typeof openMessageBox !== "boolean") {
             openMessageBox = false;
         }
+        let error, fnme, control;
         for (let i = 0, s = errors.length; i < s; i++) {
-            let error = errors[i].split(":");
+            error = errors[i].split(":");
             logger.debug( "error: " + error[0] + " : " + error[1]);
-            let fnme = error[1];
-            let control = view.byId(modelName + "_" + fnme);
+            fnme = error[1];
+            control = view.byId(modelName + "_" + fnme);
             setControlValueState(control, false);
         }
         if (openMessageBox) {
@@ -31,9 +36,9 @@
      * @param {array} errors Error messages to be shown in the box.
      */
     function showValidationErrors(errors) {
-        let msgs = [];
+        let msgs = [], error;
         errors.forEach(function(errorStr) {
-            let error = errorStr.split(":");
+            error = errorStr.split(":");
             msgs.push(util.getI18nText("validation." + error[0])
                       + ": " + error[1]);
         });
@@ -70,12 +75,12 @@
      * @param {sap.m.ComboBox} comboBox The ComboBox to check.
      */
     function checkComboBox(comboBox) {
-        let vlue = comboBox.getValue();
-        let selectedItem = comboBox.getSelectedItem();
+        const vlue = comboBox.getValue();
+        const selectedItem = comboBox.getSelectedItem();
         if (selectedItem === null) {
             if (!util.isBlank(vlue)) {
                 comboBox.setValueState("Warning");
-                let valueStateText = util.getI18nText("combobox.noItemSelected");
+                const valueStateText = util.getI18nText("combobox.noItemSelected");
                 comboBox.setValueStateText(valueStateText);
                 return;
             }
@@ -90,10 +95,10 @@
      * @param {sap.m.DatePicker} datePicker The DatePicker to check.
      */
     function checkDatePicker(datePicker) {
-        let dateValue = datePicker.getDateValue();
+        const dateValue = datePicker.getDateValue();
 
-        let value = datePicker.getValue();
-        let oDate = new Date(value);
+        const value = datePicker.getValue();
+        const oDate = new Date(value);
         if (oDate == "Invalid Date") {
             datePicker.setValueStateText(util.getI18nText("date.invalid"));
             datePicker.setValueState("Error");
@@ -122,7 +127,6 @@
         comboBox.removeAllItems();
     }
     
-    const ui = oui5lib.namespace("ui");
     ui.handleValidationErrors = handleValidationErrors;
     ui.showValidationErrors = showValidationErrors;
     ui.setControlValueState = setControlValueState;

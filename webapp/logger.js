@@ -1,7 +1,7 @@
 /*eslint no-console: "off"*/
 /*eslint no-fallthrough: "off"*/
 (function (configuration) {
-    let logger = oui5lib.namespace("logger");
+    const logger = oui5lib.namespace("logger");
     if (!window.console) {
         logger.debug = function(){};
         logger.info = function(){};

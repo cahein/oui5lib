@@ -1,5 +1,9 @@
-/** @namespace oui5lib.mapping */
 (function (configuration, logger, listHelper, request) {
+    "use strict";
+    
+    /** @namespace oui5lib.mapping */
+    const mapping = oui5lib.namespace("mapping");
+    
     /**
      * Get the primary key of the entity.
      * @memberof oui5lib.mapping
@@ -207,7 +211,6 @@
         requestConfig.method = "GET";
     }
 
-    const mapping = oui5lib.namespace("mapping");
     mapping.getPrimaryKey = getPrimaryKey;
     mapping.getEntityAttributeSpecs = getEntityAttributeSpecs;
     mapping.getEntityAttributeSpec = getEntityAttributeSpec;
