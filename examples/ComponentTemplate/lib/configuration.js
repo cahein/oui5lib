@@ -2,31 +2,32 @@ jQuery.sap.require("oum.lib.init");
 jQuery.sap.declare("oum.lib.configuration");
 
 (function() {
-   function getComponent() {
-      return sap.ui.getCore().getComponent("oumComponent");
-   }
+    const configuration = oum.namespace("lib.configuration");
+
+    function getComponent() {
+       return sap.ui.getCore().getComponent("oumComponent");
+    }
    
-   function getTilesDef() {
-      if (oum.config.entryPoints !== "undefined") {
-         return oum.config.entryPoints;
-      }
-      return false;
-   }
+    function getTilesDef() {
+        if (oum.config.entryPoints !== "undefined") {
+            return oum.config.entryPoints;
+        }
+        return false;
+    }
    
-   function getAppModel() {
-      var component = getComponent();
-      var appConfig = component.getManifestEntry("sap.app");
+    function getAppModel() {
+        const component = getComponent();
+        const appConfig = component.getManifestEntry("sap.app");
       
-      var appModel = new sap.ui.model.json.JSONModel({
-         appTitle: appConfig.title,
-         appVersion: appConfig.applicationVersion.version,
-         openui5Version: sap.ui.version
-      });
+        const appModel = new sap.ui.model.json.JSONModel({
+            appTitle: appConfig.title,
+            appVersion: appConfig.applicationVersion.version,
+            openui5Version: sap.ui.version
+        });
 
-      return appModel;
-   }
-
-   var configuration = oum.namespace("lib.configuration");
-   configuration.getAppInfoModel = getAppModel;
-   configuration.getEntryPoints = getTilesDef;
+        return appModel;
+    }
+    
+    configuration.getEntryPoints = getTilesDef;
+    configuration.getAppInfoModel = getAppModel;
 }());

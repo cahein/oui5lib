@@ -1,5 +1,7 @@
-/** @namespace oui5lib.configuration */
 (function() {
+    "use strict";
+
+    /** @namespace oui5lib.configuration */
     const configuration = oui5lib.namespace("configuration");
 
     /**

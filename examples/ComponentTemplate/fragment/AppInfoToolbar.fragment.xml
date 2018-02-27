@@ -4,11 +4,11 @@
     >
   <Toolbar>
     <Text text="{i18n>application}" />
-    <Text text="{appInfo>/appTitle}" />
+    <Text text="{/appTitle}" />
     <Text text="{i18n>version}" />
-    <Text text="{appInfo>/appVersion}" />
+    <Text text="{/appVersion}" />
     <ToolbarSpacer/>
     <Text text="OpenUI5 Version: " />
-    <Text text="{appInfo>/openui5Version}" />
+    <Text text="{/openui5Version}" />
   </Toolbar>
 </core:FragmentDefinition>

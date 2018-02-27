@@ -1,9 +1,4 @@
 (function () {
-    "use strict";
-    
-    /** @namespace oui5lib.itemBase */
-    const itemBase = oui5lib.namespace("itemBase");
-
     function updateModel() {
         if (this._model !== undefined) {
             const data = this.getData();
@@ -157,27 +152,33 @@
         this._isClone = isClone;
     }
 
+
+    /** @namespace oui5lib.itemBase */
+    const itemBase = oui5lib.namespace("itemBase");
+
+    itemBase._model = undefined;
+    itemBase._data = null;
+    itemBase._new = false;
+    itemBase._modified = false;
+    itemBase._isLoading = false;
+    itemBase._isClone = false;
+
     itemBase.getModel = getModel;
 
-    itemBase._data = null;
     itemBase.setData = setData;
     itemBase.getData = getData;
     itemBase.setProperty = setProperty;
     itemBase.getProperty = getProperty;
 
-    itemBase._new = false;
     itemBase.setNew = setNew;
     itemBase.isNew = isNew;
 
-    itemBase._modified = false;
-    itemBase.wasModified = wasModified;
     itemBase.setModified = setModified;
+    itemBase.wasModified = wasModified;
 
-    itemBase._isLoading = false;
     itemBase.setLoading = setLoading;
     itemBase.isLoading = isLoading;
 
-    itemBase._isClone = false;
     itemBase.setIsClone = setIsClone;
     itemBase.isClone = isClone;
 }());

@@ -1,4 +1,4 @@
-const oui5lib = {};
+var oui5lib = {};
 oui5lib.namespace = function(string) {
     let object = this;
     const levels = string.split(".");

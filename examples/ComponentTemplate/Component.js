@@ -5,7 +5,7 @@ sap.ui.define([
     "sap/ui/core/UIComponent",
     "oum/Router"
 ], function (UIComponent) {
-    var Component = UIComponent.extend("oum.Component", {
+    const Component = UIComponent.extend("oum.Component", {
         metadata: { 
             manifest: "json",
             async: true
@@ -15,18 +15,13 @@ sap.ui.define([
     oum.Component.prototype.init = function() {
         UIComponent.prototype.init.apply(this, arguments);
 
-        var ui5Configuration = sap.ui.getCore().getConfiguration();
-        var languageCode = ui5Configuration.getLanguage();
+        const ui5Configuration = sap.ui.getCore().getConfiguration();
+        let languageCode = ui5Configuration.getLanguage();
         if (typeof languageCode === "string" && languageCode.length > 2) {
             languageCode = languageCode.substring(0, 2).toLowerCase();
         }
         oui5lib.configuration.setCurrentLanguage(languageCode);
 
-        // model for Footer
-        this.setModel(oum.lib.configuration.getAppInfoModel(),
-                      "appInfo");
-
-        // initialize the oum.Router
         this.getRouter().initialize();
     };
     

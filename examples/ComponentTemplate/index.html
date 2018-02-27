@@ -21,7 +21,7 @@ sap.ui.getCore().attachInit(function () {
    sap.ui.require([
       "sap/ui/core/ComponentContainer"
    ], function (ComponentContainer) {
-      var oumComponent = sap.ui.getCore().createComponent({
+      const oumComponent = sap.ui.getCore().createComponent({
          name: "oum",
          id: "oumComponent"
       });
@@ -32,8 +32,9 @@ sap.ui.getCore().attachInit(function () {
 });
     </script>
   </head>
-  <body class="sapUiBody">
-    <div id="content">
+  <body>
+    <div class="sapUiBody">
+      <div id="content"></div>
     </div>
   </body>
 </html>
