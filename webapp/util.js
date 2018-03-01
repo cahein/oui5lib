@@ -46,8 +46,9 @@
      * @param {string} path The property path.
      * @returns {string} The value of the property.
      */
-    function getI18nText(path) {
-        return getI18nModel().getProperty(path);
+    function getI18nText(path, args) {
+        const resourceBundle = getI18nModel().getResourceBundle();
+        return resourceBundle.getText(path, args);
     }
     
     /**

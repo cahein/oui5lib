@@ -13,7 +13,7 @@
         }
 
         let removedEntry = null;
-        for (let i = 0, s = list.length; i < s; i++) {
+        for (var i = 0, s = list.length; i < s; i++) {
             if (list[i][keyName] == keyValue) {
                 removedEntry = list.splice(i, 1);
                 break;
@@ -33,7 +33,7 @@
             return null;
         }
         let item = null;
-        for (let i = 0, s = list.length; i < s; i++) {
+        for (var i = 0, s = list.length; i < s; i++) {
             if (list[i][keyName] == keyValue) {
                 item = list[i];
                 break;
@@ -53,7 +53,7 @@
             return false;
         }
         let item;
-        for (let i = 0, s = list.length; i < s; i++) {
+        for (var i = 0, s = list.length; i < s; i++) {
             item = list[i];
             if (item[keyName] == updatedItem[keyName]) {
                 list[i] = updatedItem;
@@ -73,7 +73,7 @@
     function filterBy(list, key, value) {
         const filtered = [];
         let item;
-        for (let i = 0, s = list.length; i < s; i++) {
+        for (var i = 0, s = list.length; i < s; i++) {
             item = list[i];
             if (item[key] === value) {
                 filtered.push(item);

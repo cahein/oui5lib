@@ -98,53 +98,53 @@
                 if (typeof reset === "boolean" && reset) {
                     this.resetData();
                 }
-                let entries;
+                let entries = null;
                 if (data instanceof Array) {
                     entries = data;
                 } else if (data instanceof Object) {
                     entries = [ data ];
                 }
-                if (typeof entries === "undefined") {
+                if (entries === null) {
                     throw new TypeError("listBase.addData requires an Array");
                 }
-                if (entries.length > 0) {
-                    let id;
-                    entries.forEach(function(item) {
-                        id = item[_primaryKey];
-                        
-                        let alreadyLoaded = isItemLoaded(id);
-                        if (alreadyLoaded) {
-                            listHelper.updateItemByKey(_data,
-                                                       _primaryKey,
-                                                       item);
-                        } else {
-                            if (_data === null) {
-                                _data = [];
-                            }
 
-                            _data.push(item);
-                            _itemsLoaded[id] = new Date();
-                        }
-                        if (_itemDataChangedEventListeners.length > 0) {
-                            _itemDataChangedEventListeners.forEach(
-                                function(listener) {
-                                    listener[0].call(listener[1], id);
-                                }
-                            );
-                        }
-                    });
-                    if (_procFunction !== null) {
-                        _procFunction(entries);
+                if (_data === null) {
+                    _data = [];
+                }
+
+                let id;
+                
+                entries.forEach(function(item) {
+                    id = item[_primaryKey];
+                    
+                    let alreadyLoaded = isItemLoaded(id);
+                    if (alreadyLoaded) {
+                        listHelper.updateItemByKey(_data,
+                                                   _primaryKey,
+                                                   item);
+                    } else {
+                        _data.push(item);
+                        _itemsLoaded[id] = new Date();
                     }
-                    updateModel(_data);
-
-                    if (_dataChangedEventListeners.length > 0) {
-                        _dataChangedEventListeners.forEach(
+                    if (_itemDataChangedEventListeners.length > 0) {
+                        _itemDataChangedEventListeners.forEach(
                             function(listener) {
-                                listener[0].call(listener[1]);
+                                listener[0].call(listener[1], id);
                             }
                         );
                     }
+                });
+                if (_procFunction !== null) {
+                    _procFunction(entries);
+                }
+                updateModel(_data);
+
+                if (_dataChangedEventListeners.length > 0) {
+                    _dataChangedEventListeners.forEach(
+                        function(listener) {
+                            listener[0].call(listener[1]);
+                        }
+                    );
                 }
             },
 
