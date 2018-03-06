@@ -127,11 +127,18 @@
         comboBox.removeAllItems();
     }
     
+    function setBusy(isBusy) {
+        const component = oui5lib.configuration.getComponent();
+        const rootControl = component.getUIArea().getRootControl();
+        rootControl.setBusy(isBusy);
+    }
+    
     ui.handleValidationErrors = handleValidationErrors;
     ui.showValidationErrors = showValidationErrors;
     ui.setControlValueState = setControlValueState;
 
     ui.clearComboBox = clearComboBox;
+    ui.setBusy = setBusy;
 
     ui.checkComboBox = checkComboBox;
     ui.checkDatePicker = checkDatePicker;
