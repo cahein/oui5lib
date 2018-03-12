@@ -9,8 +9,8 @@ module.exports = function (grunt) {
             tasks: {
                 options: {
                     groups: {
-                        "Code quality": ["lint", "gendoc", "test"],
-                        "Distribution": ["generate-oui5lib-dist"],
+                        "Code quality": ["lint", "gendoc"],
+                        "Distribution": ["generate-dist"],
                         "Examples": ["prepare-examples"],
                         "Default": ["availabletasks"]
                     },
@@ -23,8 +23,8 @@ module.exports = function (grunt) {
                         "Run Tests.",
                         "prepare-examples":
                         "Copy oui5lib for examples",
-                        "generate-oui5lib-package":
-                        "Generated oui5lib minified package",
+                        "generate-dist":
+                        "Generated oui5lib minified distribution package",
                         "availabletasks":
                         "List available tasks."
                     },
@@ -61,9 +61,9 @@ module.exports = function (grunt) {
                 "<%= dirs.webroot %>/itemBase.js"
             ],
             options: {
-                "--web-security" : false,
-                "--local-to-remote-url-access" : true,
-                "--ignore-ssl-errors" : true,
+                "--web-security": false,
+                "--local-to-remote-url-access": true,
+                "--ignore-ssl-errors": true,
                 outfile: "specrunner.html",
                 vendor: [
                     "<%= dirs.ui5resources %>/sap-ui-core.js"
@@ -223,8 +223,8 @@ module.exports = function (grunt) {
     grunt.registerTask("test", ["jasmine"]);
     grunt.registerTask("gendoc", ["clean:doc", "jsdoc"]);
     grunt.registerTask("prepare-examples", ["clean:examples",
-                                            "generate-oui5lib-dist",
+                                            "generate-dist",
                                             "copy:oui5lib"]);
-    grunt.registerTask("generate-oui5lib-dist", ["concat:oui5lib",
-                                                 "uglify:oui5lib"]);
+    grunt.registerTask("generate-dist", ["concat:oui5lib",
+                                         "uglify:oui5lib"]);
 };
