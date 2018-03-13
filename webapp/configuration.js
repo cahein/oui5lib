@@ -5,21 +5,21 @@
     const configuration = oui5lib.namespace("configuration");
 
     /**
-     * Get the componentName from the configuration.
+     * Get the componentId from the configuration.
      */
-    function getComponentName() {
-        return getConfigData().componentName;
+    function getComponentId() {
+        return getConfigData().componentId;
     }
     
     /**
      * Get Component.
      * @memberof oui5lib.configuration
-     * @returns The Component by the configured name. Returns undefined if such a Components does not exist. Returns null if the componentName has not been specified.
+     * @returns The Component by the configured ID. Returns undefined if such a Components does not exist. Returns null if the componentId parameter has not been specified in the configuration.
      */
     function getComponent() {
-        const componentName = getComponentName();
-        if (typeof componentName === "string") {
-            return sap.ui.getCore().getComponent(componentName);
+        const componentId = getComponentId();
+        if (typeof componentId === "string") {
+            return sap.ui.getCore().getComponent(componentId);
         }
         return null;
     }
