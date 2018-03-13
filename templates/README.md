@@ -25,3 +25,5 @@ Build a distribution package with
 For linting the JavaScript code [eslint](https://eslint.org/) is used. Please replace or edit the provided '.eslintrc.json' according to your conventions.
 
     grunt lint
+
+You won't be able to run the application without the UI5 resources. 

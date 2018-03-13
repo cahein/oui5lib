@@ -49,3 +49,5 @@ For tests, please use the SpecRunner.html files in the 'webapp/test' and 'exampl
 * Allow this to be a UI5 Core library.
 
 * Handle dependency loading with sap.ui.define.
+
+* Add tests for UI elements, especially the FormController.
