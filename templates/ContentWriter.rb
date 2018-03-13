@@ -28,6 +28,7 @@ class ContentWriter
   def process_project_files
     process_file('Gruntfile.js')
     process_file('package.json')
+    process_file('.eslintrc.json')
     FileUtils.cp File.join('BaseComponent', 'GruntRef.json'),
                  File.join(@outpath, 'GruntRef.json')
   end

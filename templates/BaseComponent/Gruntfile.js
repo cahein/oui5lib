@@ -36,7 +36,8 @@ module.exports = function (grunt) {
                 "<%= dirs.lib %>/*.js",
                 "<%= dirs.view %>/**/*.js",
                 "<%= dirs.controller %>/**/*.js",
-                "<%= dirs.fragment %>/**/*.js"
+                "<%= dirs.fragment %>/**/*.js",
+                "!<%= dirs.webroot %>/oui5lib.js"
             ]
         },
         copy: {
