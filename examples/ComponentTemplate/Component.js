@@ -16,7 +16,7 @@ sap.ui.define([
         UIComponent.prototype.init.apply(this, arguments);
 
         const ui5Configuration = sap.ui.getCore().getConfiguration();
-        let languageCode = ui5Configuration.getLanguage();
+        var languageCode = ui5Configuration.getLanguage();
         if (typeof languageCode === "string" && languageCode.length > 2) {
             languageCode = languageCode.substring(0, 2).toLowerCase();
         }

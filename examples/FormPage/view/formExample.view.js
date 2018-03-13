@@ -51,7 +51,19 @@ sap.ui.jsview("oum.view.formExample", {
                     sap.ui.jsfragment("oui5lib.fragment.HomeButton", oController)
                 ]
             }),
-            content: [ messages, exampleForm ]
+            content: [ messages, exampleForm ],
+            footer: new sap.m.Bar({
+                contentLeft : [
+                    new sap.m.Button({
+                        icon: "sap-icon://save",
+                        press: function(){
+                            oController.submitForm();
+                        }
+                    })
+                ],
+                contentMiddle : [ ],
+                contentRight : [ ]
+            })                  
         });
     }
 });

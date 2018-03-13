@@ -3,7 +3,7 @@ sap.ui.jsview("oum.view.simpleFormExample", {
         return "oum.controller.formExample";
     },
     createContent : function(oController) {
-        var exampleForm = new sap.ui.layout.form.SimpleForm(this.createId("exampleForm"), {
+        const exampleForm = new sap.ui.layout.form.SimpleForm(this.createId("exampleForm"), {
             title: "{i18n>some.form.title}",
             editable: true,
             layout: "ResponsiveGridLayout",
@@ -39,11 +39,11 @@ sap.ui.jsview("oum.view.simpleFormExample", {
         oController.addTimePicker(exampleForm, "exampleEntity", "time");
         oController.addTextArea(exampleForm, "exampleEntity", "textarea");
         
-        var headerTitle = new sap.m.Text({
+        const headerTitle = new sap.m.Text({
             text: "SimpleForm Example"
         });
 
-        var messages = new sap.ui.layout.VerticalLayout(this.createId("messagesContainer"));
+        const messages = new sap.ui.layout.VerticalLayout(this.createId("messagesContainer"));
 
         return new sap.m.Page({
             customHeader: new sap.m.Bar({
@@ -56,7 +56,7 @@ sap.ui.jsview("oum.view.simpleFormExample", {
                 ]
             }),
             content: [ messages, exampleForm ],
-            footer : new sap.m.Bar({
+            footer: new sap.m.Bar({
                 contentLeft : [
                     new sap.m.Button({
                         icon: "sap-icon://save",

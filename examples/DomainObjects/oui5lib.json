@@ -1,5 +1,0 @@
-{
-    "logLevel": "ERROR",
-    "mappingDirectory": "domainObjects/mapping",
-    "environment": "development"
-}

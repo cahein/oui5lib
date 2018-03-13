@@ -5,7 +5,12 @@ sap.ui.define([
 
     var exampleFormController = Controller.extend("oum.controller.formExample", {
         onInit: function () {
-            var exampleData = {
+            this.getRouter().getRoute("formexample")
+                .attachPatternMatched(this._onRouteMatched, this);
+            this.getRouter().getRoute("simpleformexample")
+                .attachPatternMatched(this._onRouteMatched, this);
+            
+            const exampleData = {
                 first_name: "",
                 last_name: "",
                 number: "",
@@ -23,34 +28,38 @@ sap.ui.define([
                 time: null,
                 textarea: ""
             };
-            var exampleModel = oui5lib.util.getJsonModelForData(exampleData);
-            var form = this.getView().byId("exampleForm");
+            const exampleModel = oui5lib.util.getJsonModelForData(exampleData);
+            const form = this.getView().byId("exampleForm");
             form.setModel(exampleModel, "exampleEntity");
             
-            var exampleList = [
+            const exampleList = [
                 { key: 0, text: "c by" },
                 { key: 1, text: "b me" },
                 { key: 2, text: "d name" },
                 { key: 3, text: "a Sort" }
             ];
-            var listModel = oui5lib.util.getJsonModelForData(exampleList);
-            var comboBox = this.getView().byId("exampleEntity_comboItem");
+            const listModel = oui5lib.util.getJsonModelForData(exampleList);
+            const comboBox = this.getView().byId("exampleEntity_comboItem");
             comboBox.setModel(listModel, "items");
 
-            var multiComboBox = this.getView().byId("exampleEntity_multiComboItem");
+            const multiComboBox = this.getView().byId("exampleEntity_multiComboItem");
             multiComboBox.setModel(listModel, "items");
 
-            var select = this.getView().byId("exampleEntity_selectItem");
+            const select = this.getView().byId("exampleEntity_selectItem");
             select.setModel(listModel, "items");
         },
 
+        _onRouteMatched: function(oEvent) {
+            this.resetValueStates();
+        },
+
         submitForm: function() {
-            var form = this.getView().byId("exampleForm");
-            var model = form.getModel("exampleEntity");
-            var exampleData = model.getData();
+            const form = this.getView().byId("exampleForm");
+            const model = form.getModel("exampleEntity");
+            const exampleData = model.getData();
             
-            var props = oui5lib.mapping.getEntityAttributeSpecs("exampleEntity");
-            var errors = oui5lib.validation.validateData(exampleData, props);
+            const props = oui5lib.mapping.getEntityAttributeSpecs("exampleEntity");
+            const errors = oui5lib.validation.validateData(exampleData, props);
             if (errors.length > 0) {
                 // there are errors
                 oui5lib.ui.handleValidationErrors(this.getView(), "exampleEntity", errors);
@@ -59,9 +68,46 @@ sap.ui.define([
             oui5lib.logger.info("record is valid");
         },
         
-        handleUnsavedChanges: function(action) {
+        handleUnsavedChanges: function(action, navto) {
             oui5lib.logger.debug("overwrite default function");
-            oui5lib.logger.info("unsavedChanges: " + action);
+            oui5lib.logger.info("reset unsaved changes: " + action);
+            if (action === "OK") {
+                this.resetRecordChanged();
+
+                switch(navto) {
+                case "home":
+                    this.getRouter().vNavTo("home");
+                    break;
+                case "back":
+                    this.getRouter().navBack();
+                    break;
+                }
+            }
+        },
+
+        resetValueStates: function() {
+            const form = this.getView().byId("exampleForm");
+            if (typeof form.getContent === "function") {
+                const content = form.getContent();
+                content.forEach(function(control) {
+                    if (typeof control.setValueState === "function") {
+                        control.setValueState("None");
+                    }
+                });
+            } else if (typeof form.getFormContainers === "function") {
+                const formContainers = form.getFormContainers();
+                formContainers.forEach(function(formContainer) {
+                    const formElements = formContainer.getFormElements();
+                    formElements.forEach(function(formElement) {
+                        const formFields = formElement.getFields();
+                        formFields.forEach(function(formField) {
+                            if (typeof formField.setValueState === "function") {
+                                formField.setValueState("None");
+                            }
+                        });
+                    });
+                });
+            } 
         }
     });
     
