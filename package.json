@@ -2,7 +2,7 @@
   "name": "oui5lib",
   "version": "0.9.0",
   "private": true,
-  "description": "UI5 extension library",
+  "description": "OpenUI5 extension library",
   "author": "Carsten Heinrigs",
   "devDependencies": {
     "grunt": "^1.0.2",
