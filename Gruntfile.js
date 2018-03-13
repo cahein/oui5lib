@@ -86,6 +86,7 @@ module.exports = function (grunt) {
                     "<%= dirs.webroot %>/currentuser.js",
                     "<%= dirs.webroot %>/mapping.js",
                     "<%= dirs.webroot %>/validation.js",
+                    "<%= dirs.webroot %>/messages.js",
                     "<%= dirs.webroot %>/ui.js",
                     "<%= dirs.webroot %>/listBase.js",
                     "<%= dirs.webroot %>/itemBase.js"

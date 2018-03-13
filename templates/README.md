@@ -14,11 +14,11 @@ Inside the template component folder you find a 'package.json' with development 
 
     npm install
     
-After this, you have a few grunt tasks available. Get an overview of available tasks executing
+After this, you have a few grunt tasks available. Get an overview of available tasks by executing
 
     grunt
 
-Build a distribution with
+Build a distribution package with
 
     grunt dist
 
