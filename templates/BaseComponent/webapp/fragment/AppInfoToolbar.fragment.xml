@@ -1,0 +1,14 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    >
+  <Toolbar>
+    <Text text="{i18n>application}" />
+    <Text text="{/appTitle}" />
+    <Text text="{i18n>version}" />
+    <Text text="{/appVersion}" />
+    <ToolbarSpacer/>
+    <Text text="OpenUI5 Version: " />
+    <Text text="{/openui5Version}" />
+  </Toolbar>
+</core:FragmentDefinition>
