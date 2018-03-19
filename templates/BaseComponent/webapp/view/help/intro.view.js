@@ -1,6 +1,6 @@
-sap.ui.jsview("oum.view.help.intro", {
+sap.ui.jsview("ooooo.view.help.intro", {
     getControllerName : function() {
-        return "oum.controller.help.intro";
+        return "ooooo.controller.help.intro";
     },
     
     createContent: function(oController) {

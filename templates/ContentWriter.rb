@@ -19,7 +19,7 @@ class ContentWriter
     process_file('webapp/oui5lib.json')
     FileUtils.cp 'BaseComponent/webapp/config.json', @outpath + '/webapp/config.json'
     FileUtils.copy_entry 'BaseComponent/webapp/i18n/', @outpath + '/webapp/i18n/'
-    copy_xml_files
+    process_xml_files
 
     add_oui5lib_files
     process_project_files
@@ -43,13 +43,13 @@ class ContentWriter
     end
   end
 
-  def copy_xml_files
+  def process_xml_files
     files = Dir.glob('BaseComponent/webapp/**/*.xml')
     files.each do | fname |
       filename = fname.sub 'BaseComponent', ''
       dirname = get_dirname(filename)
 
-      FileUtils.cp fname, File.join(@outpath, filename)
+      process_file(filename)
     end
   end
 
