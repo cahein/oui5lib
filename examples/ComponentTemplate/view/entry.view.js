@@ -17,30 +17,45 @@ sap.ui.jsview("oum.view.entry", {
             ]
         });
 
-        const tileContainer = new sap.m.TileContainer();
+        const tiles = [];
 
         const entryPoints = oum.lib.configuration.getEntryPoints();
         if (entryPoints) {
             var tile;
             entryPoints.forEach(function(tileDef) {
-                tile = new sap.m.StandardTile({
-                    icon : tileDef.icon,
-                    title : tileDef.title,
+                tile = new sap.m.GenericTile({
+                    header: tileDef.header,
                     tooltip: tileDef.tooltip,
-                    info : tileDef.info,
+                    tileContent: new sap.m.TileContent({
+                        content: new sap.m.ImageContent({
+                            src: tileDef.icon,
+                            description: tileDef.iconText
+                        }),
+                        footer: tileDef.info
+                    }),
                     press : function(oEvent) {
                         oController.routeTo(oEvent);
                     }
                 });
                 tile.data("routeName", tileDef.routeName);
 
-                tileContainer.addTile(tile);
+                tile.addStyleClass("sapUiTinyMarginBegin");
+                tile.addStyleClass("sapUiTinyMarginTop");
+                tile.addStyleClass("tileLayout");
+
+                tiles.push(tile);
             });
         }
-        
+        const landmarks = new sap.m.PageAccessibleLandmarkInfo({
+            headerRole: "Region",
+            headerLabel: "{i18n>view.entry.headerLabel}",
+            contentRole: "Main",
+            contentLabel: "{i18n>view.entry.contentLabel}"
+        });
         const entryPage = new sap.m.Page({
+            landmarkInfo: landmarks,
             customHeader: headerBar,
-            content: [ tileContainer ],
+            content: [ tiles ],
             footer: sap.ui.xmlfragment("oum.fragment.AppInfoToolbar")
         });
         return entryPage;

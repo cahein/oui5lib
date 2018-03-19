@@ -1,10 +1,11 @@
 {
     "entryPoints": [
         {
-            "title" : "{i18n>tiles.help.title}",
-            "info" : "{i18n>tiles.help.info}",
+            "header" : "{i18n>tiles.help.header}",
+            "footer" : "{i18n>tiles.help.footer}",
             "tooltip" : "{i18n>help.tooltip}",
             "icon" : "sap-icon://sys-help",
+            "iconText" : "{i18n>tiles.help.iconText}",
             "routeName" : "help"
         }
     ]
