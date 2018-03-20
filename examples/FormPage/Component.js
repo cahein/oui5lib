@@ -1,9 +1,8 @@
-jQuery.sap.require("oui5lib");
-jQuery.sap.require("oum.lib.configuration");
-
 sap.ui.define([
     "sap/ui/core/UIComponent",
-    "oum/Router"
+    "oum/Router",
+    "oui5lib",
+    "oum/lib/configuration"
 ], function (UIComponent) {
     var Component = UIComponent.extend("oum.Component", {
         metadata: { 
@@ -21,10 +20,6 @@ sap.ui.define([
             languageCode = languageCode.substring(0, 2).toLowerCase();
         }
         oui5lib.configuration.setCurrentLanguage(languageCode);
-
-        // model for Footer
-        this.setModel(oum.lib.configuration.getAppInfoModel(),
-                      "appInfo");
 
         // initialize the oum.Router
         this.getRouter().initialize();

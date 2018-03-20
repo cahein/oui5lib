@@ -9,11 +9,11 @@
         }
     },
     "sap.ui": {
-	"deviceTypes": {
-	    "desktop": true,
-	    "tablet": true,
-	    "phone": false
-	},
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": false
+        },
         "supportedThemes": [
             "sap_belize",
             "sap_belize_hcb",
@@ -26,7 +26,9 @@
             "cozy": true
         },
         "dependencies": {
+            "minUI5Version": "1.38.32",
             "libs": {
+                "sap.m": {}
             },
             "components" : {
             }

@@ -1,14 +1,12 @@
-jQuery.sap.require("oui5lib");
-jQuery.sap.require("ooooo.lib.configuration");
-
 sap.ui.define([
     "sap/ui/core/UIComponent",
-    "ooooo/Router"
+    "ooooo/Router",
+    "oui5lib",
+    "ooooo/lib/configuration"
 ], function (UIComponent) {
     const Component = UIComponent.extend("ooooo.Component", {
         metadata: { 
-            manifest: "json",
-            async: true
+            manifest: "json"
         }
     });
 

@@ -1,14 +1,12 @@
-jQuery.sap.require("oui5lib");
-jQuery.sap.require("oum.lib.configuration");
-
 sap.ui.define([
     "sap/ui/core/UIComponent",
-    "oum/Router"
+    "oum/Router",
+    "oui5lib",
+    "oum/lib/configuration"
 ], function (UIComponent) {
     const Component = UIComponent.extend("oum.Component", {
         metadata: { 
-            manifest: "json",
-            async: true
+            manifest: "json"
         }
     });
 

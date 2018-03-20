@@ -54,8 +54,7 @@ module.exports = function (grunt) {
                 src: [
                     "<%= dirs.examples %>/DomainObjects/oui5lib",
                     "<%= dirs.examples %>/ComponentTemplate/oui5lib",
-                    "<%= dirs.examples %>/FormPage/oui5lib",
-                    "<%= dirs.examples %>/OrderApp/oui5lib"
+                    "<%= dirs.examples %>/FormPage/oui5lib"
                 ]
             }
         },
@@ -184,6 +183,15 @@ module.exports = function (grunt) {
                         dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/view/"
                     },
                     {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>",
+                        src: [
+                            "configuration.js",
+                            "logger.js"
+                        ],
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/"
+                    },
+                    {
                         src: "<%= dirs.dist %>/oui5lib.min.js",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib.js"
                     },
@@ -211,6 +219,15 @@ module.exports = function (grunt) {
                         src: "**",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib/view/"
                     },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>",
+                        src: [
+                            "configuration.js",
+                            "logger.js"
+                        ],
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/"
+                    }
                 ]
             }
         }
