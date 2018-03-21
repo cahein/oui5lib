@@ -1,9 +1,8 @@
-sap.ui.define([
-   "oui5lib/configuration",
+sap.ui.require([
    "sap/ui/core/format/DateFormat"
-], function(configuration, dateFormat) {
+], function(dateFormat) {
 
-   (function() {
+   (function(configuration) {
       "use strict";
 
       /** @namespace oui5lib.formatter */
@@ -228,7 +227,5 @@ sap.ui.define([
       formatter.convertToIndustrialMinutes = convertToIndustrialMinutes;
 
       formatter.convertDateString = convertDateString;
-   }());
-
-   return oui5lib.formatter;
+   }(oui5lib.configuration));
 });
