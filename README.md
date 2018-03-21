@@ -46,13 +46,12 @@ To add it to your component, copy the files of the 'dist' folder into your webap
 
 ## Tests
 
-For tests, please use the SpecRunner.html files in the 'webapp/test' and 'examples/domainObjects/test' folders. The tests are using the Jasmine Standalone package. To run the tests the files in the 'lib/jasmine-x.x.x/' folder of the [Jasmine Standalone package](https://github.com/jasmine/jasmine/releases) need to be copied into a 'jasmine' folder.
+For tests, please use the SpecRunner.html files in the 'webapp/test' and 'examples/domainObjects/test' folders. The tests are using the Jasmine Standalone package. In order to run the tests the files in the 'lib/jasmine-x.x.x/' folder of the [Jasmine Standalone package](https://github.com/jasmine/jasmine/releases) need to be copied into a 'jasmine' subfolder.
 
 
 ## TODO
 
-* Allow this to be a UI5 Core library.
-
-* Handle dependency loading with sap.ui.define.
+* Allow this to be added as a UI5 Core library.
 
 * Add tests for UI elements, especially the FormController.
+
