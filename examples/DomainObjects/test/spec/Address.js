@@ -1,5 +1,5 @@
 describe("Address object", function() {
-    beforeAll(function() {
+    beforeEach(function() {
         oum.do.addresses.resetData();
         oum.do.addresses.addData(oum.fixture.addressesData);
     });

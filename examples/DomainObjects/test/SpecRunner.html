@@ -4,18 +4,17 @@
     <meta charset="UTF-8"/>
     <title>Jasmine Spec Runner</title>
       
-    <link rel="shortcut icon" type="image/png" href="jasmine-2.8.0/jasmine_favicon.png"/>
-    <link rel="stylesheet" href="jasmine-2.8.0/jasmine.css"/>
+    <link rel="shortcut icon" type="image/png" href="jasmine/jasmine_favicon.png"/>
+    <link rel="stylesheet" href="jasmine/jasmine.css"/>
     
-    <script src="jasmine-2.8.0/jasmine.js"></script>
-    <script src="jasmine-2.8.0/jasmine-html.js"></script>
-    <script src="jasmine-2.8.0/boot.js"></script>
+    <script src="jasmine/jasmine.js"></script>
+    <script src="jasmine/jasmine-html.js"></script>
+    <script src="jasmine/boot.js"></script>
     
     <!-- include source files here... -->
 
-    <script src="helper/jquery.js"></script>
+    <!-- oUI5lib -->
     <script src="../oui5lib/init-preload.js"></script>
-    
     <script src="../oui5lib/lib/listHelper.js"></script>
     <script src="../oui5lib/configuration.js"></script>
     <script src="../oui5lib/logger.js"></script>
@@ -26,22 +25,20 @@
     <script src="../oui5lib/listBase.js"></script>
     <script src="../oui5lib/itemBase.js"></script>
     
+    <!-- setup oum namespace and test fixtures -->
     <script src="helper/oumSetup.js"></script>
-
-    <script src="../domainObjects/orders.js"></script>
-    <script src="../domainObjects/addresses.js"></script>
-    <script src="../domainObjects/products.js"></script>
-
-    <script src="../domainObjects/Order.js"></script>
-    <script src="../domainObjects/Address.js"></script>
-    <script src="../domainObjects/Product.js"></script>
-
-    <script src="../domainObjects/loader.js"></script>
-    <script src="../domainObjects/relationsHandler.js"></script>
-
     <script src="helper/fixtures.js"></script>
     <script src="helper/requestSetup.js"></script>
 
+    <!-- oum objects being tested -->
+    <script src="../domainObjects/loader.js"></script>
+    <script src="../domainObjects/relationsHandler.js"></script>
+    <script src="../domainObjects/orders.js"></script>
+    <script src="../domainObjects/addresses.js"></script>
+    <script src="../domainObjects/products.js"></script>
+    <script src="../domainObjects/Order.js"></script>
+    <script src="../domainObjects/Address.js"></script>
+    <script src="../domainObjects/Product.js"></script>
     <script src="../domainObjects/statuses.js"></script>
 
     <!-- include spec files here... -->

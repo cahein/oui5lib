@@ -1,6 +1,6 @@
 describe("Domain Objects", function() {
     var loader = oum.do.loader;
-    beforeAll(function() {
+    beforeEach(function() {
         oum.do.orders.resetData();
         oum.do.products.resetData();
         oum.do.addresses.resetData();

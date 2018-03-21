@@ -35,13 +35,18 @@ To generate a minified JavaScript file ('oui5lib.min.js') and a 'oui5lib' folder
 
     grunt dist
 
-To add it to your component, copy the files of the 'dist' folder into your webapp root. Customize the 'oui5lib.json'. Rename one of the oui5lib files ('oui5lib.min.js' or 'oui5lib.concat.js') to 'oui5lib.js' and require it with
+To add it to your component, copy the files of the 'dist' folder into your webapp root. Customize the 'oui5lib.json'. Rename one of the oui5lib files ('oui5lib.min.js' or 'oui5lib.concat.js') to 'oui5lib.js' and require it in the Component.js with
 
-    jQuery.sap.require("oui5lib");
+    sap.ui.define([
+       ...
+       "oui5lib"
+    ], function(...) {
+       ...
+    });
 
 ## Tests
 
-For tests, please use the SpecRunner.html files in the 'webapp/test' and 'examples/domainObjects/test' folders.
+For tests, please use the SpecRunner.html files in the 'webapp/test' and 'examples/domainObjects/test' folders. The tests are using the Jasmine Standalone package. To run the tests the files in the 'lib/jasmine-x.x.x/' folder of the [Jasmine Standalone package](https://github.com/jasmine/jasmine/releases) need to be copied into a 'jasmine' folder.
 
 
 ## TODO
