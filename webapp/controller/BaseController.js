@@ -18,15 +18,12 @@ sap.ui.define([
         verifyPermissions : function() {
             const view = this.getView();
             const viewName = view.sViewName;
-            const permissions = oui5lib.configuration.getViewPermissions(viewName);
-            if (typeof permissions !== "undefined") {
-                if (oui5lib.currentuser.hasPermissions(permissions.userRoles)) {
-                    return true;
-                }
+            if (!oui5lib.currentuser.hasPermissionForView(viewName)) {
+                oui5lib.logger.warn("user is not authorized to access view: " + viewName);
+                this.getRouter().navTo("notAuthorized");
+                return false;
             }
-            oui5lib.logger.warn("user is not authorized to access view: " + viewName);
-            this.getRouter().navTo("notAuthorized");
-            return false;
+            return true;
         },
         
         /**
