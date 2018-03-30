@@ -1,5 +1,5 @@
 describe("Orders collection object", function() {
-    beforeAll(function() {
+    beforeEach(function() {
         oum.do.addresses.resetData();
         oum.do.products.resetData();
         oum.do.orders.resetData();

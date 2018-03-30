@@ -66,9 +66,10 @@
     
     function removeOrderItem(productId) {
         if (this.getOrderItem(productId) !== null) {
-            var items = this.getOrderItems();
-            listHelper.removeByKey(items, "productId", productId);
+            const items = this.getOrderItems();
+            return listHelper.removeByKey(items, "productId", productId);
         }
+        return false;
     }
 
     function addOrderItem(productId, quantity) {

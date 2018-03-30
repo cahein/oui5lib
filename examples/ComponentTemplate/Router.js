@@ -6,19 +6,22 @@ sap.ui.define([
             mRouter.apply(this, arguments);
         },
 
-        vNavTo : function(sName, oParameters={}, bReplace=false) {
+        vNavTo: function(sName, routeParameters, bReplace) {
             const route = this.getRoute(sName);
             if (typeof route === "undefined") {
                 this.navTo("noRoute");
             } else {
-                if (oParameters === undefined) {
-                    oParameters = {};
+                if (routeParameters === undefined || routeParameters === null) {
+                    routeParameters = {};
                 }
-                this.navTo(sName, oParameters, bReplace);
+                if (typeof bReplace !== "boolean") {
+                    bReplace = false;
+                }
+                this.navTo(sName, routeParameters, bReplace);
             }
         },
         
-        navBack : function() {
+        navBack: function() {
             const oHistory = sap.ui.core.routing.History.getInstance();
             const sPreviousHash = oHistory.getPreviousHash();
 

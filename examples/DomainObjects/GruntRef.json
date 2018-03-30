@@ -1,6 +1,0 @@
-{
-    "oui5lib": "oui5lib",
-    "domainObjects": "lib/domainObjects",
-    "test": "test",
-    "spec": "test/spec"
-}

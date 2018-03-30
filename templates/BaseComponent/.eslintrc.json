@@ -1,0 +1,38 @@
+{
+    "env": {
+        "browser": true,
+        "jquery": true,
+        "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-extra-semi": 1,
+        "no-inner-declarations": "error",
+        "no-unused-vars": "warn",
+        "curly": "error",
+        "no-eval": "error",
+        "no-new-wrappers": "error",
+        "no-array-constructor": "error",
+        "no-mixed-spaces-and-tabs": "error",
+        "linebreak-style": [ "error", "unix" ],
+        "quotes": [ "error", "double" ],
+        "semi": [ "error", "always" ],
+        "indent": [
+            "warn", 4, {
+                "FunctionDeclaration": { "parameters": "first" },
+                "FunctionExpression": { "parameters": "first" },
+                "CallExpression": { "arguments": "first" },
+                "ObjectExpression": "first"
+            }
+        ]
+    },
+    "globals": {
+        "sap": true,
+        "jQuery": true,
+        "oui5lib": true,
+        "ooooo": true
+    }
+}

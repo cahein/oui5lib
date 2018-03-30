@@ -1,0 +1,13 @@
+{
+    "webroot": "webapp",
+    "controller": "webapp/controller",
+    "fragment": "webapp/fragment",
+    "view": "webapp/view",
+    "i18n": "webapp/i18n",
+    "lib": "webapp/lib",
+    "test": "webapp/test",
+    "spec": "webapp/test/spec",
+    "build": "build",
+    "tmp": "build/tmp",
+    "dist": "dist"
+}

@@ -1,4 +1,12 @@
+/**
+ * Use this fragment to get a Select control with languages to choose from. The available languages are configured in the oui5lib.json. Upon selecting another language it is set as the current language and the the related i18n model is updated using the  {@link oui5lib.configuration.setCurrentLanguage} function.
+ * @module oui5lib.fragment.LanguageSwitcher
+ */
 sap.ui.jsfragment("oui5lib.fragment.LanguageSwitcher", {
+    /**
+     * Creates the control.
+     * @returns {sap.m.Select} The Select control.
+     */
     createContent: function () {
         const languageSelect = new sap.m.Select({
             tooltip: "{i18n>language.select.tooltip}",

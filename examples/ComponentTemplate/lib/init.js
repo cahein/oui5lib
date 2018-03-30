@@ -2,9 +2,9 @@ if (typeof oum === "undefined") {
     var oum = {};
 }
 oum.namespace = function(string) {
-    let object = this;
+    var object = this;
     const levels = string.split(".");
-    for (let i = 0, l = levels.length; i < l; i++) {
+    for (var i = 0, l = levels.length; i < l; i++) {
         if (typeof object[levels[i]] === "undefined") {
             object[levels[i]] = {};
         }

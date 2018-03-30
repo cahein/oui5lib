@@ -9,8 +9,8 @@ module.exports = function (grunt) {
             tasks: {
                 options: {
                     groups: {
-                        "Code quality": ["lint", "gendoc", "test"],
-                        "Distribution": ["generate-oui5lib-dist"],
+                        "Code quality": ["lint", "gendoc"],
+                        "Distribution": ["dist"],
                         "Examples": ["prepare-examples"],
                         "Default": ["availabletasks"]
                     },
@@ -23,8 +23,8 @@ module.exports = function (grunt) {
                         "Run Tests.",
                         "prepare-examples":
                         "Copy oui5lib for examples",
-                        "generate-oui5lib-package":
-                        "Generated oui5lib minified package",
+                        "dist":
+                        "Generate oui5lib distribution package",
                         "availabletasks":
                         "List available tasks."
                     },
@@ -44,35 +44,6 @@ module.exports = function (grunt) {
                 "<%= dirs.fragment %>/**/*.js"
             ]
         },
-        jasmine: {
-            src: [
-                "<%= dirs.spec %>/helpers/setup.js",
-                "<%= dirs.spec %>/helpers/fixtures.js",
-                "<%= dirs.lib %>/listHelper.js",
-                "<%= dirs.webroot %>/configuration.js",
-                "<%= dirs.webroot %>/logger.js",
-                "<%= dirs.webroot %>/formatter.js",
-                "<%= dirs.webroot %>/util.js",
-                "<%= dirs.webroot %>/event.js",
-                "<%= dirs.webroot %>/request.js",
-                "<%= dirs.webroot %>/mapping.js",
-                "<%= dirs.webroot %>/validation.js",
-                "<%= dirs.webroot %>/listBase.js",
-                "<%= dirs.webroot %>/itemBase.js"
-            ],
-            options: {
-                "--web-security" : false,
-                "--local-to-remote-url-access" : true,
-                "--ignore-ssl-errors" : true,
-                outfile: "specrunner.html",
-                vendor: [
-                    "<%= dirs.ui5resources %>/sap-ui-core.js"
-                ],
-                specs: [
-                    "<%= dirs.spec %>/*.js"
-                ]
-            }
-        },
         clean: {
             doc: {
                 src: [
@@ -83,8 +54,7 @@ module.exports = function (grunt) {
                 src: [
                     "<%= dirs.examples %>/DomainObjects/oui5lib",
                     "<%= dirs.examples %>/ComponentTemplate/oui5lib",
-                    "<%= dirs.examples %>/FormPage/oui5lib",
-                    "<%= dirs.examples %>/OrderApp/oui5lib"
+                    "<%= dirs.examples %>/FormPage/oui5lib"
                 ]
             }
         },
@@ -115,6 +85,7 @@ module.exports = function (grunt) {
                     "<%= dirs.webroot %>/currentuser.js",
                     "<%= dirs.webroot %>/mapping.js",
                     "<%= dirs.webroot %>/validation.js",
+                    "<%= dirs.webroot %>/messages.js",
                     "<%= dirs.webroot %>/ui.js",
                     "<%= dirs.webroot %>/listBase.js",
                     "<%= dirs.webroot %>/itemBase.js"
@@ -134,6 +105,39 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
+                        src: "oui5lib.json",
+                        dest: "<%= dirs.dist %>"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.i18n %>",
+                        src: "*.properties",
+                        dest: "<%= dirs.dist %>/oui5lib/i18n/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.controller %>",
+                        src: "*.js",
+                        dest: "<%= dirs.dist %>/oui5lib/controller/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.fragment %>",
+                        src: "**",
+                        dest: "<%= dirs.dist %>/oui5lib/fragment/"
+                    },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.view %>",
+                        src: "**",
+                        dest: "<%= dirs.dist %>/oui5lib/view/"
+                    }
+                ]
+            },
+            examples: {
+                files: [
+                    {
+                        expand: true,
                         cwd: "<%= dirs.webroot %>",
                         src: [
                             "init-preload.js",
@@ -142,6 +146,7 @@ module.exports = function (grunt) {
                             "logger.js",
                             "util.js",
                             "event.js",
+                            "formatter.js",
                             "request.js",
                             "mapping.js",
                             "listBase.js",
@@ -178,6 +183,15 @@ module.exports = function (grunt) {
                         dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/view/"
                     },
                     {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>",
+                        src: [
+                            "configuration.js",
+                            "logger.js"
+                        ],
+                        dest: "<%= dirs.examples %>/ComponentTemplate/oui5lib/"
+                    },
+                    {
                         src: "<%= dirs.dist %>/oui5lib.min.js",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib.js"
                     },
@@ -205,6 +219,15 @@ module.exports = function (grunt) {
                         src: "**",
                         dest: "<%= dirs.examples %>/FormPage/oui5lib/view/"
                     },
+                    {
+                        expand: true,
+                        cwd: "<%= dirs.webroot %>",
+                        src: [
+                            "configuration.js",
+                            "logger.js"
+                        ],
+                        dest: "<%= dirs.examples %>/FormPage/oui5lib/"
+                    }
                 ]
             }
         }
@@ -212,19 +235,19 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-available-tasks");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-clean");
-    grunt.loadNpmTasks("grunt-jsdoc");
-    grunt.loadNpmTasks("grunt-eslint");
-    grunt.loadNpmTasks("grunt-contrib-jasmine");
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-uglify-es");
+    grunt.loadNpmTasks("grunt-jsdoc");
+    grunt.loadNpmTasks("grunt-eslint");
     
     grunt.registerTask("default", ["availabletasks"]);
     grunt.registerTask("lint", ["eslint"]);
-    grunt.registerTask("test", ["jasmine"]);
     grunt.registerTask("gendoc", ["clean:doc", "jsdoc"]);
+    grunt.registerTask("dist", [ "concat:oui5lib",
+                                 "uglify:oui5lib",
+                                 "copy:oui5lib" ]);
+
     grunt.registerTask("prepare-examples", ["clean:examples",
-                                            "generate-oui5lib-dist",
-                                            "copy:oui5lib"]);
-    grunt.registerTask("generate-oui5lib-dist", ["concat:oui5lib",
-                                                 "uglify:oui5lib"]);
+                                            "dist",
+                                            "copy:examples"]);
 };

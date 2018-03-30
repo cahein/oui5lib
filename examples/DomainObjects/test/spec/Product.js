@@ -1,5 +1,5 @@
 describe("Product object", function() {
-    beforeAll(function() {
+    beforeEach(function() {
         oum.do.products.resetData();
         oum.do.products.addData(oum.fixture.productsData);
     });

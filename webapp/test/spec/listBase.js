@@ -1,28 +1,29 @@
 describe("ListBase", function() {
-    var listBase = null;
-    var primaryKey = "id";
+    let listBase = null;
+    const primaryKey = "id";
     
-    var testData = [
+    const testData = [
         { id: 1, name: "entry 0", description: "first entry of the data array", type: "A"},
         { id: 2, name: "entry 1", description: "second entry of the data array", type: "B"},
         { id: 3, name: "entry 2", description: "third entry of the data array", type: "A"},
         { id: 4, name: "entry 3", description: "forth entry of the data array", type: "C"},
         { id: 5, name: "entry 4", description: "fifth entry of the data array", type: "B"},
     ];
-    var itemToAdd = { id: 5, type: "D"};
+    const itemToAdd = { id: 6, type: "D"};
     
     beforeAll(function() {
         // runs before all tests in this block
-        listBase = oui5lib.listBase.getObject(primaryKey);
     });
     
     beforeEach(function() {
         // runs before each test in this block
+        listBase = oui5lib.listBase.getObject(primaryKey);
+        listBase.addData(testData, true);
     });
     
     it ("should return an error if no primary key is provided", function() {
         try {
-            var listBase = oui5lib.listBase.getObject();
+            listBase = oui5lib.listBase.getObject();
         } catch (e) {
             expect(e.message).toEqual("cannot create listBase object without primary key");
         }
@@ -40,29 +41,29 @@ describe("ListBase", function() {
         } catch (e) {
             expect(e.name).toEqual("TypeError");
         }
-        var data = listBase.getData();
+        
+        const data = listBase.getData();
         expect(data instanceof Array).toBe(true);
-        expect(data.length).toEqual(0);
-    });
-    
-    it ("should add an object to the collection", function() {
-        listBase.addData(itemToAdd);
-        var data = listBase.getData();
-        expect(data).toEqual([itemToAdd]);
+        expect(data.length).toEqual(5);
     });
     
     it ("should empty the collection", function() {
-        var data = listBase.getData();
-        expect(data.length).toEqual(1);
+        let data = listBase.getData();
+        expect(data.length).toEqual(5);
         listBase.resetData();
 
         data = listBase.getData();
         expect(data).toBe(null);
     });
+
+    it ("should add an object to the collection", function() {
+        listBase.addData(itemToAdd, true);
+        const data = listBase.getData();
+        expect(data).toEqual([itemToAdd]);
+    });
     
     it ("should add an array of objects to the collection", function() {
-        listBase.addData(testData);
-        var data = listBase.getData();
+        const data = listBase.getData();
         expect(data.length).toEqual(5);
         expect(data).toEqual(testData);
     });
@@ -73,79 +74,75 @@ describe("ListBase", function() {
     });
     
     it ("should allow to get an item by its primary key", function() {
-        var entry = listBase.getItem("1");
+        let entry = listBase.getItem("1");
         expect(entry.id).toEqual(1);
         expect(entry.name).toEqual("entry 0");
         
-        entry = listBase.getItem(1);
-        expect(entry.name).toEqual("entry 0");
+        entry = listBase.getItem(2);
+        expect(entry.name).toEqual("entry 1");
     });
 
     it ("should update an entry", function() {
-        var entryIn = { id: 2, name: "entry 1 updated",
-                        description: "updated entry"};
-        var updated = listBase.updateItem(entryIn);
+        const entryIn = { id: 2, name: "entry 1 updated", description: "updated entry"};
+        const updated = listBase.updateItem(entryIn);
         expect(updated).toBe(true);
 
-        var entryOut = listBase.getItem(2);
+        const entryOut = listBase.getItem(2);
         expect(entryOut).toBe(entryIn);
     });
     
     it ("should not add an entry with duplicate primary key", function() {
-        var data = listBase.getData();
+        const data = listBase.getData();
         expect(data.length).toEqual(5);
         
-        var entry = { id: 1, name: "entry 5",
-                      description: "primary key is not unique"};
-        var bool = listBase.addItem(entry);
+        const entry = { id: 1, name: "entry exists", description: "primary key is not unique"};
+        const bool = listBase.addItem(entry);
         expect(bool).toBe(false);
-        
-        data = listBase.getData();
         expect(data.length).toEqual(5);
     });
     
     it ("should add an entry with unique primary key", function() {
-        var entry = { id: 6, name: "entry 5",
-                      description: "primary key is unique"};
-        var bool = listBase.addItem(entry);
+        const entry = { id: 6, name: "entry 5", description: "primary key is unique"};
+        const bool = listBase.addItem(entry);
         expect(bool).toBe(true);
         
-        data = listBase.getData();
+        const data = listBase.getData();
         expect(data.length).toEqual(6);
     });
     
     it ("should remove an entry by id", function() {
-        var data = listBase.getData();
-        expect(data.length).toEqual(6);
-        
-        listBase.removeItem(6);         
-        data = listBase.getData();
+        const data = listBase.getData();
         expect(data.length).toEqual(5);
+        
+        listBase.removeItem(5);         
+        expect(data.length).toEqual(4);
     });
     
     it ("should sort by key", function() {
-        var sortedData = listBase.sortBy("description");
+        const sortedData = listBase.sortBy("description");
         expect(sortedData[0].id).toEqual(5);
         
-        var data = listBase.getData();
+        const data = listBase.getData();
         expect(data).toBe(sortedData);
     });
     
     it ("should filter by key", function() {
-        var filteredData = listBase.filterBy("type", "A");
+        const filteredData = listBase.filterBy("type", "A");
         expect(filteredData.length).toEqual(2);
         
-        var data = listBase.getData();
+        const data = listBase.getData();
         expect(data.length).toEqual(5);
     });
     
     it ("should not reference the same object", function() {
-        var otherListBase = oui5lib.listBase.getObject(primaryKey);
+        const otherListBase = oui5lib.listBase.getObject(primaryKey);
         expect(otherListBase).not.toBe(listBase);
         
-        var aData = otherListBase.getData();
+        const aData = otherListBase.getData();
         expect(aData instanceof Array).toBe(true);
-        var bData = listBase.getData();
+        expect(aData.length).toEqual(0);
+
+        const bData = listBase.getData();
         expect(bData.length).toEqual(5);
     });
 });
