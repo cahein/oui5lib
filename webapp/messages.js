@@ -14,7 +14,6 @@
         if (typeof duration !== "number") {
             duration = 3000;
         }
-        jQuery.sap.require("sap.m.MessageToast");
         sap.m.MessageToast.show(msg, { duration: duration });
     }
 
