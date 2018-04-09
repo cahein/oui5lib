@@ -10,7 +10,7 @@ To start the generator, open a terminal, move to the 'templates' folder and run 
     
 The script will first ask for a component name. This name is used to create a folder inside the 'templates' folder. It is also used as value for the 'name' property of the node 'package.json', as UIComponent 'name' and prefix for the component ID, as root namespace of the custom library, among others. At this time only letters are allowed. The script will exit if a folder with the given name already exists.
 
-Inside the template component folder you find a 'package.json' with development dependencies. Install these dependencies with
+After the component was generated, change into its folder. Inside the component folder you find a 'package.json' with development dependencies. Install these dependencies with
 
     npm install
     
