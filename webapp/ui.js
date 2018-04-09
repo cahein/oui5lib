@@ -1,4 +1,4 @@
-(function(logger, util, messages) {
+(function(logger, configuration, util, messages) {
     "use strict";
     
     /** @namespace oui5lib.ui */
@@ -128,11 +128,15 @@
     }
     
     function setBusy(isBusy) {
-        const component = oui5lib.configuration.getComponent();
-        const rootControl = component.getUIArea().getRootControl();
-        rootControl.setBusy(isBusy);
+        const component = configuration.getComponent();
+        const rootControl = component.getRootControl();
+        if (isBusy) {
+            rootControl.setBusyIndicatorDelay(10).setBusy(true);
+        } else {
+            rootControl.setBusy(false);
+        }
     }
-    
+       
     ui.handleValidationErrors = handleValidationErrors;
     ui.showValidationErrors = showValidationErrors;
     ui.setControlValueState = setControlValueState;
@@ -142,4 +146,4 @@
 
     ui.checkComboBox = checkComboBox;
     ui.checkDatePicker = checkDatePicker;
-}(oui5lib.logger, oui5lib.util, oui5lib.messages));
+}(oui5lib.logger, oui5lib.configuration, oui5lib.util, oui5lib.messages));

@@ -35,16 +35,6 @@
         return null;
     }
 
-    function setBusy(isBusy) {
-        const component = configuration.getComponent();
-        const rootControl = component.getRootControl();
-        if (isBusy) {
-            rootControl.setBusyIndicatorDelay(10).setBusy(true);
-        } else {
-            rootControl.setBusy(false);
-        }
-    }
-   
     function getI18nModel() {
         const component = configuration.getComponent();
         return component.getModel("i18n");
@@ -179,7 +169,6 @@
     util.isUI5Loaded = isUI5Loaded;
     util.getComponentRouter = getComponentRouter;
     util.getComponentEventBus = getComponentEventBus;
-    util.setBusy = setBusy;
 
     util.getI18nModel = getI18nModel;
     util.getI18nText = getI18nText;
