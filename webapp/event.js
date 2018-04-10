@@ -5,12 +5,16 @@
     const event = oui5lib.namespace("event");
 
     /**
-     * Publish event in case of an error.
+     * Publish event in case of an error. By default, a Component event is being published.
      * @memberof oui5lib.event
      * @param {string} eventId One of 'status', 'error', 'timeout'.
-     * @param {object} props
+     * @param {object} props Request properties.
+     * @param {boolean} isComponentEvent Default is true.
      */
     function publishRequestFailureEvent(eventId, xhr, props, isComponentEvent) {
+        if (typeof isComponentEvent !== "boolean") {
+            isComponentEvent = true;
+        }
         if (typeof props === "undefined" || props === null) {
             props = {};
         }

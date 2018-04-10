@@ -127,11 +127,14 @@
         comboBox.removeAllItems();
     }
     
-    function setBusy(isBusy) {
+    function setBusy(isBusy, delay) {
+        if (typeof delay !== "number") {
+            delay = 100;
+        }
         const component = configuration.getComponent();
         const rootControl = component.getRootControl();
         if (isBusy) {
-            rootControl.setBusyIndicatorDelay(10).setBusy(true);
+            rootControl.setBusyIndicatorDelay(delay).setBusy(true);
         } else {
             rootControl.setBusy(false);
         }
