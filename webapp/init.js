@@ -28,18 +28,18 @@ xhr.onload = function() {
 xhr.send();
 
 sap.ui.require([
-   "oui5lib/configuration",
-   "oui5lib/lib/listHelper",
-   "oui5lib/logger",
-   "oui5lib/formatter",
-   "oui5lib/util",
-   "oui5lib/event",
-   "oui5lib/request",
-   "oui5lib/currentuser",
-   "oui5lib/mapping",
-   "oui5lib/validation",
-   "oui5lib/messages",
-   "oui5lib/ui",
-   "oui5lib/itemBase",
-   "oui5lib/listBase"
+    "oui5lib/configuration",
+    "oui5lib/lib/listHelper",
+    "oui5lib/logger",
+    "oui5lib/formatter",
+    "oui5lib/util",
+    "oui5lib/event",
+    "oui5lib/request",
+    "oui5lib/currentuser",
+    "oui5lib/mapping",
+    "oui5lib/validation",
+    "oui5lib/messages",
+    "oui5lib/ui",
+    "oui5lib/itemBase",
+    "oui5lib/listBase"
 ]);
