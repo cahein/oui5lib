@@ -31,7 +31,7 @@ sap.ui.jsview("oum.view.entry", {
                             src: tileDef.icon,
                             description: tileDef.iconText
                         }),
-                        footer: tileDef.info
+                        footer: tileDef.footer
                     }),
                     press : function(oEvent) {
                         oController.routeTo(oEvent);
