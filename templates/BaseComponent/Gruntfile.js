@@ -119,7 +119,8 @@ module.exports = function (grunt) {
                             "lib/**"
                         ]
                     },
-                    dest: "<%= dirs.build %>/webapp"
+                    dest: "<%= dirs.build %>/webapp",
+                    compress: false
                 },
                 components: "ooooo"
             }
