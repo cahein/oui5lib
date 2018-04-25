@@ -1,24 +1,23 @@
 describe("Product object", function() {
     beforeEach(function() {
-        oum.do.products.resetData();
-        oum.do.products.addData(oum.fixture.productsData);
+        oum.do.products.addData(JSON.parse(JSON.stringify(oum.fixture.productsData)), true);
     });
 
     it ("should get a new Product", function() {
-        var product = new oum.do.Product();
+        const product = new oum.do.Product();
         expect(product instanceof oum.do.Product).toBe(true);
         expect(product.isNew()).toBe(true);
     });
 
     it ("should get a loaded Product", function() {
-        var product = new oum.do.Product("0889610356");
+        const product = new oum.do.Product("0889610356");
         expect(product instanceof oum.do.Product).toBe(true);
         expect(product.isNew()).toBe(false);
         expect(product.id).toEqual("0889610356");
     });
     
     it ("should allow to modify Product data", function() {
-        var product = new oum.do.Product("0394718747");
+        const product = new oum.do.Product("0394718747");
         expect(product.getProperty("title/a"))
             .toEqual("Propaganda: the formation of men's attitudes.");
         expect(product.wasModified()).toEqual(false);
@@ -30,14 +29,14 @@ describe("Product object", function() {
     it ("should call loader to request a Product", function() {
         oum.do.products.resetData();
         
-        spyOn(oum.do.loader, "loadProduct");
+        spyOn(oum.do.Loader, "loadProduct");
 
-        var product = new oum.do.Product("0521560241");
+        const product = new oum.do.Product("0521560241");
         expect(product instanceof oum.do.Product).toBe(true);
         expect(product.isNew()).toBe(false);
 
-        expect(oum.do.loader.loadProduct.calls.count()).toEqual(1);
-        expect(oum.do.loader.loadProduct)
+        expect(oum.do.Loader.loadProduct.calls.count()).toEqual(1);
+        expect(oum.do.Loader.loadProduct)
             .toHaveBeenCalledWith("0521560241");
 
     });

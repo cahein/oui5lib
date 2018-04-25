@@ -1,24 +1,25 @@
 describe("Address object", function() {
     beforeEach(function() {
-        oum.do.addresses.resetData();
-        oum.do.addresses.addData(oum.fixture.addressesData);
+        oum.do.addresses.addData(
+            JSON.parse(JSON.stringify(oum.fixture.addressesData)),
+            true);
     });
 
     it ("should get a new Address", function() {
-        var address = new oum.do.Address();
+        const address = new oum.do.Address();
         expect(address instanceof oum.do.Address).toBe(true);
         expect(address.isNew()).toBe(true);
     });
 
     it ("should get a loaded Address", function() {
-        var address = new oum.do.Address(3);
+        const address = new oum.do.Address(3);
         expect(address instanceof oum.do.Address).toBe(true);
         expect(address.isNew()).toBe(false);
         expect(address.id).toEqual(3);
     });
 
     it ("should allow to modify Address data", function() {
-        var address = new oum.do.Address(3);
+        const address = new oum.do.Address(3);
         expect(address.getProperty("postcode")).toEqual("-1");
         expect(address.wasModified()).toEqual(false);
         address.setProperty("note", "Don't go there");
@@ -30,14 +31,22 @@ describe("Address object", function() {
 
     it ("should call loader to request an Address", function() {
         oum.do.addresses.resetData();
-        spyOn(oum.do.loader, "loadAddress");
+        spyOn(oum.do.Loader, "loadAddress");
         
-        var address = new oum.do.Address(3);
+        const address = new oum.do.Address(3);
         expect(address instanceof oum.do.Address).toBe(true);
         expect(address.isNew()).toBe(false);
 
-        expect(oum.do.loader.loadAddress.calls.count()).toEqual(1);
-        expect(oum.do.loader.loadAddress)
+        expect(oum.do.Loader.loadAddress.calls.count()).toEqual(1);
+        expect(oum.do.Loader.loadAddress)
             .toHaveBeenCalledWith(3);
+    });
+    it ("should return the name for an Address", function() {
+        const addressData = oum.fixture.addressesData[0];
+        const addressName = addressData.firstname + " " + addressData.lastname;
+        
+        const address = new oum.do.Address(addressData.id);
+        expect(typeof address.getName === "function").toBe(true);
+        expect(address.getName()).toEqual(addressName);
     });
 });

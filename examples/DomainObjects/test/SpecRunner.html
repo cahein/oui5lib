@@ -24,6 +24,8 @@
     <script src="../oui5lib/mapping.js"></script>
     <script src="../oui5lib/listBase.js"></script>
     <script src="../oui5lib/itemBase.js"></script>
+    <script src="helper/jquery.js"></script>
+    <script src="../oui5lib/formatter.js"></script>
     
     <!-- setup oum namespace and test fixtures -->
     <script src="helper/oumSetup.js"></script>
@@ -31,27 +33,31 @@
     <script src="helper/requestSetup.js"></script>
 
     <!-- oum objects being tested -->
-    <script src="../domainObjects/loader.js"></script>
-    <script src="../domainObjects/relationsHandler.js"></script>
+    <script src="../domainObjects/RefsHandler.js"></script>
+    <script src="../domainObjects/Loader.js"></script>
+
     <script src="../domainObjects/orders.js"></script>
-    <script src="../domainObjects/addresses.js"></script>
     <script src="../domainObjects/products.js"></script>
-    <script src="../domainObjects/Order.js"></script>
-    <script src="../domainObjects/Address.js"></script>
-    <script src="../domainObjects/Product.js"></script>
+    <script src="../domainObjects/addresses.js"></script>
     <script src="../domainObjects/statuses.js"></script>
+    <script src="../domainObjects/Order.js"></script>
+    <script src="../domainObjects/Product.js"></script>
+    <script src="../domainObjects/Address.js"></script>
+
 
     <!-- include spec files here... -->
+    <script src="spec/request.js"></script>
     <script src="spec/domainObjects.js"></script>
 
-    <script src="spec/loader.js"></script>
-    <script src="spec/orders.js"></script>
+    <script src="spec/Address.js"></script>
     <script src="spec/Order.js"></script>
-    <script src="spec/products.js"></script>
     <script src="spec/Product.js"></script>
     <script src="spec/addresses.js"></script>
-    <script src="spec/Address.js"></script>
-    <script src="spec/relationsHandler.js"></script>
+    <script src="spec/orders.js"></script>
+    <script src="spec/products.js"></script>
+
+    <script src="spec/RefsHandler.js"></script>
+    <script src="spec/Loader.js"></script>
   </head>
   <body>
   </body>

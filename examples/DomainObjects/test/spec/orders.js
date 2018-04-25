@@ -1,58 +1,45 @@
 describe("Orders collection object", function() {
-    beforeEach(function() {
+    const orders = oum.do.orders;
+    beforeAll(function() {
         oum.do.addresses.resetData();
         oum.do.products.resetData();
-        oum.do.orders.resetData();
-
-        oum.do.orders.addData(oum.fixture.ordersData);
+    });
+    beforeEach(function() {
+        orders.addData(JSON.parse(JSON.stringify(oum.fixture.ordersData)));
+    });
+    afterEach(function() {
+        orders.resetData();
     });
 
     it ("should return the orders collection", function() {
-        var data = oum.do.orders.getData(); 
+        const data = orders.getData(); 
         expect(data instanceof Array).toBe(true);
         expect(data.length).toBe(2);
     });
     
     it ("should allow us to check if an order is loaded", function() {
-        expect(oum.do.orders.isItemLoaded(1) instanceof Date).toBe(true);
-        expect(oum.do.orders.isItemLoaded(2) instanceof Date).toBe(true);
-        expect(oum.do.orders.isItemLoaded(3)).toBe(false);
+        expect(orders.isItemLoaded(1) instanceof Date).toBe(true);
+        expect(orders.isItemLoaded(2) instanceof Date).toBe(true);
+        expect(orders.isItemLoaded(3)).toBe(false);
     });
 
     it ("should return item count", function() {
-        expect(oum.do.orders.getItemCount()).toBe(2);
+        expect(orders.getItemCount()).toBe(2);
     });
 
     it ("should return order data by id", function() {
-        var data = oum.do.orders.getItem(1); 
+        const data = orders.getItem(1); 
         expect(data.id).toBe(1);
     });
 
     it ("should add address names to the order data", function() {
         oum.do.addresses.addData(oum.fixture.addressesData);
-        oum.do.orders.resetData();
-        oum.do.orders.addData(oum.fixture.ordersData);
-        var data = oum.do.orders.getItem(2); 
+
+        const data = oum.do.orders.getItem(2); 
         expect(typeof data.billingName === "string").toBe(true);
         expect(typeof data.shippingName === "string").toBe(true);
     });
     
-    it ("should add product names to the order items data", function() {
-        oum.do.products.addData(oum.fixture.productsData);
-        oum.do.orders.resetData();
-        oum.do.orders.addData(oum.fixture.ordersData);
-        var data = oum.do.orders.getItem(2);
-        var items = data.items;
-        items.forEach(function(item) {
-            expect(typeof item.productName === "string").toBe(true);
-        });
-    });
-
-    
-    it ("should convert date string to Date object", function() {
-        var order = oum.do.orders.getItem(1);
-        expect(order.orderDate instanceof Date).toBe(true);
-    });
 
     it ("should calculate and add the order total ", function() {
         var order = oum.do.orders.getItem(1);
@@ -61,10 +48,9 @@ describe("Orders collection object", function() {
     });
 
     it ("should call function to load referenced addresses and products", function() {
-        oum.do.orders.resetData();
-        spyOn(oum.do.relationsHandler, "processOrderReferences");
-
+        orders.resetData();
+        spyOn(oum.do.RefsHandler, "processOrderReferences");
         oum.do.orders.addData(oum.fixture.ordersData);
-        expect(oum.do.relationsHandler.processOrderReferences.calls.count()).toEqual(1);
+        expect(oum.do.RefsHandler.processOrderReferences.calls.count()).toEqual(1);
     });
 });

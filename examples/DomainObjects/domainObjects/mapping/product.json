@@ -1,76 +1,86 @@
 {
-    "description": "Define Book",
-    "primaryKey" : "isbn",
-    "entity" : [
-        {
-            "name": "isbn"
-        },{
-            "name": "title",
-            "type": "object",
-            "objectItem": [
-                {
-                    "name": "a",
-                    "required": true
-                },{
-                    "name": "b"
-                },{
-                    "name": "c",
-                    "required": true
-                }
-            ]
-        },{
-            "name": "author"
-        },{
-            "name": "edition"
-        },{
-            "name": "published",
-            "required": true
-        },{
-            "name": "bibliography"
-        },{
-            "name": "numbers",
-            "type": "object",
-            "objectItem": [
-                {
-                    "name": "ISBN",
-                    "required": true
-                },{
-                    "name": "LCCN",
-                    "required": true
-                }
-            ]
-        },{
-            "name": "salesPrice",
-            "type": "float",
-            "required": true
-        },{
-            "name": "stockQty",
-            "type": "int",
-            "default": 0,
-            "required": true
-        }
-    ],
-    "request": {
-        "defaults": {
-            "protocol": "http",
-            "host": "localhost:3000"
-        },
-        "getProducts": {
-            "pathname": "getProducts",
-            "method": "GET",
-            "params": [
-                {
-                    "name": "isbns",
-                    "type": "Array",
-                    "required": true
-                }
-            ]
-        },
-        "saveProduct": {
-            "pathname": "saveProduct",
-            "method": "POST",
-            "params": [
-            ]
-        }
-    }
+   "description": "Define Book",
+   "primaryKey" : "isbn",
+   "entity" : [
+      {
+         "name": "isbn"
+      },{
+         "name": "title",
+         "type": "object",
+         "objectItem": [
+            {
+               "name": "a",
+               "required": true
+            },{
+               "name": "b"
+            },{
+               "name": "c",
+               "required": true
+            }
+         ]
+      },{
+         "name": "author"
+      },{
+         "name": "edition"
+      },{
+         "name": "published",
+         "required": true
+      },{
+         "name": "bibliography"
+      },{
+         "name": "numbers",
+         "type": "object",
+         "objectItem": [
+            {
+               "name": "ISBN",
+               "required": true
+            },{
+               "name": "LCCN",
+               "required": true
+            }
+         ]
+      },{
+         "name": "salesPrice",
+         "type": "float",
+         "required": true
+      },{
+         "name": "stockQty",
+         "type": "int",
+         "default": 0,
+         "required": true
+      }
+   ],
+   "request": {
+      "defaults": {
+         "protocol": "http",
+         "host": "localhost:3000"
+      },
+      "getProducts": {
+         "pathname": "getProducts",
+         "method": "POST",
+         "parameters": [
+            {
+               "name": "isbns",
+               "type": "Array",
+               "required": true
+            }
+         ]
+      },
+      "queryProducts": {
+         "pathname": "queryProducts",
+         "method": "GET",
+         "parameters": [
+            {
+               "name": "query",
+               "required": true
+            }
+         ]
+      },
+      "saveProduct": {
+         "pathname": "saveProduct",
+         "method": "POST",
+         "parameters": [
+         ]
+      }
+   }
 }

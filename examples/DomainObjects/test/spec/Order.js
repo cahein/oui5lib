@@ -1,16 +1,20 @@
 describe("Order entity object", function() {
-    beforeEach(function() {
+    beforeAll(function() {
         oum.do.products.resetData();
         oum.do.addresses.resetData();
+    });
+    beforeEach(function() {
+        oum.do.orders.addData(
+            JSON.parse(JSON.stringify(oum.fixture.ordersData)));
+    });
+    afterEach(function() {
         oum.do.orders.resetData();
-
-        oum.do.orders.addData(JSON.parse(JSON.stringify(oum.fixture.ordersData)));
     });
 
     it ("should get a new Order", function() {
         const order = new oum.do.Order();
         expect(order instanceof oum.do.Order).toBe(true);
-        expect(order.getProperty("id")).toEqual(undefined);
+        expect(order.getProperty("id")).toEqual("-1");
         expect(order.isNew()).toBe(true);
     });
     
@@ -41,11 +45,11 @@ describe("Order entity object", function() {
     });
     
     it ("should call loader to request an Order", function() {
-        spyOn(oum.do.loader, "loadOrder");
+        spyOn(oum.do.Loader, "loadOrder");
         
         expect(oum.do.orders.isItemLoaded(8)).toBe(false);
         const order = new oum.do.Order(8);
-        expect(oum.do.loader.loadOrder)
+        expect(oum.do.Loader.loadOrder)
             .toHaveBeenCalledWith(8);
     });
 
@@ -57,60 +61,97 @@ describe("Order entity object", function() {
         expect(typeof order.getShippingAddress).toEqual("function"); 
     });
 
-    it ("should get related address entity objects", function() {
-        oum.do.addresses.addData(oum.fixture.addressesData);
+    
+    it ("should get referenced address entity objects", function() {
+        oum.do.addresses.addData(oum.fixture.addressesData, true);
 
         const order = new oum.do.Order(2);
         const billingAddress = order.getBillingAddress();
         expect(billingAddress instanceof oum.do.Address).toBe(true);
         expect(billingAddress.getProperty("id")).toEqual(2);
-
+        
         const shippingAddress = order.getShippingAddress();
         expect(shippingAddress instanceof oum.do.Address).toBe(true);
         expect(shippingAddress.getProperty("id")).toEqual(3);
-        
     });
 
 
 
-    it ("should get the order total", function() {
-        oum.do.orders.addData(oum.fixture.ordersData);
-        const order = new oum.do.Order(2);
-        expect(order.getOrderTotal()).toEqual("42.00");
-    });
-    
     it ("should get the order items", function() {
         const order = new oum.do.Order(2);
         const orderItems = order.getOrderItems();
         expect(orderItems.length).toEqual(2);
     });
 
-    it ("should add an order item and get updated order total", function() {
-        const order = oum.do.Order(2);
-        let orderItems = order.getOrderItems();
-        expect(orderItems.length).toEqual(2);
 
-        oum.do.products.addData(oum.fixture.productsData);
+    it ("should change the order line quantity and update related totals", function() {
+        const order = new oum.do.Order(1);
+        const orderItem = order.getOrderItem("0394718747");
 
-        order.addOrderEntry("0394718747", 1);
-        
-        orderItems = order.getOrderItems();
-        expect(orderItems.length).toEqual(3);
-        expect(order.getOrderTotal()).toEqual("55.09");
+        expect(orderItem.quantity).toEqual(2);
+        expect(orderItem.lineTotal).toEqual("9.60");
+        expect(order.getProperty("total")).toEqual("29.50");
+
+        const success = order.changeOrderItemQuantity("0394718747", "1");
+        expect(success).toBe(true);
+
+        expect(orderItem.quantity).toEqual(1);
+        expect(orderItem.lineTotal).toEqual("4.80");
+        expect(order.getProperty("total")).toEqual("24.70");
     });
+    
+    it ("should process and return the enriched order lines", function() {
+        oum.do.products.addData(oum.fixture.productsData, true);
 
-    it ("should remove an order item", function() {
-        const order = new oum.do.Order(2);
-        const removedItem = order.removeOrderItem("0889610356");
-        expect(typeof removedItem === "object").toBe(true);
+        const order = new oum.do.Order(1);
         const orderItems = order.getOrderItems();
-        expect(orderItems.length).toEqual(1);
+
+        expect(orderItems.length).toEqual(2);
+        orderItems.forEach(function(orderItem) {
+            expect(typeof orderItem.productName).toBe("string");
+            expect(typeof orderItem.lineTotal).toBe("string");
+        });
+        expect(orderItems[0].quantity).toEqual(2);
+        expect(orderItems[0].unitPrice).toEqual("4.80");
+        expect(orderItems[0].lineTotal).toEqual("9.60");
+        
+        expect(orderItems[1].quantity).toEqual(1);
+        expect(orderItems[1].unitPrice).toEqual("19.90");
+        expect(orderItems[1].lineTotal).toEqual("19.90");
     });
 
-    it ("should get an order item by product id", function() {
-        const order = oum.do.Order(2);
-        const item = order.getOrderItem("1859847390");
-        expect(item.quantity).toEqual(1);
-        expect(item.unitPrice).toEqual(2.4);
+    it ("should not add another order line for a product already ordered", function() {
+        const order = new oum.do.Order(1);
+        const orderItems = order.getOrderItems();
+
+        order.addOrderItem("0394718747", 3);
+        
+        expect(orderItems.length).toEqual(2);
+        expect(order.getProperty("total")).toEqual("29.50");
+
+    });
+    it ("should add an order line and recalulate the order total", function() {
+        const order = new oum.do.Order(1);
+        const orderItems = order.getOrderItems();
+        expect(orderItems.length).toEqual(2);
+        
+        order.addOrderItem("0521560241", 1);
+        
+        expect(orderItems.length).toEqual(3);
+        expect(order.getProperty("total")).toEqual("134.50");
+    });
+
+    it ("should remove an order line and recalulate the order total", function() {
+        const order = new oum.do.Order(1);
+        const orderItems = order.getOrderItems();
+
+        expect(orderItems.length).toEqual(2);
+        expect(order.getProperty("total")).toEqual("29.50");
+        
+        const removedItem = order.removeOrderItem("0394718747");
+        expect(typeof removedItem === "object").toBe(true);
+        
+        expect(orderItems.length).toEqual(1);
+        expect(order.getProperty("total")).toEqual("19.90");
     });
 });

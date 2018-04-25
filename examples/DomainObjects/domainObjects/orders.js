@@ -1,87 +1,81 @@
-/** @namespace oum.do.orders */
+jQuery.sap.require("oum.do.addresses");
+jQuery.sap.require("oum.do.products");
+jQuery.sap.require("oum.do.statuses");
+jQuery.sap.require("oum.do.Address");
+jQuery.sap.require("oum.do.Product");
+
 (function() {
-    var _addressTypes = ["billing", "shipping"];
-    
-    function procData(orders) {
-        oum.do.relationsHandler.processOrderReferences(orders);
-        
-        orders.forEach(function(order) {
-            var orderDateString = order.orderDate;
-            var propDef = oui5lib.mapping.getEntityAttributeSpec("order",
-                                                                 "orderDate");
-            if (typeof propDef.dateFormat === "string") {
-                order.orderDate = new Date(orderDateString);
-            } else {
-                order.orderDate = new Date(orderDateString);
-            }
+   const primaryKey = oui5lib.mapping.getPrimaryKey("order");
+   const listBase = oui5lib.listBase.getObject(primaryKey);
 
-            order.total = calculateOrderTotal(order.items);
+   /** @namespace oum.do.orders */
+   let orders = oum.namespace("do.orders");
+   orders = oui5lib.util.extend(orders, listBase);
 
-            procStatus(order);
-            procAddresses(order);
-            procOrderedItems(order);
-        });
-    }
+   function procData(orders) {
+      const orderDateSpec = oui5lib.mapping.getEntityAttributeSpec("order",
+                                                                   "orderDate");
+      orders.forEach(function(order) {
+         const orderDateString = order.orderDate;
+         if (typeof orderDateSpec.dateFormat === "string") {
+            order.orderDate = oui5lib.formatter.getDateFromString(orderDateString,
+                                                                  orderDateSpec.dateFormat);
+         } else {
+            order.orderDate = new Date(orderDateString);
+         }
 
-    function procAddresses(order) {
-        var address, addressId;
-        _addressTypes.forEach(function(type) {
-            addressId = order[type + "AddressId"];
-            if (oum.do.addresses.isItemLoaded(addressId)) {
-                address = new oum.do.Address(addressId);
-                order[type + "Name"] = address.getName();
-            }
-        });
-    }
-    
-    function procOrderedItems(order) {
-        var items = order.items;
-        items.forEach(function(item) {
-            var productId = item.productId;
-            if (oum.do.products.isItemLoaded(productId)) {
-                var product = new oum.do.Product(productId);
-                item.productName = product.getName();
-            }
-        });
-    }
+         order.total = calculateOrderTotal(order.items);
 
-    function procStatus(order) {
-        if (oum.do.statuses.isInitialized()) {
-            var status = order.status;
-            var statusItem = oum.do.statuses.getItem(status);
-            order.valueState = statusItem.valueState; 
-        } else {
-            oui5lib.logger.info("statuses not yet loaded");
-        }
-    }
+         procStatus(order);
+      });
+   }
+   orders.registerProcFunction(procData);
+   
 
-    function calculateOrderTotal(items) {
-        var total = 0.00;
-        for (var i = 0, s = items.length; i < s; i++) {
-            var entry = items[i];
-            var quantity = entry.quantity;
-            var price = entry.unitPrice;
-            total += quantity * price;
-        }
-        return total.toFixed(2);
-    }
+   function processReferences() {
+      oum.do.RefsHandler.processOrderReferences(this.getData());
+   }
+   orders.addDataChangedListener(processReferences, orders);
+   
 
-    function getAddressTypes() {
-        return _addressTypes;
-    }
-    
-    var primaryKey = oui5lib.mapping.getPrimaryKey("order");
-    var listBase = oui5lib.listBase.getObject(primaryKey);
+   const _addressTypes = ["billing", "shipping"];
+   function getAddressTypes() {
+      return _addressTypes;
+   }
+   orders.getAddressTypes = getAddressTypes;
 
-    var orders = oum.namespace("do.orders");
-    orders = oui5lib.util.extend(orders, listBase);
-    orders.registerProcFunction(procData);
-    
-    orders.calculateOrderTotal = calculateOrderTotal;
+   function procAddresses(order) {
+      let address, addressId;
+      getAddressTypes().forEach(function(type) {
+         addressId = order[type + "AddressId"];
+         if (oum.do.addresses.isItemLoaded(addressId)) {
+            address = new oum.do.Address(addressId);
+            order[type + "Name"] = address.getName();
+         }
+      });
+   }
+   orders.procAddresses = procAddresses;
 
-    orders.getAddressTypes = getAddressTypes;
-    
-    orders.procAddresses = procAddresses;
-    orders.procOrderedItems = procOrderedItems;
-    orders.procStatus = procStatus;
+
+   function calculateOrderTotal(items) {
+      let total = 0.00;
+      items.forEach(function(item) {
+         const quantity = item.quantity;
+         const price = item.unitPrice;
+         total += quantity * price;
+      });
+      return total.toFixed(2);
+   }
+   orders.calculateOrderTotal = calculateOrderTotal;
+
+   
+   function procStatus(order) {
+      if (oum.do.statuses.isInitialized()) {
+         const status = order.status;
+         const statusItem = oum.do.statuses.getItem(status);
+         order.statusText = statusItem.statusText;
+         order.valueState = statusItem.valueState; 
+      }
+   }
+   orders.procStatus = procStatus;
 }());
