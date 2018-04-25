@@ -4,7 +4,7 @@
     /** @namespace oui5lib.util */
     const util = oui5lib.namespace("util");
 
-    function isUI5Loaded() {
+    function isUI5Env() {
         if (typeof sap === "object" && typeof sap.ui === "object") {
             return true;
         }
@@ -166,7 +166,7 @@
         return jQuery.extend(true, {}, data);
     }
 
-    util.isUI5Loaded = isUI5Loaded;
+    util.isUI5Env = isUI5Env;
     util.getComponentRouter = getComponentRouter;
     util.getComponentEventBus = getComponentEventBus;
 
