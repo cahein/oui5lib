@@ -135,8 +135,8 @@
     }
 
     const _defaultDateTimePatterns = {
-        dateTime: "YYYY-MM-dd HH:mm:ss",
-        date: "YYYY-MM-dd",
+        dateTime: "yyyy-MM-dd HH:mm:ss",
+        date: "yyyy-MM-dd",
         time: "HH:mm:ss"
     };
 
