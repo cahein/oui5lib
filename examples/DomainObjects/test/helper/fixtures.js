@@ -1,7 +1,8 @@
 oum.fixture = {};
-oum.fixture.startDate = "20171001";
-oum.fixture.endDate = "20171201";
-oum.fixture.status = "processing";
+oum.fixture.startDate = "2017-10-01";
+oum.fixture.endDate = "2017-12-01";
+oum.fixture.statuses = [ "processing" ];
+oum.fixture.orderId = 8;
 
 oum.fixture.ordersData = [
     {

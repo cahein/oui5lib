@@ -1,11 +1,16 @@
 jQuery.sap.require("sap.ui.core.format.DateFormat");
 
-(function(configuration, dateFormat) {
+(function(configuration) {
     "use strict";
 
     /** @namespace oui5lib.formatter */
     const formatter = oui5lib.namespace("formatter");
 
+    let dateFormat = null;
+    if (oui5lib.util.isUI5Env()) {
+        dateFormat = sap.ui.core.format.DateFormat;
+    }
+    
     /**
      * Converts date and time strings into Javascript Date.
      * @memberof oui5lib.formatter
@@ -14,6 +19,9 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
      * @returns {Date}
      */
     function getDateFromString(dateStr, datePattern){
+        if (dateFormat === null) {
+            return dateStr;
+        }
         if (datePattern === undefined) {
             datePattern = configuration.getDateTimeValuePattern("date");
         }
@@ -225,4 +233,4 @@ jQuery.sap.require("sap.ui.core.format.DateFormat");
     formatter.convertToIndustrialMinutes = convertToIndustrialMinutes;
 
     formatter.convertDateString = convertDateString;
-}(oui5lib.configuration, sap.ui.core.format.DateFormat));
+}(oui5lib.configuration));

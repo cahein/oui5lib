@@ -27,7 +27,7 @@
 
 
     function publishEvent(channelId, eventId, eventData, isComponentEvent) {
-        if (!util.isUI5Loaded()) {
+        if (!util.isUI5Env()) {
             logger.warn("Couldn't publish event: no UI5 loaded");
             return;
         }

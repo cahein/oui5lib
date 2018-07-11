@@ -1,0 +1,22 @@
+{
+    "description": "Define Country",
+    "primaryKey" : "code",
+    "entity" : [
+        {
+            "name": "code"
+        },
+        {
+            "name": "country"
+        }
+    ],
+    "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:3000"
+        },
+        "getCountries": {
+            "pathname": "getCountries",
+            "method": "GET"
+        }
+    }
+}

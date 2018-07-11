@@ -90,21 +90,20 @@
     
     function addHandlers(xhr, handleSuccess, requestProps, isAsync) {
         xhr.onload = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200 || xhr.status === 0) {
-                    let responseData = null;
-                    try {
-                        responseData = JSON.parse(xhr.responseText);
-                    } catch(e) {
-                        throw new Error("JSON is invalid: " + xhr.responseText);
-                    }
-                    if (typeof handleSuccess === "function") {
-                        handleSuccess(responseData, requestProps);
-                    }
-                } else {
-                    event.publishRequestFailureEvent("status",
-                                                     xhr, requestProps);
+            const status = xhr.status + "";
+            if (status.match(/^20\d$/) || status === 0) {
+                let responseData = null;
+                try {
+                    responseData = JSON.parse(xhr.responseText);
+                } catch(e) {
+                    throw new Error("JSON is invalid: " + xhr.responseText);
                 }
+                if (typeof handleSuccess === "function") {
+                    handleSuccess(responseData, requestProps);
+                }
+            } else {
+                event.publishRequestFailureEvent("status",
+                                                 xhr, requestProps);
             }
         };
         

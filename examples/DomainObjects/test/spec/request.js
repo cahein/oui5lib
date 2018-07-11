@@ -6,11 +6,12 @@ describe("Request object", function() {
       oui5lib.request.sendMappingRequest(
          "order", "getOrders",
          { "startDate": oum.fixture.startDate },
-         function(data, props) {
-            expect(props.entity).toEqual("order");
-            expect(data.result).toBe(true);
-            expect(data.value instanceof Array).toBe(true);
-            expect(data.value.length).toEqual(2);
+         function(responseData, requestProps) {
+            expect(requestProps.entity).toEqual("order");
+            expect(requestProps.request).toEqual("getOrders");
+            expect(responseData.result).toBe(true);
+            expect(responseData.value instanceof Array).toBe(true);
+            expect(responseData.value.length).toEqual(2);
             hasEvaluatedExpectations = true;
          }
       );
@@ -23,7 +24,7 @@ describe("Request object", function() {
       try {
          oui5lib.request.sendMappingRequest(
             "order", "getOrders",
-            { "status": oum.fixture.status },
+            { "startDate": null },
             function() {});
       } catch (e) {
          expect(e.name).toEqual("Error");
