@@ -26,13 +26,15 @@ sap.ui.jsview("oum.view.entry", {
                 tile = new sap.m.GenericTile({
                     header: tileDef.header,
                     tooltip: tileDef.tooltip,
-                    tileContent: new sap.m.TileContent({
-                        content: new sap.m.ImageContent({
-                            src: tileDef.icon,
-                            description: tileDef.iconText
-                        }),
-                        footer: tileDef.info
-                    }),
+                    tileContent: [
+                        new sap.m.TileContent({
+                            content: new sap.m.ImageContent({
+                                src: tileDef.icon,
+                                description: tileDef.iconText
+                            }),
+                            footer: tileDef.footer
+                        })
+                    ],
                     press : function(oEvent) {
                         oController.routeTo(oEvent);
                     }

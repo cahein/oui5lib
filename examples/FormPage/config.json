@@ -1,24 +1,27 @@
 {
     "entryPoints": [
         {
-            "title" : "{i18n>tiles.simpleform.example}",
-            "info" : "{i18n>tiles.simpleform.example}",
-            "tooltip" : "{i18n>simpleform.example}",
+            "header" : "{i18n>tiles.simpleform.header}",
+            "footer" : "{i18n>tiles.simpleform.footer}",
+            "tooltip" : "{i18n>tiles.simpleform.tooltip}",
             "icon" : "sap-icon://form",
+            "iconText" : "{i18n>tiles.form.iconText}",
             "routeName" : "simpleformexample"
         },
         {
-            "title" : "{i18n>tiles.form.example}",
-            "info" : "{i18n>tiles.form.example}",
-            "tooltip" : "{i18n>form.example}",
+            "header" : "{i18n>tiles.form.header}",
+            "footer" : "{i18n>tiles.form.footer}",
+            "tooltip" : "{i18n>tiles.form.tooltip}",
             "icon" : "sap-icon://form",
+            "iconText" : "{i18n>tiles.form.iconText}",
             "routeName" : "formexample"
         },
         {
-            "title" : "{i18n>tiles.help.title}",
-            "info" : "{i18n>tiles.help.info}",
+            "header" : "{i18n>tiles.help.header}",
+            "footer" : "{i18n>tiles.help.footer}",
             "tooltip" : "{i18n>help.tooltip}",
             "icon" : "sap-icon://sys-help",
+            "iconText" : "{i18n>tiles.help.iconText}",
             "routeName" : "help"
         }
     ]
