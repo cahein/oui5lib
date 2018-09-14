@@ -1,7 +1,9 @@
 /*eslint no-console: "off"*/
 /*eslint no-fallthrough: "off"*/
 (function (configuration) {
+    /** @namespace oui5lib.logger */
     const logger = oui5lib.namespace("logger");
+
     if (!window.console) {
         logger.debug = function(){};
         logger.info = function(){};
@@ -10,37 +12,28 @@
         return;
     }
 
-    const logLevel =  configuration.getLogLevel();
-   
     const logPrefix = "oui5lib - ";
-
+    
+    logger.debug = function(msg) {
+        console.log(logPrefix + "DEBUG " + msg);
+    };
+    logger.info = function(msg) {
+        console.info(logPrefix + "INFO " + msg);
+    };
+    logger.warn = function(msg) {
+        console.warn(logPrefix + "WARN " +  msg);
+    };
+    logger.error = function(msg) {
+        console.error(logPrefix + "ERROR " + msg);
+    };
+    
+    const logLevel =  configuration.getLogLevel();
     switch (logLevel) {
     case "ERROR":
-        console.warn = function(){};
+        logger.warn = function(){};
     case "WARN":
-        console.info = function(){};
+        logger.info = function(){};
     case "INFO":
-        console.log = function(){};
+        logger.debug = function(){};
     }
-    
-    function debug(msg) {
-        console.log(logPrefix + "DEBUG " + msg);
-    }
-    
-    function info(msg) {
-        console.info(logPrefix + "INFO " + msg);
-    }
-    
-    function warn(msg) {
-        console.warn(logPrefix + "WARN " +  msg);
-    }
-    
-    function error(msg) {
-        console.error(logPrefix + "ERROR " + msg);
-    }
-    
-    logger.debug = debug;
-    logger.info = info;
-    logger.warn = warn;
-    logger.error = error;
 }(oui5lib.configuration));
