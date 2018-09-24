@@ -47,27 +47,7 @@ sap.ui.define([
 
         resetValueStates: function() {
             const form = this.getView().byId("eeeeeForm");
-            if (typeof form.getContent === "function") {
-                const content = form.getContent();
-                content.forEach(function(control) {
-                    if (typeof control.setValueState === "function") {
-                        control.setValueState("None");
-                    }
-                });
-            } else if (typeof form.getFormContainers === "function") {
-                const formContainers = form.getFormContainers();
-                formContainers.forEach(function(formContainer) {
-                    const formElements = formContainer.getFormElements();
-                    formElements.forEach(function(formElement) {
-                        const formFields = formElement.getFields();
-                        formFields.forEach(function(formField) {
-                            if (typeof formField.setValueState === "function") {
-                                formField.setValueState("None");
-                            }
-                        });
-                    });
-                });
-            } 
+            this.resetFormValueStates(form);
         }
     });
     
