@@ -53,14 +53,14 @@ class ContentWriter
     end
   end
 
-  def generate_form(entity_name, mapping, form_type)
+  def generate_form(entity_name, mapping, form_type, i18n_keys)
     view_out_file = File.new(File.join(@outpath, 'webapp', 'view', entity_name + '.view.js'), 'w')
 
     File.readlines('ViewTemplates/view/' + form_type + 'Template.view.js').each do | line |
       view_out_file.print transform_line(line, entity_name)
 
       if line.match('// form controls')
-        view_out_file.print generate_form_controls(entity_name, mapping, form_type)
+        view_out_file.print generate_form_controls(entity_name, mapping, form_type, i18n_keys)
       end
     end
 
@@ -83,7 +83,7 @@ class ContentWriter
     line
   end
 
-  def generate_form_controls(entity_name, mapping, form_type)
+  def generate_form_controls(entity_name, mapping, form_type, i18n_keys)
     case form_type
     when "simpleForm"
       formControl = "#{entity_name}Form"
@@ -111,6 +111,20 @@ class ContentWriter
           controls += "oController.addMultiComboBox(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
         when "sap.m.Select"
           controls += "oController.addSelect(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        end
+
+        if attributeSpec["i18n"] != nil
+          i18nKeys = attributeSpec["i18n"]
+
+          if i18nKeys["label"] != nil
+            i18n_keys << i18nKeys["label"]
+          end
+          if i18nKeys["tooltip"] != nil
+            i18n_keys << i18nKeys["tooltip"]
+          end
+          if i18nKeys["invalid"] != nil
+            i18n_keys << i18nKeys["invalid"]
+          end
         end
       end
     end

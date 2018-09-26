@@ -15,7 +15,7 @@ sap.ui.define([
         submitForm: function() {
             const form = this.getView().byId("eeeeeForm");
 
-            const model = form.getModel("eeeeeEntity");
+            const model = form.getModel("eeeee");
             const eeeeeData = model.getData();
             
             const props = oui5lib.mapping.getEntityAttributeSpecs("eeeee");
