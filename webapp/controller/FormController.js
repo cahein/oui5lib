@@ -645,6 +645,30 @@ sap.ui.define([
             const formElements = formContainer.getFormElements();
             const formField = formElements[formElements.length - 1];
             formField.addField(element);
+        },
+
+        resetFormValueStates: function(form) {
+            if (typeof form.getContent === "function") {
+                const content = form.getContent();
+                content.forEach(function(control) {
+                    if (typeof control.setValueState === "function") {
+                        control.setValueState("None");
+                    }
+                });
+            } else if (typeof form.getFormContainers === "function") {
+                const formContainers = form.getFormContainers();
+                formContainers.forEach(function(formContainer) {
+                    const formElements = formContainer.getFormElements();
+                    formElements.forEach(function(formElement) {
+                        const formFields = formElement.getFields();
+                        formFields.forEach(function(formField) {
+                            if (typeof formField.setValueState === "function") {
+                                formField.setValueState("None");
+                            }
+                        });
+                    });
+                });
+            } 
         }
     });
     return FormController;

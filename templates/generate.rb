@@ -18,4 +18,4 @@ end
 
 
 cw = ContentWriter.new(namespace, namespace)
-cw.generateTemplateComponent
+cw.generate_template_component

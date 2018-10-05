@@ -12,7 +12,7 @@ class ContentWriter
   end
 
 
-  def generateTemplateComponent
+  def generate_template_component
     process_js_files
     process_file('webapp/index.html')
     process_file('webapp/manifest.json')
@@ -53,6 +53,84 @@ class ContentWriter
     end
   end
 
+  def generate_form(entity_name, mapping, form_type, i18n_keys)
+    view_out_file = File.new(File.join(@outpath, 'webapp', 'view', entity_name + '.view.js'), 'w')
+
+    File.readlines('ViewTemplates/view/' + form_type + 'Template.view.js').each do | line |
+      view_out_file.print transform_line(line, entity_name)
+
+      if line.match('// form controls')
+        view_out_file.print generate_form_controls(entity_name, mapping, form_type, i18n_keys)
+      end
+    end
+
+    controller_out_file = File.new(File.join(@outpath, 'webapp', 'controller', entity_name + '.controller.js'), 'w')
+    File.readlines('ViewTemplates/controller/formTemplate.controller.js').each do | line |
+      controller_out_file.print transform_line(line, entity_name)
+    end
+  end
+
+  def transform_line(line, entity_name)
+    if line.match('ooooo.')
+      line = line.gsub(/ooooo/, @namespace)
+    end
+    if line.match('eeeee')
+      line = line.gsub(/eeeee/, entity_name)
+    end
+    if line.match('rrrrr.')
+      line = line.gsub(/rrrrr/, entity_name)
+    end
+    line
+  end
+
+  def generate_form_controls(entity_name, mapping, form_type, i18n_keys)
+    case form_type
+    when "simpleForm"
+      formControl = "#{entity_name}Form"
+    when "form"
+      formControl = "formContainer"
+    end
+
+    controls = ''
+    mapping["entity"].each do | attributeSpec |
+      if attributeSpec["ui5"] != nil && attributeSpec["ui5"]["sapuiControl"] != nil
+        case attributeSpec["ui5"]["sapuiControl"]
+        when "sap.m.Input"
+          controls += "oController.addInput(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        when "sap.m.MaskInput"
+          controls += "oController.addMaskInput(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        when "sap.m.TextArea"
+          controls += "oController.addTextArea(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        when "sap.m.Switch"
+          controls += "oController.addSwitch(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        when "sap.m.CheckBox"
+          controls += "oController.addCheckBox(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        when "sap.m.ComboBox"
+          controls += "oController.addComboBox(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        when "sap.m.MultiComboBox"
+          controls += "oController.addMultiComboBox(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        when "sap.m.Select"
+          controls += "oController.addSelect(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
+        end
+
+        if attributeSpec["i18n"] != nil
+          i18nKeys = attributeSpec["i18n"]
+
+          if i18nKeys["label"] != nil
+            i18n_keys << i18nKeys["label"]
+          end
+          if i18nKeys["tooltip"] != nil
+            i18n_keys << i18nKeys["tooltip"]
+          end
+          if i18nKeys["invalid"] != nil
+            i18n_keys << i18nKeys["invalid"]
+          end
+        end
+      end
+    end
+    controls
+  end
+
   def process_file(filename)
     out_file = File.new(File.join(@outpath, filename), 'w')
     File.readlines('BaseComponent/' + filename).each do | line |
@@ -82,8 +160,8 @@ class ContentWriter
               'lib/listHelper.js',
               'configuration.js',
               'logger.js',
-              'formatter.js',
               'util.js',
+              'formatter.js',
               'messages.js',
               'event.js',
               'request.js',
