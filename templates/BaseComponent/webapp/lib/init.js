@@ -2,9 +2,9 @@ if (typeof ooooo === "undefined") {
     var ooooo = {};
 }
 ooooo.namespace = function(string) {
-    var object = this;
+    let object = this;
     const levels = string.split(".");
-    for (var i = 0, l = levels.length; i < l; i++) {
+    for (let i = 0, l = levels.length; i < l; i++) {
         if (typeof object[levels[i]] === "undefined") {
             object[levels[i]] = {};
         }

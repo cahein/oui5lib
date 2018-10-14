@@ -3,7 +3,7 @@
     "sap.app": {
         "id": "oui5libComponent",
         "type": "application",
-        "title": "{{oui5libComponent.title}}",
+        "title": "{{component.title}}",
         "applicationVersion": {
             "version": "0.8"
         }

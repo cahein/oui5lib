@@ -3,7 +3,7 @@ sap.ui.define([
 ], function(Controller) {
    "use strict";
 
-   var helpIntroController = Controller.extend("oum.controller.help.intro", {
+   const helpIntroController = Controller.extend("oum.controller.help.intro", {
       onInit: function() {
          this.debug("help intro onInit");
       }

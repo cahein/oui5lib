@@ -3,6 +3,6 @@
     "availableLanguages": [ "en", "de" ],
     "defaultLanguage": "en",
     "logLevel": "DEBUG",
-    
+
     "mappingDirectory": "domainObjects/mapping"
 }

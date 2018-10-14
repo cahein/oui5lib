@@ -8,7 +8,7 @@ sap.ui.define([
     
     /**
      * Use the FormController if you have a view with a Form. 
-     * @mixin oui5lib.controller.FormController
+     * @interface oui5lib.controller.FormController
      */
     const FormController = oController.extend("oui5lib.controller.FormController", {
         // default: Text
