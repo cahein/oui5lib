@@ -26,9 +26,10 @@
             "cozy": true
         },
         "dependencies": {
-            "minUI5Version": "1.38.32",
+            "minUI5Version": "1.38.37",
             "libs": {
-                "sap.m": {}
+                "sap.m": {},
+                "sap.ui.layout": {}
             },
             "components" : {
             }

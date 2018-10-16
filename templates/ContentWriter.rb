@@ -93,8 +93,8 @@ class ContentWriter
 
     controls = ''
     mapping["entity"].each do | attributeSpec |
-      if attributeSpec["ui5"] != nil && attributeSpec["ui5"]["sapuiControl"] != nil
-        case attributeSpec["ui5"]["sapuiControl"]
+      if attributeSpec["ui5"] != nil && attributeSpec["ui5"]["control"] != nil
+        case attributeSpec["ui5"]["control"]
         when "sap.m.Input"
           controls += "oController.addInput(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
         when "sap.m.MaskInput"

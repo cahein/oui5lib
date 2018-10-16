@@ -11,7 +11,7 @@
          "default": "new",
          "referenceTo": "status.status",
          "ui5": {
-            "sapuiControl" : "sap.m.Select",
+            "control" : "sap.m.Select",
             "itemsModel": "statuses", 
             "itemKey": "status", 
             "itemText": "statusText"
