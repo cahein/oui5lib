@@ -21,7 +21,7 @@ sap.ui.jsview("oum.view.entry", {
 
         const entryPoints = oum.lib.configuration.getEntryPoints();
         if (entryPoints) {
-            var tile;
+            let tile;
             entryPoints.forEach(function(tileDef) {
                 tile = new sap.m.GenericTile({
                     header: tileDef.header,

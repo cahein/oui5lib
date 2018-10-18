@@ -11,15 +11,12 @@
      * @param {object} props Request properties.
      * @param {boolean} isComponentEvent Default is true.
      */
-    function publishRequestFailureEvent(eventId, xhr, props, isComponentEvent) {
-        if (typeof isComponentEvent !== "boolean") {
-            isComponentEvent = true;
-        }
+    function publishRequestFailureEvent(eventId, xhr, props) {
         if (typeof props === "undefined" || props === null) {
             props = {};
         }
         props.xhrObj = xhr;
-        publishEvent("xhr", eventId, props, isComponentEvent);
+        publishEvent("xhr", eventId, props, true);
     }
     event.publishRequestFailureEvent = publishRequestFailureEvent;
     

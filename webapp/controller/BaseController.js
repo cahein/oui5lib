@@ -5,7 +5,7 @@ sap.ui.define([
 
     /**
      * Extends the default Controller with some basic functions. 
-     * @mixin oui5lib.controller.BaseController
+     * @interface oui5lib.controller.BaseController
      */
     const BaseController = Controller.extend("oui5lib.controller.BaseController", {
         /**

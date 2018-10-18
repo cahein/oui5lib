@@ -16,12 +16,12 @@
         if (typeof openMessageBox !== "boolean") {
             openMessageBox = false;
         }
-        let error, fnme, control;
+        let error, propertyName, control;
         for (let i = 0, s = errors.length; i < s; i++) {
             error = errors[i].split(":");
             logger.debug( "error: " + error[0] + " : " + error[1]);
-            fnme = error[1];
-            control = view.byId(modelName + "_" + fnme);
+            propertyName = error[1];
+            control = view.byId(modelName + "_" + propertyName);
             setControlValueState(control, false);
         }
         if (openMessageBox) {
@@ -65,6 +65,34 @@
             } else {
                 control.setValueState("Error");
             }
+        }
+    }
+
+    /**
+     * Reset all value states of form controls to 'None'.
+     * @param {object} form Either a SimpleForm or a Form
+     */ 
+    function resetValueStates(form) {
+        if (typeof form.getContent === "function") {
+            const content = form.getContent();
+            content.forEach(function(control) {
+                if (typeof control.setValueState === "function") {
+                    control.setValueState("None");
+                }
+            });
+        } else if (typeof form.getFormContainers === "function") {
+            const formContainers = form.getFormContainers();
+            formContainers.forEach(function(formContainer) {
+                const formElements = formContainer.getFormElements();
+                formElements.forEach(function(formElement) {
+                    const formFields = formElement.getFields();
+                    formFields.forEach(function(formField) {
+                        if (typeof formField.setValueState === "function") {
+                            formField.setValueState("None");
+                        }
+                    });
+                });
+            });
         }
     }
     
@@ -142,6 +170,7 @@
        
     ui.handleValidationErrors = handleValidationErrors;
     ui.showValidationErrors = showValidationErrors;
+    ui.resetValueStates = resetValueStates;
     ui.setControlValueState = setControlValueState;
 
     ui.clearComboBox = clearComboBox;

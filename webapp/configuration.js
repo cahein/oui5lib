@@ -162,7 +162,6 @@
         switch (type) {
         case "dateTime": {
             let pattern = ui5LocaleData.getDateTimePattern(style);
-            pattern = pattern.replace(/'/g, "");
             pattern = pattern.replace("{1}", ui5LocaleData.getDatePattern(style));
             pattern = pattern.replace("{0}", ui5LocaleData.getTimePattern(style));
             return pattern;

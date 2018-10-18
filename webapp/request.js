@@ -83,7 +83,8 @@
         logger.info("request url: " + url);
 
         fetchJson(url, handleSuccess, { "entity": entityName,
-                                        "request": requestName
+                                        "request": requestName,
+                                        "requestParameters": requestParams 
                                       }, isAsync, httpVerb, encodedParams);
     }
     
