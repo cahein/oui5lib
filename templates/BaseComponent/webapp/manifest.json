@@ -34,6 +34,11 @@
             "components" : {
             }
         },
+        "resources": {
+	    "css": [{
+	        "uri": "css/style.css"
+	    }]
+        },
         "routing" : {
             "config" : {
                 "routerClass": "ooooo.Router",
