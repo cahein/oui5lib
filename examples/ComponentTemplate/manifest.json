@@ -5,7 +5,7 @@
         "type": "application",
         "title": "{{component.title}}",
         "applicationVersion": {
-            "version": "0.8"
+            "version": "1.0"
         }
     },
     "sap.ui": {
@@ -26,12 +26,17 @@
             "cozy": true
         },
         "dependencies": {
-            "minUI5Version": "1.38.32",
+            "minUI5Version": "1.38.37",
             "libs": {
                 "sap.m": {}
             },
             "components" : {
             }
+        },
+        "resources": {
+	    "css": [{
+	        "uri": "css/style.css"
+	    }]
         },
         "routing" : {
             "config" : {

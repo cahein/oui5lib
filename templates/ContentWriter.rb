@@ -17,8 +17,15 @@ class ContentWriter
     process_file('webapp/index.html')
     process_file('webapp/manifest.json')
     process_file('webapp/oui5lib.json')
-    FileUtils.cp 'BaseComponent/webapp/config.json', @outpath + '/webapp/config.json'
-    FileUtils.copy_entry 'BaseComponent/webapp/i18n/', @outpath + '/webapp/i18n/'
+    FileUtils.cp File.join('BaseComponent', 'webapp', 'config.json'),
+                 File.join(@outpath, 'webapp', 'config.json')
+
+    css_folder = File.join(@outpath, 'webapp', 'css')
+    FileUtils.mkdir_p(css_folder)
+    FileUtils.cp File.join('BaseComponent', 'webapp', 'css', 'style.css'),
+                 File.join(css_folder, 'style.css')
+    FileUtils.copy_entry File.join('BaseComponent', 'webapp', 'i18n'),
+                         File.join(@outpath, 'webapp', 'i18n')
     process_xml_files
 
     add_oui5lib_files
@@ -93,8 +100,8 @@ class ContentWriter
 
     controls = ''
     mapping["entity"].each do | attributeSpec |
-      if attributeSpec["ui5"] != nil && attributeSpec["ui5"]["sapuiControl"] != nil
-        case attributeSpec["ui5"]["sapuiControl"]
+      if attributeSpec["ui5"] != nil && attributeSpec["ui5"]["control"] != nil
+        case attributeSpec["ui5"]["control"]
         when "sap.m.Input"
           controls += "oController.addInput(#{formControl}, \"#{entity_name}\", \"#{attributeSpec["name"]}\");\n"
         when "sap.m.MaskInput"
