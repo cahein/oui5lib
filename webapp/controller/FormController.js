@@ -642,9 +642,12 @@ sap.ui.define([
             }
         },
         addToLastFormElement: function(formContainer, element) {
+            if (!(formContainer instanceof sap.ui.layout.form.FormContainer)) {
+                return false;
+            }
             const formElements = formContainer.getFormElements();
-            const formField = formElements[formElements.length - 1];
-            formField.addField(element);
+            const formRow = formElements[formElements.length - 1];
+            return formRow.addField(element);
         },
 
         resetFormValueStates: function(form) {
