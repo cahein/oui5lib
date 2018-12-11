@@ -1,8 +1,8 @@
 # OpenUI5 library
 
-The oui5lib project aims to provide tools to simplify and speed up development with OpenUI5. It is partly just a collection of useful functions for UI5 development, but also provides extensions to handle requests, validate input and construct form controls.
+The oui5lib project provides tools to simplify and speed up development with OpenUI5. It is partly just a collection of useful functions for UI5 development, but also provides extensions to handle requests, validate input and construct form controls.
 
-The use of oui5lib is explained in detail in the book [UI5 User Guide](https://cahein.de/ui5guide)',
+The use of oui5lib is explained in detail in the book [UI5 User Guide](https://cahein.de/ui5guide).
 
 The project uses grunt for various project related tasks. Install required node packages with
 
