@@ -5,14 +5,14 @@
   "description": "OpenUI5 extension library",
   "author": "Carsten Heinrigs",
   "devDependencies": {
-    "grunt": "^1.0.3",
-    "grunt-available-tasks": "^0.6.3",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-concat": "^1.0.1",
+    "grunt": "~1.0.3",
+    "grunt-available-tasks": "~0.6.3",
+    "grunt-contrib-clean": "~2.0.0",
+    "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-uglify-es": "git://github.com/gruntjs/grunt-contrib-uglify.git#harmony",
-    "grunt-eslint": "^20.1.0",
-    "grunt-jsdoc": "^2.2.1"
+    "grunt-contrib-uglify-es": "~3.3.0",
+    "grunt-eslint": "~21.0.0",
+    "grunt-jsdoc": "~2.3.0"
   },
   "dependencies": {},
   "optionalDependencies": {}
