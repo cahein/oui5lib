@@ -2,7 +2,6 @@
 *#
 .#*
 .tern-port
-package-lock.json
 resources
 doc
 saved

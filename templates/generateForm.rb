@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# coding: utf-8
 $LOAD_PATH << '.'
 
 require 'json'
@@ -53,25 +54,32 @@ def add_tile(namespace, entity_name)
   end
 end
 
-def addI18nKeys(namespace)
-  properties = {}
+def addI18nKeys(namespace, available_languages)
+  available_languages.each do | language_code |
+    properties = {}
 
-  en_path = File.join(__dir__, namespace, "webapp/i18n", "i18n_en.properties" )
+    path = File.join(__dir__, namespace, "webapp/i18n", "i18n_#{language_code}.properties" )
 
-  File.open(en_path, "r") do | i18n_properties |
-    i18n_properties.read.each_line do | line |
-      line.strip!
+    File.open(path, "r") do | i18n_properties |
+      i18n_properties.read.each_line do | line |
+        line.strip!
 
-      if line =~ /([^=]*)=(.*)/
-        properties[$1.strip] = $2
+        if line =~ /([^=]*)=(.*)/
+          properties[$1.strip] = $2
+        end
       end
     end
-  end
-
-
-  @i18n_keys.each do | i18nkey |
-    if properties[i18nkey] == nil
-      puts "#{i18nkey}="
+  
+    @i18n_keys.each do | i18nkey |
+      if properties[i18nkey] == nil
+        properties[i18nkey] = ""
+      end
+    end
+  
+    puts "Write #{path}"
+    outfile = File.open(path, "w+")
+    properties.each do | key, value |
+      outfile.puts "#{key}=#{value}\n"
     end
   end
 end
@@ -91,6 +99,7 @@ if File.exists? oui5lib_configfile
   file = File.read(oui5lib_configfile);
   configData = JSON.parse(file)
   mapping_directory = configData["mappingDirectory"]
+  available_languages = configData["availableLanguages"]
 end
 
 puts "What is the mapping name? "
@@ -149,7 +158,7 @@ if File.exists? mapping_file
 
   add_tile(namespace, entity_name)
 
-  addI18nKeys(namespace)
+  addI18nKeys(namespace, available_languages)
 else
   puts "No mapping found at #{mapping_file}"
 end
