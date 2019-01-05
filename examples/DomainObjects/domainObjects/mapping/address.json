@@ -1,132 +1,150 @@
 {
-   "description": "Define Address",
-   "primaryKey" : "id",
-   "entity" : [
-      {
-         "name": "id",
-         "type": "int"
-      },
-      {
-         "name": "firstname",
-         "required": true,
-         "validate": [
-            "hasLetters",
-            "minLength_3",
-            "maxLength_40"
-         ],
-         "i18n": {
-            "label": "address.firstName",
-            "tooltip": "address.firstName.tooltip",
-            "invalid": "address.firstName.invalid"
-         }
-      },
-      {
-         "name": "lastname",
-         "required": true,
-         "validate": [
-            "hasLetters",
-            "minLength_3",
-            "maxLength_20"
-         ],
-         "i18n": {
-            "label": "address.lastName",
-            "tooltip": "address.lastName.tooltip",
-            "invalid": "address.lastName.invalid"
-         }
-      },
-      {
-         "name": "street",
-         "required": true,
-         "i18n": {
-            "label": "address.street",
-            "tooltip": "address.street.tooltip",
-            "invalid": "address.street.invalid"
-         }
-      },
-      {
-         "name": "city",
-         "required": true,
-         "i18n": {
-            "label": "address.city",
-            "tooltip": "address.city.tooltip",
-            "invalid": "address.city.invalid"
-         }
-      },
-      {
-         "name": "postcode",
-         "required": true,
-         "i18n": {
-            "label": "address.postcode",
-            "tooltip": "address.postcode.tooltip",
-            "invalid": "address.postcode.invalid"
-         }
-      },
-      {
-         "name": "countryCode",
-         "required": true,
-         "ui5": {
-            "sapuiControl" : "sap.m.Select",
-            "itemsModel": "countries", 
-            "itemKey": "code", 
-            "itemText": "country",
-            "sortBy": "country"
-         },
-         "i18n": {
-            "label": "address.country",
-            "tooltip": "address.country.tooltip",
-            "invalid": "address.country.invalid"
-         }
-      },
-      {
-         "name": "phone",
-         "validate": [
-            "phone"
-         ],
-         "i18n": {
-            "label": "address.phone",
-            "tooltip": "address.phone.tooltip",
-            "invalid": "address.phone.invalid"
-         }
-      }
-   ],
-   "request": {
-      "defaults": {
-         "protocol": "http",
-         "host": "localhost:3000"
-      },
-      "getAddresses": {
-         "pathname": "getAddresses",
-         "method": "POST",
-         "parameters": [
-            {
-               "name": "ids",
-               "type": "Array",
-               "required": true
-            }
-         ]
-      },
-      "queryAddresses": {
-         "pathname": "queryAddresses",
-         "method": "GET",
-         "parameters": [
-            {
-               "name": "query",
-               "required": true
+    "description": "Define Address",
+    "primaryKey" : "id",
+    "entity" : [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+            "name": "firstname",
+            "required": true,
+            "validate": [
+                "hasLetters",
+                "minLength_3",
+                "maxLength_40"
+            ],
+            "ui5": {
+                "control": "sap.m.Input"
             },
-            {
-               "name": "matchType"
+            "i18n": {
+                "label": "address.firstName",
+                "tooltip": "address.firstName.tooltip",
+                "invalid": "address.firstName.invalid"
             }
-         ]
-      },
-      "saveAddress": {
-         "pathname": "saveAddress",
-         "method": "POST",
-         "parameters": [
-            {
-               "name": "addressString",
-               "required": true
+        },
+        {
+            "name": "lastname",
+            "required": true,
+            "validate": [
+                "hasLetters",
+                "minLength_3",
+                "maxLength_20"
+            ],
+            "ui5": {
+                "control": "sap.m.Input"
+            },
+            "i18n": {
+                "label": "address.lastName",
+                "tooltip": "address.lastName.tooltip",
+                "invalid": "address.lastName.invalid"
             }
-         ]
-      }
-   }
+        },
+        {
+            "name": "street",
+            "required": true,
+            "ui5": {
+                "control": "sap.m.Input"
+            },
+            "i18n": {
+                "label": "address.street",
+                "tooltip": "address.street.tooltip",
+                "invalid": "address.street.invalid"
+            }
+        },
+        {
+            "name": "city",
+            "required": true,
+            "ui5": {
+                "control": "sap.m.Input"
+            },
+            "i18n": {
+                "label": "address.city",
+                "tooltip": "address.city.tooltip",
+                "invalid": "address.city.invalid"
+            }
+        },
+        {
+            "name": "postcode",
+            "required": true,
+            "ui5": {
+                "control": "sap.m.Input"
+            },
+            "i18n": {
+                "label": "address.postcode",
+                "tooltip": "address.postcode.tooltip",
+                "invalid": "address.postcode.invalid"
+            }
+        },
+        {
+            "name": "countryCode",
+            "required": true,
+            "ui5": {
+                "control": "sap.m.Select",
+                "itemsModel": "countries", 
+                "itemKey": "code", 
+                "itemText": "country",
+                "sortBy": "country"
+            },
+            "i18n": {
+                "label": "address.country",
+                "tooltip": "address.country.tooltip",
+                "invalid": "address.country.invalid"
+            }
+        },
+        {
+            "name": "phone",
+            "validate": [
+                "phone"
+            ],
+            "ui5": {
+                "control" : "sap.m.Input"
+            },
+            "i18n": {
+                "label": "address.phone",
+                "tooltip": "address.phone.tooltip",
+                "invalid": "address.phone.invalid"
+            }
+        }
+    ],
+    "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:3000"
+        },
+        "getAddresses": {
+            "pathname": "getAddresses",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "ids",
+                    "type": "Array",
+                    "required": true
+                }
+            ]
+        },
+        "queryAddresses": {
+            "pathname": "queryAddresses",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "query",
+                    "required": true
+                },
+                {
+                    "name": "matchType"
+                }
+            ]
+        },
+        "saveAddress": {
+            "pathname": "saveAddress",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "addressString",
+                    "required": true
+                }
+            ]
+        }
+    }
 }

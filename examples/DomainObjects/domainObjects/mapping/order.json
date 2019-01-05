@@ -1,173 +1,176 @@
 {
-   "description": "Define Order",
-   "primaryKey" : "id",
-   "entity" : [
-      {
-         "name": "id",
-         "type": "int"
-      },
-      {
-         "name": "status",
-         "default": "new",
-         "referenceTo": "status.status",
-         "ui5": {
-            "control" : "sap.m.Select",
-            "itemsModel": "statuses", 
-            "itemKey": "status", 
-            "itemText": "statusText"
-         },
-         "i18n": {
-            "label": "order.status.label",
-            "tooltip": "order.status.tooltip"
-         }
-      },
-      {
-         "name": "statusText",
-         "i18n": {
-            "label": "order.status.label",
-            "tooltip": "order.status.tooltip"
-         }
-      },
-      {
-         "name": "orderDate",
-         "type": "Date",
-         "dateFormat": "yyyy-MM-dd HH:mm:ss",
-         "required": true,
-         "ui5": {
-            "width": "200px"
-         },
-         "i18n": {
-            "label": "order.date.label",
-            "tooltip": "order.date.tooltip"
-         }
-      },
-      {
-         "name": "billingAddressId",
-         "type": "int",
-         "referenceTo": "address.id",
-         "required": true
-      },
-      {
-         "name": "billingName",
-         "ui5": {
-            "width": "200px"
-         },
-         "i18n": {
-            "label": "address.billing",
-            "tooltip": "address.billing.tooltip"
-         }
-      },
-      {
-         "name": "shippingAddressId",
-         "type": "int",
-         "referenceTo": "address.id",
-         "required": true
-      },
-      {
-         "name": "shippingName",
-         "ui5": {
-            "width": "200px"
-         },
-         "i18n": {
-            "label": "address.shipping",
-            "tooltip": "address.shipping.tooltip"
-         }
-      },
-      {
-         "name": "currency"
-      },
-      {
-         "name": "items",
-         "type": "array",
-         "required": true,
-         "arrayItem": [
-            {
-               "name": "productId",
-               "referenceTo": "product.id",
-               "required": true
+    "description": "Define Order",
+    "primaryKey" : "id",
+    "entity" : [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+            "name": "status",
+            "default": "new",
+            "referenceTo": "status.status",
+            "ui5": {
+                "control" : "sap.m.Select",
+                "itemsModel": "statuses", 
+                "itemKey": "status", 
+                "itemText": "statusText"
             },
-            {
-               "name": "quantity",
-               "type": "int",
-               "required": true
-            },
-            {
-               "name": "unitPrice",
-               "type": "float",
-               "required": true
+            "i18n": {
+                "label": "order.status.label",
+                "tooltip": "order.status.tooltip"
             }
-         ]
-      },
-      {
-         "name": "total",
-         "i18n": {
-            "label": "order.total.label",
-            "tooltip": "order.total.tooltip"
-         }
-      },
-      {
-         "name": "payments",
-         "type": "collection",
-         "collectionProperties": [
-            {
-               "name": "date",
-               "type": "Date"
-            },
-            {
-               "name": "method"
-            },
-            {
-               "name": "amount",
-               "type": "float"
+        },
+        {
+            "name": "statusText",
+            "i18n": {
+                "label": "order.status.label",
+                "tooltip": "order.status.tooltip"
             }
-         ]
-      }
-   ],
-   "request": {
-      "defaults": {
-         "protocol": "http",
-         "host": "localhost:3000"
-      },
-      "getOrders": {
-         "pathname": "getOrders",
-         "method": "GET",
-         "parameters": [
-            {
-               "name": "startDate",
-               "type": "Date",
-               "dateFormat": "YYYY-MM-dd",
-               "required": true
+        },
+        {
+            "name": "orderDate",
+            "type": "Date",
+            "dateFormat": "yyyy-MM-dd HH:mm:ss",
+            "required": true,
+            "ui5": {
+                "control": "sap.m.DatePicker",
+                "width": "200px"
             },
-            {
-               "name": "endDate",
-               "type": "Date",
-               "dateFormat": "YYYY-MM-dd"
+            "i18n": {
+                "label": "order.date.label",
+                "tooltip": "order.date.tooltip"
+            }
+        },
+        {
+            "name": "billingAddressId",
+            "type": "int",
+            "referenceTo": "address.id",
+            "required": true
+        },
+        {
+            "name": "billingName",
+            "ui5": {
+                "control": "sap.m.Input",
+                "width": "200px"
             },
-            {
-               "name": "statuses",
-               "type": "Array"
+            "i18n": {
+                "label": "address.billing",
+                "tooltip": "address.billing.tooltip"
             }
-         ]
-      },
-      "getOrder": {
-         "pathname": "getOrder",
-         "method": "GET",
-         "parameters": [
-            {
-               "name": "id",
-               "required": true
+        },
+        {
+            "name": "shippingAddressId",
+            "type": "int",
+            "referenceTo": "address.id",
+            "required": true
+        },
+        {
+            "name": "shippingName",
+            "ui5": {
+                "control": "sap.m.Input",
+                "width": "200px"
+            },
+            "i18n": {
+                "label": "address.shipping",
+                "tooltip": "address.shipping.tooltip"
             }
-         ]
-      },
-      "saveOrder": {
-         "pathname": "saveOrder",
-         "method": "POST",
-         "parameters": [
-            {
-               "name": "orderString",
-               "required": true
+        },
+        {
+            "name": "currency"
+        },
+        {
+            "name": "items",
+            "type": "array",
+            "required": true,
+            "arrayItem": [
+                {
+                    "name": "productId",
+                    "referenceTo": "product.id",
+                    "required": true
+                },
+                {
+                    "name": "quantity",
+                    "type": "int",
+                    "required": true
+                },
+                {
+                    "name": "unitPrice",
+                    "type": "float",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "name": "total",
+            "i18n": {
+                "label": "order.total.label",
+                "tooltip": "order.total.tooltip"
             }
-         ]
-      }
-   }
+        },
+        {
+            "name": "payments",
+            "type": "collection",
+            "collectionProperties": [
+                {
+                    "name": "date",
+                    "type": "Date"
+                },
+                {
+                    "name": "method"
+                },
+                {
+                    "name": "amount",
+                    "type": "float"
+                }
+            ]
+        }
+    ],
+    "request": {
+        "defaults": {
+            "protocol": "http",
+            "host": "localhost:3000"
+        },
+        "getOrders": {
+            "pathname": "getOrders",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "startDate",
+                    "type": "Date",
+                    "dateFormat": "YYYY-MM-dd",
+                    "required": true
+                },
+                {
+                    "name": "endDate",
+                    "type": "Date",
+                    "dateFormat": "YYYY-MM-dd"
+                },
+                {
+                    "name": "statuses",
+                    "type": "Array"
+                }
+            ]
+        },
+        "getOrder": {
+            "pathname": "getOrder",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "id",
+                    "required": true
+                }
+            ]
+        },
+        "saveOrder": {
+            "pathname": "saveOrder",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "orderString",
+                    "required": true
+                }
+            ]
+        }
+    }
 }

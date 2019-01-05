@@ -1,0 +1,22 @@
+{
+    "ecmaVersion": 6,
+    "libs": [
+        "browser",
+        "jquery"
+    ],
+    "loadEagerly": [
+        "webapp/*.js",
+        "webapp/controller/*.js",
+        "webapp/lib/*.js"
+    ],
+    "dontLoad": [
+        "webapp/init*.js",
+        "node_modules/**"
+    ],
+    "plugins": {
+        "requirejs": {
+            "baseURL": "./",
+            "paths": {}
+        }
+    }
+}
