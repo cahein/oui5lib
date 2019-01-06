@@ -84,6 +84,9 @@ class ContentWriter
     if line.match('eeeee')
       line = line.gsub(/eeeee/, entity_name)
     end
+    if line.match('Eeeee')
+      line = line.gsub(/Eeeee/, entity_name.capitalize)
+    end
     if line.match('rrrrr.')
       line = line.gsub(/rrrrr/, entity_name)
     end
