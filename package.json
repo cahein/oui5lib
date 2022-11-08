@@ -1,19 +1,17 @@
 {
   "name": "oui5lib",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "OpenUI5 extension library",
   "author": "Carsten Heinrigs",
   "devDependencies": {
-    "grunt": "~1.0.3",
+    "grunt": "^1.5.3",
     "grunt-available-tasks": "~0.6.3",
     "grunt-contrib-clean": "~2.0.0",
     "grunt-contrib-concat": "~1.0.1",
     "grunt-contrib-copy": "~1.0.0",
-    "grunt-contrib-uglify-es": "~3.3.0",
+    "grunt-contrib-uglify": "~5.2.1",
     "grunt-eslint": "~21.0.0",
-    "grunt-jsdoc": "~2.3.0"
-  },
-  "dependencies": {},
-  "optionalDependencies": {}
+    "grunt-jsdoc": "^2.4.1"
+  }
 }
