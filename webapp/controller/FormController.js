@@ -1,4 +1,4 @@
-sap.ui.define([
+sap.ui.define("FormController", [
     "oui5lib/controller/BaseController",
 ], function(oController) {
     "use strict";

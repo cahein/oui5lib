@@ -37,7 +37,10 @@
 
     function getI18nModel() {
         const component = configuration.getComponent();
-        return component.getModel("i18n");
+        if (component) {
+            return component.getModel("i18n");
+        }
+        return undefined;
     }
    
     /**
@@ -47,8 +50,12 @@
      * @returns {string} The value of the property.
      */
     function getI18nText(path, args) {
-        const resourceBundle = getI18nModel().getResourceBundle();
-        return resourceBundle.getText(path, args);
+        const i18nModel = getI18nModel();
+        if (i18nModel) {
+            const resourceBundle = getI18nModel().getResourceBundle();
+            return resourceBundle.getText(path, args);
+        }
+        return undefined;
     }
     
     /**

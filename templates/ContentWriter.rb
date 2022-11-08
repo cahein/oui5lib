@@ -81,14 +81,17 @@ class ContentWriter
     if line.match('ooooo.')
       line = line.gsub(/ooooo/, @namespace)
     end
+    if line.match('rrrrr.')
+      line = line.gsub(/rrrrr/, entity_name)
+    end
     if line.match('eeeee')
       line = line.gsub(/eeeee/, entity_name)
     end
+    if line.match('eeeeP')
+      line = line.gsub(/eeeeP/, entity_name.pluralize)
+    end
     if line.match('Eeeee')
       line = line.gsub(/Eeeee/, entity_name.capitalize)
-    end
-    if line.match('rrrrr.')
-      line = line.gsub(/rrrrr/, entity_name)
     end
     line
   end

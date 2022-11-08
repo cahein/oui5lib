@@ -56,7 +56,7 @@ sap.ui.jsview("oum.view.entry", {
             contentLabel: "{i18n>view.entry.contentLabel}"
         });
         const entryPage = new sap.m.Page({
-            landmarkinfo: landmarks,
+            landmarkInfo: landmarks,
             customHeader: headerBar,
             content: [ tiles ],
             footer: sap.ui.xmlfragment("oum.fragment.AppInfoToolbar")

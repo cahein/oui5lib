@@ -3,7 +3,7 @@ sap.ui.define([
 ], function(Controller) {
     "use strict";
 
-    var formController = Controller.extend("ooooo.controller.eeeee", {
+    const eeeeeController = Controller.extend("ooooo.controller.eeeee", {
         onInit: function () {
             const eventBus = sap.ui.getCore().getEventBus();
             eventBus.subscribe("loading", "ready", this._handleLoaded, this);
@@ -17,25 +17,30 @@ sap.ui.define([
             const id = args.id;
 
             this.id = id;
-
             const eeeee = new Eeeee(id);
+
             if (!eeeee.isLoading()) {
-               this.setEeeeeModel();
+                this.setEeeeeModel();
             }
         },
 
         _handleLoaded: function(channel, eventId, eventData) {
             if (typeof eventData === "object") {
-                if (eventData.entity === "order" &&
+                if (eventData.entity === "eeeee" &&
                     eventData.id == this.id) {
                     this.setEeeeeModel();
                 }
             }
         },
 
+        setEeeeeModel: function() {
+            const form = this.getView().byId("eeeeeForm");
+            const model = form.getModel("eeeee");
+            const eeeeeData = model.getData();
+        },
+        
         submitForm: function() {
             const form = this.getView().byId("eeeeeForm");
-
             const model = form.getModel("eeeee");
             const eeeeeData = model.getData();
             

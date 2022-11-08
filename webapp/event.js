@@ -42,5 +42,4 @@
         }
         eventBus.publish(channelId, eventId, eventData);
     }
-    
 }(oui5lib.logger, oui5lib.util));
