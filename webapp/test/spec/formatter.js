@@ -18,13 +18,13 @@ describe("Namespace oui5lib.formatter", function() {
         it("should format a Date to a time string", function() {
             var date = new Date("2015", "10", "25", "9", "46", "10");
             var timeStr = oui5lib.formatter.getTimeString(date);
-            expect(timeStr).toEqual("9:46:10 AM");
+            expect(timeStr).toEqual("9:46:10 AM");
             timeStr = oui5lib.formatter.getTimeString(date, "HHmmss");
             expect(timeStr).toEqual("094610");
 
             date = new Date("2015", "10", "25", "13", "8", "2");
             timeStr = oui5lib.formatter.getTimeString(date);
-            expect(timeStr).toEqual("1:08:02 PM");
+            expect(timeStr).toEqual("1:08:02 PM");
             timeStr = oui5lib.formatter.getTimeString(date, "HHmmss");
             expect(timeStr).toEqual("130802");
         });

@@ -28,7 +28,6 @@ describe("Namespace oui5lib.configuration", function() {
         expect(typeof logLevel).toEqual("string");
         expect(logLevel).toEqual("ERROR");
     });
-
     it("should return date and time value pattern defined in the configuration", function() {
         let format = oui5lib.configuration.getDateTimeValuePattern("dateTime");
         expect(format).toEqual("yyyy-MM-dd HH:mm:ss");
@@ -37,7 +36,7 @@ describe("Namespace oui5lib.configuration", function() {
     });
     it("should return date and time display pattern from the locale", function() {
         let format = oui5lib.configuration.getDateTimeDisplayPattern("dateTime", "short");
-        expect(format).toEqual("M/d/yy, h:mm a");
+        expect(format).toEqual("M/d/yy, h:mm a");
         format = oui5lib.configuration.getDateTimeDisplayPattern("date", "medium");
         expect(format).toEqual("MMM d, y");
     });
